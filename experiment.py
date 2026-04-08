@@ -5,6 +5,7 @@ import os
 from feldera import FelderaClient
 from feldera.pipeline import Pipeline
 from feldera.enums import PipelineStatus
+from feldera.rest.pipeline import Pipeline as RestPipeline
 
 from data_loader import prepare_data
 
@@ -15,6 +16,7 @@ class Experiment:
         pipeline_name,
         batch_size,
         trials,
+        pipeline_sql_path=None,
         output_dir="results",
         feldera_url="http://localhost:8080"
     ):
@@ -22,10 +24,24 @@ class Experiment:
         self.pipeline_name = pipeline_name
         self.batch_size = batch_size
         self.trials = trials
+        self.pipeline_sql_path = pipeline_sql_path
         self.output_dir = output_dir
         self.pipeline = None
 
     def _start_pipeline(self):
+        if self.pipeline_sql_path:
+            with open(self.pipeline_sql_path, "r", encoding="utf-8") as f:
+                sql_code = f.read()
+            print(f"Creating/updating pipeline '{self.pipeline_name}' from {self.pipeline_sql_path}")
+            pipeline_def = RestPipeline(
+                name=self.pipeline_name,
+                sql=sql_code,
+                udf_rust="",
+                udf_toml="",
+                program_config={},
+                runtime_config={},
+            )
+            self.client.create_or_update_pipeline(pipeline_def)
         self.pipeline = Pipeline.get(self.pipeline_name, self.client)
         self.client.start_pipeline(self.pipeline_name)
         self.pipeline.wait_for_status(PipelineStatus.RUNNING, timeout=120)
@@ -132,6 +148,7 @@ class Experiment:
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
     parser.add_argument("--pipeline-name", default="tpch_benchmark")
+    parser.add_argument("--pipeline-sql-path", default=None, help="Path to SQL file for pipeline definition.")
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default="results")
@@ -165,8 +182,10 @@ if __name__ == "__main__":
 
     experiment = Experiment(
         pipeline_name=args.pipeline_name,
+        pipeline_sql_path=args.pipeline_sql_path,
         batch_size=args.batch_size,
         trials=args.trials,
+
         output_dir=args.output_dir,
     )
     experiment.run_all(insert_sequence)
