@@ -1,0 +1,4 @@
+duckdb==1.5.1
+feldera==0.273.0
+pandas==2.3.3
+

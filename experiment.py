@@ -152,11 +152,11 @@ def parse_args():
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default="results")
-    parser.add_argument("--csv-dir", default=".")
+    parser.add_argument("--csv-dir", default="data")
     parser.add_argument(
         "--tables",
         default="CUSTOMER,ORDERS,LINEITEM,PARTSUPP",
-        help="Comma-separated list of table names in round-robin order.",
+        help="Comma-separated list of table names.",
     )
     return parser.parse_args()
 
