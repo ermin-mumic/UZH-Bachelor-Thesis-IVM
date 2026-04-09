@@ -48,7 +48,7 @@ class Experiment:
 
     def _stop_pipeline(self):
         if self.pipeline is not None:
-            self.pipeline.stop()
+            self.pipeline.stop(force=True)
 
     def _stats(self):
         return self.pipeline.stats().global_metrics
@@ -77,7 +77,7 @@ class Experiment:
         os.makedirs(self.output_dir, exist_ok=True)
         filename = os.path.join(
             self.output_dir,
-            f"run_pipeline{self.pipeline_name}_batch{self.batch_size}_trial{trial_id}.json",
+            f"pipeline-{self.pipeline_name}_batch{self.batch_size}_trial{trial_id}.json",
         )
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
@@ -147,11 +147,11 @@ class Experiment:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
-    parser.add_argument("--pipeline-name", default="tpch_benchmark")
-    parser.add_argument("--pipeline-sql-path", default=None, help="Path to SQL file for pipeline definition.")
+    parser.add_argument("--pipeline-name", required=True)
+    parser.add_argument("--pipeline-sql-path", required=True, help="Path to SQL file for pipeline definition.")
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument("--trials", type=int, default=1)
-    parser.add_argument("--output-dir", default="results")
+    parser.add_argument("--output-dir", default=None)
     parser.add_argument("--csv-dir", default="data")
     parser.add_argument(
         "--tables",
@@ -161,9 +161,19 @@ def parse_args():
     return parser.parse_args()
 
 
+def resolve_default_output_dir(pipeline_sql_path: str) -> str:
+    pipeline_sql_name = os.path.basename(pipeline_sql_path)
+    pipeline_sql_stem = os.path.splitext(pipeline_sql_name)[0]
+    pipeline_parent_dir = os.path.basename(os.path.dirname(pipeline_sql_path))
+    return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem)
+
+
 if __name__ == "__main__":
     args = parse_args()
     table_names = [t.strip().upper() for t in args.tables.split(",") if t.strip()]
+
+    if args.output_dir is None:
+        args.output_dir = resolve_default_output_dir(args.pipeline_sql_path)
 
 
     print("\n" + "=" * 70)
