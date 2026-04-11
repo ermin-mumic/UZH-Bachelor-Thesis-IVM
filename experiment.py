@@ -18,6 +18,7 @@ class Experiment:
         trials,
         pipeline_sql_path=None,
         output_dir="results",
+        sf,
         feldera_url="http://localhost:8080"
     ):
         self.client = FelderaClient(feldera_url)
@@ -26,6 +27,7 @@ class Experiment:
         self.trials = trials
         self.pipeline_sql_path = pipeline_sql_path
         self.output_dir = output_dir
+        self.sf = sf
         self.pipeline = None
 
     def _start_pipeline(self):
@@ -77,7 +79,7 @@ class Experiment:
         os.makedirs(self.output_dir, exist_ok=True)
         filename = os.path.join(
             self.output_dir,
-            f"pipeline-{self.pipeline_name}_batch{self.batch_size}_trial{trial_id}.json",
+            f"pipeline-{self.pipeline_name}_sf{self.sf}_batch{self.batch_size}_trial{trial_id}.json",
         )
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
@@ -161,7 +163,7 @@ def parse_args():
     parser.add_argument("--batch-size", type=int, default=1000)
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default=None)
-    parser.add_argument("--csv-dir", default="data")
+    parser.add_argument("--csv-dir", required=True)
     parser.add_argument(
         "--tables",
         default="CUSTOMER,ORDERS,LINEITEM,PARTSUPP",
@@ -170,11 +172,12 @@ def parse_args():
     return parser.parse_args()
 
 
-def resolve_default_output_dir(pipeline_sql_path: str) -> str:
+def resolve_default_output_dir(pipeline_sql_path: str, csv_dir: str) -> str:
     pipeline_sql_name = os.path.basename(pipeline_sql_path)
     pipeline_sql_stem = os.path.splitext(pipeline_sql_name)[0]
     pipeline_parent_dir = os.path.basename(os.path.dirname(pipeline_sql_path))
-    return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem)
+    sf_folder = os.path.basename(csv_dir)
+    return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem, sf_folder)
 
 
 if __name__ == "__main__":
@@ -182,7 +185,7 @@ if __name__ == "__main__":
     table_names = [t.strip().upper() for t in args.tables.split(",") if t.strip()]
 
     if args.output_dir is None:
-        args.output_dir = resolve_default_output_dir(args.pipeline_sql_path)
+        args.output_dir = resolve_default_output_dir(args.pipeline_sql_path, args.csv_dir)
 
 
     print("\n" + "=" * 70)
@@ -204,8 +207,8 @@ if __name__ == "__main__":
         pipeline_sql_path=args.pipeline_sql_path,
         batch_size=args.batch_size,
         trials=args.trials,
-
         output_dir=args.output_dir,
+        sf=os.path.basename(args.csv_dir)
     )
     experiment.run_all(insert_sequence)
 
