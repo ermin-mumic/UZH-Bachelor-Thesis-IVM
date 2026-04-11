@@ -100,6 +100,16 @@ class Experiment:
         )
 
         for table_name, df_batch in insert_sequence:
+            self.client.push_to_pipeline(
+                self.pipeline_name,
+                table_name,
+                "json", # data format
+                df_batch.to_json(orient="records", date_format="epoch"), # data (converted to list of JSON objects)
+                json_flavor="pandas", 
+                array=True,
+                serialize=False, # already serialized to JSON
+                wait=False # not waiting until batch processed
+            )
             self.pipeline.input_pandas(table_name, df_batch)
             batch_snap = self._snapshot()
             memory_timeline.append(
