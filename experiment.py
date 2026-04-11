@@ -16,9 +16,9 @@ class Experiment:
         pipeline_name,
         batch_size,
         trials,
-        pipeline_sql_path=None,
-        output_dir="results",
         sf,
+        pipeline_sql_path,
+        output_dir="results",
         feldera_url="http://localhost:8080"
     ):
         self.client = FelderaClient(feldera_url)
