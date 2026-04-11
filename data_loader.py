@@ -69,7 +69,8 @@ def prepare_data(table_names: list, csv_dir: str = '.', batch_size: int = 1) -> 
             end = min(start + batch_size, len(df))
             batch_df = df.iloc[start:end]
 
-            insert_sequence.append((table_name, batch_df))
+            # Convert batch dataframe to JSON array of objects representing rows --> '[{"col1":1, "col2":"a"},{"col1":2, "col2":"b"}]
+            insert_sequence.append((table_name, batch_df.to_json(orient="records", date_format="epoch"))) 
             current_row[table_name] = end
             added_any = True
         

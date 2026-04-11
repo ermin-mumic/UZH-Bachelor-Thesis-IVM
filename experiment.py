@@ -63,7 +63,7 @@ class Experiment:
 
     @staticmethod
     def _count_input_rows(insert_sequence):
-        return int(sum(len(df_batch) for _, df_batch in insert_sequence))
+        return int(sum(len(json.loads(batch_serialized)) for _, batch_serialized in insert_sequence))
 
     @staticmethod
     def _compute_throughput_rows_per_sec(start_snap, end_snap):
@@ -99,12 +99,12 @@ class Experiment:
             }
         )
 
-        for table_name, df_batch in insert_sequence:
+        for table_name, batch_serialized in insert_sequence:
             self.client.push_to_pipeline(
                 self.pipeline_name,
                 table_name,
                 "json", # data format
-                df_batch.to_json(orient="records", date_format="epoch"), # data (converted to list of JSON objects)
+                batch_serialized, # data
                 json_flavor="pandas", 
                 array=True,
                 serialize=False, # already serialized to JSON
