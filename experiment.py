@@ -110,7 +110,6 @@ class Experiment:
                 serialize=False, # already serialized to JSON
                 wait=False # not waiting until batch processed
             )
-            self.pipeline.input_pandas(table_name, df_batch)
             batch_snap = self._snapshot()
             memory_timeline.append(
                 {
