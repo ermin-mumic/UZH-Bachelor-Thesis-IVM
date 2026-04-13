@@ -176,7 +176,7 @@ def resolve_default_output_dir(pipeline_sql_path: str, csv_dir: str) -> str:
     pipeline_sql_name = os.path.basename(pipeline_sql_path)
     pipeline_sql_stem = os.path.splitext(pipeline_sql_name)[0]
     pipeline_parent_dir = os.path.basename(os.path.dirname(pipeline_sql_path))
-    sf_folder = os.path.basename(csv_dir)
+    sf_folder = os.path.basename(csv_dir.rstrip("/"))
     return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem, sf_folder)
 
 
