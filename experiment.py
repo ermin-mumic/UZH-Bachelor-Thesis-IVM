@@ -121,7 +121,15 @@ class Experiment:
             )
 
         self.pipeline.wait_for_completion()
+        
         end_snap = self._snapshot()
+        memory_timeline.append(
+            {
+                "uptime_msecs": end_snap["uptime_msecs"],
+                "rss_mib": end_snap["rss_mib"]
+            }
+        )
+        
         self._stop_pipeline()
 
         throughput_rows_per_sec = self._compute_throughput_rows_per_sec(start_snap, end_snap)
