@@ -1,4 +1,5 @@
 duckdb==1.5.1
-feldera==0.273.0
+feldera==0.286.0
 pandas==2.3.3
+numpy<2.0.0
 
