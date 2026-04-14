@@ -59,10 +59,6 @@ class Experiment:
             "total_completed_records": stats.total_completed_records or 0,
             "rss_mib": (stats.rss_bytes or 0) / (1024 * 1024),
         }
-    #TODO: remove this as required looping through whole insert sequence instead let data loader compute that while preparing data
-    @staticmethod
-    def _count_input_rows(insert_sequence):
-        return int(sum(len(json.loads(batch_serialized)) for _, batch_serialized in insert_sequence))
 
     @staticmethod
     def _compute_throughput_rows_per_sec(start_snap, end_snap):
