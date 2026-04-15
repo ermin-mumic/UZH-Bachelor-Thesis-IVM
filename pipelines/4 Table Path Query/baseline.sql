@@ -30,7 +30,22 @@ CREATE TABLE PARTSUPP (
     PS_SUPPLYCOST decimal(12,2),
     PS_COMMENT varchar(199),
     PRIMARY KEY (PARTKEY, SUPPKEY)
-) WITH ('materialized' = 'true');
+) WITH (
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": {
+                "path": "/tpch_data/sf_10.0/partsupp.csv"
+            }
+        },
+        "format": { 
+            "name": "csv",
+            "config": {
+                "headers": true
+            }
+        }
+    }]'
+);
 
 CREATE TABLE CUSTOMER (
     CUSTKEY bigint not null,
@@ -42,7 +57,22 @@ CREATE TABLE CUSTOMER (
     C_MKTSEGMENT char(10),
     C_COMMENT varchar(117),
     PRIMARY KEY (CUSTKEY)
-) WITH ('materialized' = 'true');
+) WITH (
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": {
+                "path": "/tpch_data/sf_10.0/customer.csv"
+            }
+        },
+        "format": { 
+            "name": "csv",
+            "config": {
+                "headers": true
+            }
+        }
+    }]'
+);
 
 CREATE TABLE ORDERS (
     ORDERKEY bigint not null,
@@ -55,7 +85,22 @@ CREATE TABLE ORDERS (
     O_SHIPPRIORITY integer,
     O_COMMENT varchar(79),
     PRIMARY KEY (ORDERKEY)
-) WITH ('materialized' = 'true');
+) WITH (
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": {
+                "path": "/tpch_data/sf_10.0/orders.csv"
+            }
+        },
+        "format": { 
+            "name": "csv",
+            "config": {
+                "headers": true
+            }
+        }
+    }]'
+);
 
 CREATE TABLE LINEITEM (
     ORDERKEY bigint not null,
@@ -75,7 +120,22 @@ CREATE TABLE LINEITEM (
     L_SHIPMODE char(10),
     L_COMMENT varchar(44),
     PRIMARY KEY (ORDERKEY, L_LINENUMBER)
-) WITH ('materialized' = 'true');
+) WITH (
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": {
+                "path": "/tpch_data/sf_10.0/lineitem.csv"
+            }
+        },
+        "format": { 
+            "name": "csv",
+            "config": {
+                "headers": true
+            }
+        }
+    }]'
+);
 
 CREATE TABLE NATION (
     NATIONKEY bigint not null,
