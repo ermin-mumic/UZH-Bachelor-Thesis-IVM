@@ -7,7 +7,7 @@ from feldera.pipeline import Pipeline
 from feldera.enums import PipelineStatus
 from feldera.rest.pipeline import Pipeline as RestPipeline
 
-from data_loader import prepare_data_generator
+from data_loader_v1 import prepare_data
 
 
 class Experiment:
@@ -52,13 +52,20 @@ class Experiment:
         if self.pipeline is not None:
             self.pipeline.stop(force=True)
 
+    def _stats(self):
+        return self.pipeline.stats().global_metrics
+
     def _snapshot(self):
-        stats = self.pipeline.stats().global_metrics
+        stats = self._stats()
         return {
             "uptime_msecs": stats.uptime_msecs or 0,
             "total_completed_records": stats.total_completed_records or 0,
             "rss_mib": (stats.rss_bytes or 0) / (1024 * 1024),
         }
+
+    @staticmethod
+    def _count_input_rows(insert_sequence):
+        return int(sum(len(json.loads(batch_serialized)) for _, batch_serialized in insert_sequence))
 
     @staticmethod
     def _compute_throughput_rows_per_sec(start_snap, end_snap):
@@ -78,15 +85,10 @@ class Experiment:
             json.dump(payload, f, indent=2)
         print(f"Results saved to {filename}")
 
-    def run_trial(self, trial_id, insert_generator):
+    def run_trial(self, trial_id, insert_sequence):
         print(f"\n{'#' * 70}")
         print(f"TRIAL {trial_id}/{self.trials}")
         print(f"{'#' * 70}\n")
-
-        # Executes DuckDB mapping
-        metadata = next(insert_generator)
-        print(f"\nTotal rows in all tables: {metadata['total_rows']}")
-        print(f"Amount of batches to be inserted: {metadata['total_batches']}\n")
 
         self._start_pipeline()
         memory_timeline = []
@@ -99,8 +101,7 @@ class Experiment:
             }
         )
 
-        # Generate data batches
-        for table_name, batch_serialized in insert_generator:
+        for table_name, batch_serialized in insert_sequence:
             self.client.push_to_pipeline(
                 self.pipeline_name,
                 table_name,
@@ -138,8 +139,8 @@ class Experiment:
             "trial": trial_id,
             "pipeline_name": self.pipeline_name,
             "batch_size": self.batch_size,
-            "input_rows_submitted": metadata["total_rows"],
-            "input_batches_submitted": metadata["total_batches"],
+            "input_batches_submitted": len(insert_sequence),
+            "input_rows_submitted": self._count_input_rows(insert_sequence),
             "throughput_rows_per_sec": throughput_rows_per_sec,
             "start_uptime_msecs": start_snap["uptime_msecs"],
             "end_uptime_msecs": end_snap["uptime_msecs"],
@@ -157,14 +158,10 @@ class Experiment:
         print(f"Peak memory: {peak_memory_mib:.2f} MiB")
 
 
-    def run_all(self, table_names, csv_dir, batch_size):
+    def run_all(self, insert_sequence):
+        print(f"\nPrepared {len(insert_sequence)} batch inserts")
         for trial in range(1, self.trials + 1):
-            insert_generator = prepare_data_generator(
-                table_names=table_names,
-                csv_dir=csv_dir,
-                batch_size=batch_size
-            )
-            self.run_trial(trial, insert_generator)
+            self.run_trial(trial, insert_sequence)
 
 
 def parse_args():
@@ -207,6 +204,11 @@ if __name__ == "__main__":
     print(f"Trials: {args.trials}")
     print(f"Tables: {', '.join(table_names)}")
 
+    insert_sequence = prepare_data(
+        table_names=table_names,
+        csv_dir=args.csv_dir,
+        batch_size=args.batch_size,
+    )
 
     experiment = Experiment(
         pipeline_name=args.pipeline_name,
@@ -216,11 +218,7 @@ if __name__ == "__main__":
         output_dir=args.output_dir,
         sf=os.path.basename(args.csv_dir)
     )
-    experiment.run_all(
-        table_names=table_names,
-        csv_dir=args.csv_dir,
-        batch_size=args.batch_size
-    )
+    experiment.run_all(insert_sequence)
 
     print("\n" + "=" * 70)
     print("EXPERIMENT COMPLETE")

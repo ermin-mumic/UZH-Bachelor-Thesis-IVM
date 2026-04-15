@@ -9,6 +9,8 @@ services:
       # manager command below (e.g., --allowed-origins "http://localhost:xyz").
       # Otherwise, browsers will complain about CORS errors
       - "8080:8080"
+    volumes:
+      - /local/scratch/emumic/tpch_data:/tpch_data
     stop_grace_period: 0s
     environment:
       - RUST_LOG=info,actix_web=error,tokio_postgres=info
