@@ -4,8 +4,9 @@ import os
 
 from feldera import FelderaClient
 from feldera.pipeline import Pipeline
+from feldera.pipeline_builder import PipelineBuilder
 from feldera.enums import PipelineStatus
-from feldera.rest.pipeline import Pipeline as RestPipeline
+
 
 class Experiment:
     def __init__(
@@ -29,19 +30,15 @@ class Experiment:
     
         with open(self.pipeline_sql_path, "r", encoding="utf-8") as f:
             sql_code = f.read()
-        print(f"Creating/updating pipeline '{self.pipeline_name}' from {self.pipeline_sql_path}")
 
-        pipeline_def = RestPipeline(
-            name=self.pipeline_name,
-            sql=sql_code,
-            udf_rust="",
-            udf_toml="",
-            program_config={},
-            runtime_config={},
-        )
+        print(f"Creating pipeline '{self.pipeline_name}' from {self.pipeline_sql_path}")
 
-        self.client.create_or_update_pipeline(pipeline_def)
-        self.pipeline = Pipeline.get(self.pipeline_name, self.client)
+        self.pipeline = PipelineBuilder(
+            client = self.client,
+            name = self.pipeline_name,
+            sql = sql_code
+        ).create_or_replace()
+
         self.client.start_pipeline(self.pipeline_name)
         self.pipeline.wait_for_status(PipelineStatus.RUNNING, timeout=120)
 
@@ -67,9 +64,11 @@ class Experiment:
 
     def _save_results(self, trial_id, payload):
         os.makedirs(self.output_dir, exist_ok=True)
+
+        sf_suffix = f"_sf{self.sf}" if self.sf is not None else ""
         filename = os.path.join(
             self.output_dir,
-            f"pipeline-{self.pipeline_name}_sf{self.sf}_trial{trial_id}.json",
+            f"pipeline-{self.pipeline_name}{sf_suffix}_trial{trial_id}.json",
         )
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
@@ -135,15 +134,18 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
     parser.add_argument("--pipeline-name", required=True)
     parser.add_argument("--pipeline-sql-path", required=True, help="Path to SQL file for pipeline definition.")
-    parser.add_argument("--sf", type=float, required=True)
+    parser.add_argument("--sf", type=float, default=None)
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default=None)
     return parser.parse_args()
 
-def resolve_default_output_dir(pipeline_sql_path: str, sf: float) -> str:
+def resolve_default_output_dir(pipeline_sql_path: str, sf: float = None) -> str:
     pipeline_sql_name = os.path.basename(pipeline_sql_path)
     pipeline_sql_stem = os.path.splitext(pipeline_sql_name)[0]
     pipeline_parent_dir = os.path.basename(os.path.dirname(pipeline_sql_path))
+
+    if sf is None:
+        return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem)
     return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem, str(sf))
 
 
@@ -158,7 +160,6 @@ if __name__ == "__main__":
     print("FELDERA EXPERIMENT")
     print("=" * 70 + "\n")
     print(f"Pipeline: {args.pipeline_name}")
-    print(f"Scaling Factor: {args.sf}")
     print(f"Trials: {args.trials}")
 
     experiment = Experiment(
