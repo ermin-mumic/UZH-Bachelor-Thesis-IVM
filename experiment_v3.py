@@ -13,7 +13,7 @@ class Experiment:
         self,
         pipeline_name,
         pipeline_sql_path,
-        sf,
+        dataset_path,
         trials,
         output_dir,
         feldera_url="http://localhost:8080"
@@ -21,7 +21,7 @@ class Experiment:
         self.client = FelderaClient(feldera_url)
         self.pipeline_name = pipeline_name
         self.pipeline_sql_path = pipeline_sql_path
-        self.sf = sf
+        self.dataset_path = dataset_path
         self.trials = trials
         self.output_dir = output_dir
         self.pipeline = None
@@ -29,9 +29,11 @@ class Experiment:
     def _start_pipeline(self):
     
         with open(self.pipeline_sql_path, "r", encoding="utf-8") as f:
-            sql_code = f.read()
+            template = f.read()
 
-        print(f"Creating pipeline '{self.pipeline_name}' from {self.pipeline_sql_path}")
+        sql_code = template.replace('{{FILE_PATH}}', args.dataset_path)
+
+        print(f"Creating pipeline '{self.pipeline_name}' with '{self.dataset_path}'")
 
         self.pipeline = PipelineBuilder(
             client = self.client,
@@ -39,8 +41,7 @@ class Experiment:
             sql = sql_code
         ).create_or_replace()
 
-        self.client.start_pipeline(self.pipeline_name)
-        self.pipeline.wait_for_status(PipelineStatus.RUNNING, timeout=120)
+        self.pipeline.start()
 
     def _stop_pipeline(self):
         if self.pipeline is not None:
@@ -55,20 +56,17 @@ class Experiment:
         }
 
     @staticmethod
-    def _compute_throughput_rows_per_sec(start_snap, end_snap):
-        completed_delta = end_snap["total_completed_records"] - start_snap["total_completed_records"]
-        uptime_delta_msecs = end_snap["uptime_msecs"] - start_snap["uptime_msecs"]
-        if uptime_delta_msecs <= 0:
+    def _compute_throughput_rows_per_sec(end_snap):
+        if end_snap["uptime_msecs"] <= 0:
             return 0.0
-        return float(completed_delta) / (float(uptime_delta_msecs) / 1000.0)
+        return float(end_snap["total_completed_records"]) / (float(end_snap["uptime_msecs"]) / 1000.0)
 
     def _save_results(self, trial_id, payload):
         os.makedirs(self.output_dir, exist_ok=True)
 
-        sf_suffix = f"_sf{self.sf}" if self.sf is not None else ""
         filename = os.path.join(
             self.output_dir,
-            f"pipeline-{self.pipeline_name}{sf_suffix}_trial{trial_id}.json",
+            f"trial{trial_id}.json",
         )
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
@@ -83,14 +81,6 @@ class Experiment:
 
         self._start_pipeline()
 
-        start_snap = self._snapshot()
-        memory_timeline.append(
-            {
-                "uptime_msecs": start_snap["uptime_msecs"],
-                "rss_mib": start_snap["rss_mib"]
-            }
-        )
-
         self.pipeline.wait_for_completion()
         
         end_snap = self._snapshot()
@@ -104,18 +94,15 @@ class Experiment:
         self._stop_pipeline()
         self.pipeline.clear_storage()
 
-        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(start_snap, end_snap)
+        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(end_snap)
         peak_memory_mib = max((p["rss_mib"] for p in memory_timeline), default=0.0)
 
         payload = {
             "trial": trial_id,
             "pipeline_name": self.pipeline_name,
             "throughput_rows_per_sec": throughput_rows_per_sec,
-            "start_uptime_msecs": start_snap["uptime_msecs"],
             "end_uptime_msecs": end_snap["uptime_msecs"],
-            "completed_records_start": start_snap["total_completed_records"],
             "completed_records_end": end_snap["total_completed_records"],
-            "memory_start_mib": start_snap["rss_mib"],
             "memory_end_mib": end_snap["rss_mib"],
             "memory_peak_mib": peak_memory_mib,
             "memory_timeline": memory_timeline,
@@ -132,21 +119,18 @@ class Experiment:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
-    parser.add_argument("--pipeline-name", required=True)
     parser.add_argument("--pipeline-sql-path", required=True, help="Path to SQL file for pipeline definition.")
-    parser.add_argument("--sf", type=float, default=None)
+    parser.add_argument("--dataset-path", required=True, help="Path to Data CSV file, relative from /local/scratch/emumic/data/")
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default=None)
     return parser.parse_args()
 
-def resolve_default_output_dir(pipeline_sql_path: str, sf: float = None) -> str:
+def resolve_default_output_dir(pipeline_sql_path: str, dataset_path: str) -> str:
     pipeline_sql_name = os.path.basename(pipeline_sql_path)
     pipeline_sql_stem = os.path.splitext(pipeline_sql_name)[0]
     pipeline_parent_dir = os.path.basename(os.path.dirname(pipeline_sql_path))
 
-    if sf is None:
-        return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem)
-    return os.path.join("results", pipeline_parent_dir, pipeline_sql_stem, str(sf))
+    return os.path.join("results", dataset_path, pipeline_parent_dir, pipeline_sql_stem)
 
 
 
@@ -154,18 +138,18 @@ if __name__ == "__main__":
     args = parse_args()
 
     if args.output_dir is None:
-        args.output_dir = resolve_default_output_dir(args.pipeline_sql_path, args.sf)
+        args.output_dir = resolve_default_output_dir(args.pipeline_sql_path, args.dataset_path)
 
     print("\n" + "=" * 70)
     print("FELDERA EXPERIMENT")
     print("=" * 70 + "\n")
-    print(f"Pipeline: {args.pipeline_name}")
+    print(f"Pipeline Template: {args.pipeline_sql_path}")
     print(f"Trials: {args.trials}")
 
     experiment = Experiment(
-        pipeline_name=args.pipeline_name,
+        pipeline_name=os.path.splitext(os.path.basename(args.pipeline_sql_path))[0],
         pipeline_sql_path=args.pipeline_sql_path,
-        sf=args.sf,
+        dataset_path=args.dataset_path,
         trials=args.trials,
         output_dir=args.output_dir,
     )
