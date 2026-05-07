@@ -10,7 +10,7 @@ services:
       # Otherwise, browsers will complain about CORS errors
       - "8080:8080"
     volumes:
-      - /local/scratch/emumic/data:/data
+      - ./data:/data
     stop_grace_period: 0s
     environment:
       - RUST_LOG=info,actix_web=error,tokio_postgres=info
@@ -22,17 +22,24 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --request GET --url http://localhost:8080/healthz"
+          "curl --fail --request GET --url http://localhost:8080/healthz",
         ]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redpanda:
-    profiles: [ "redpanda", "kafka-connect",
-                "demo-debezium-mysql", "demo-supply-chain-tutorial",
-                "demo-snowflake-sink", "demo-debezium-jdbc", "demo-debezium-postgres",
-                "demo-simple-count" ]
+    profiles:
+      [
+        "redpanda",
+        "kafka-connect",
+        "demo-debezium-mysql",
+        "demo-supply-chain-tutorial",
+        "demo-snowflake-sink",
+        "demo-debezium-jdbc",
+        "demo-debezium-postgres",
+        "demo-simple-count",
+      ]
     command:
       - redpanda
       - start
@@ -66,25 +73,23 @@ services:
       - 19644:9644
     healthcheck:
       test:
-        [
-          "CMD-SHELL",
-          "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"
-        ]
+        ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 5
       start_period: 5s
 
   nats:
-    profiles: [ "nats" ]
+    profiles: ["nats"]
     image: nats:alpine
     ports:
-      - "4222:4222"  # Client connections
-      - "8222:8222"  # HTTP monitoring
-      - "6222:6222"  # Cluster routing
-    command: ["-js", "-m", "8222"]  # Enable JetStream and monitoring
+      - "4222:4222" # Client connections
+      - "8222:8222" # HTTP monitoring
+      - "6222:6222" # Cluster routing
+    command: ["-js", "-m", "8222"] # Enable JetStream and monitoring
     healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8222/healthz"]
+      test:
+        ["CMD", "wget", "--spider", "--quiet", "http://localhost:8222/healthz"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -94,16 +99,16 @@ services:
     # Utilities for NATS testing and management
     # Usage: docker compose exec nats-cli sh
     # Then nats cli tool is available.
-    profiles: [ "nats" ]
+    profiles: ["nats"]
     image: natsio/nats-box:latest
     depends_on:
       - nats
     environment:
       - NATS_URL=nats://nats:4222
-    command: ["sleep", "infinity"]  # Keep container running for interactive use
+    command: ["sleep", "infinity"] # Keep container running for interactive use
 
   prometheus:
-    profiles: [ "prometheus", "grafana" ]
+    profiles: ["prometheus", "grafana"]
     depends_on:
       pipeline-manager:
         condition: service_healthy
@@ -114,14 +119,21 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
     healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:9090/-/healthy"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--quiet",
+          "http://localhost:9090/-/healthy",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 50s
 
   grafana:
-    profiles: [ "grafana" ]
+    profiles: ["grafana"]
     depends_on:
       prometheus:
         condition: service_healthy
@@ -130,4 +142,4 @@ services:
       - 3000:3000
     restart: unless-stopped
     volumes:
-        - ./config/grafana_data_sources.yaml:/etc/grafana/provisioning/datasources/grafana_data_sources.yaml
+      - ./config/grafana_data_sources.yaml:/etc/grafana/provisioning/datasources/grafana_data_sources.yaml

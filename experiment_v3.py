@@ -1,12 +1,37 @@
 import argparse
 import json
 import os
+import threading
+import time
 
 from feldera import FelderaClient
-from feldera.pipeline import Pipeline
 from feldera.pipeline_builder import PipelineBuilder
-from feldera.enums import PipelineStatus
 
+
+
+class StatsPoller(threading.Thread):
+    def __init__(
+        self,
+        snapshot_func,
+        interval = 0.02
+    ):
+        super().__init__()
+        self.snapshot_func = snapshot_func
+        self.interval = interval
+        self.timeline = []
+        self._stop_event = threading.Event()
+
+    def run(self):
+        while not self._stop_event.is_set():
+            try:
+                snap = self.snapshot_func()
+                self.timeline.append(snap)
+            except:
+                pass
+            time.sleep(self.interval)
+    
+    def stop(self):
+        self._stop_event.set()
 
 class Experiment:
     def __init__(
@@ -50,9 +75,9 @@ class Experiment:
     def _snapshot(self):
         stats = self.pipeline.stats().global_metrics
         return {
-            "uptime_msecs": stats.uptime_msecs or 0,
-            "total_completed_records": stats.total_completed_records or 0,
-            "rss_mib": (stats.rss_bytes or 0) / (1024 * 1024),
+            "uptime_msecs": stats.uptime_msecs or -1,
+            "total_completed_records": stats.total_completed_records or -1,
+            "rss_mib": (stats.rss_bytes or -1) / (1024 * 1024),
         }
 
     @staticmethod
@@ -77,35 +102,32 @@ class Experiment:
         print(f"TRIAL {trial_id}/{self.trials}")
         print(f"{'#' * 70}\n")
 
-        memory_timeline = []
+        poller = StatsPoller(self._snapshot)
+        poller.start()
 
         self._start_pipeline()
-
         self.pipeline.wait_for_completion()
-        
-        end_snap = self._snapshot()
-        memory_timeline.append(
-            {
-                "uptime_msecs": end_snap["uptime_msecs"],
-                "rss_mib": end_snap["rss_mib"]
-            }
-        )
+
+        poller.stop()
+        poller.join()
+
+        timeline = poller.timeline
         
         self._stop_pipeline()
         self.pipeline.clear_storage()
 
-        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(end_snap)
-        peak_memory_mib = max((p["rss_mib"] for p in memory_timeline), default=0.0)
+        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(timeline[-1])
+        peak_memory_mib = max((p["rss_mib"] for p in timeline), default=0.0)
 
         payload = {
             "trial": trial_id,
             "pipeline_name": self.pipeline_name,
             "throughput_rows_per_sec": throughput_rows_per_sec,
-            "end_uptime_msecs": end_snap["uptime_msecs"],
-            "completed_records_end": end_snap["total_completed_records"],
-            "memory_end_mib": end_snap["rss_mib"],
+            "end_uptime_msecs": timeline[-1]["uptime_msecs"],
+            "completed_records_end": timeline[-1]["total_completed_records"],
+            "memory_end_mib": timeline[-1]["rss_mib"],
             "memory_peak_mib": peak_memory_mib,
-            "memory_timeline": memory_timeline,
+            "timeline": timeline,
         }
 
         self._save_results(trial_id, payload)
@@ -120,7 +142,7 @@ class Experiment:
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
     parser.add_argument("--pipeline-sql-path", required=True, help="Path to SQL file for pipeline definition.")
-    parser.add_argument("--dataset-path", required=True, help="Path to Data CSV file, relative from /local/scratch/emumic/data/")
+    parser.add_argument("--dataset-path", required=True, help="Path to Data CSV file.")
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default=None)
     return parser.parse_args()

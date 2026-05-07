@@ -1,0 +1,72 @@
+-- Template.
+CREATE TABLE EDGES (
+    src bigint,
+    tgt bigint
+) WITH (
+    'materialized' = 'true',
+    'connectors' = '[{
+        "name": "Edges_connector",
+        "transport": {
+            "name": "file_input",
+            "config": {
+                "path": "/{{FILE_PATH}}"
+            }
+        },
+        "format": { 
+            "name": "csv",
+            "config": {
+                "headers": true
+            }
+        }
+    }]'
+);
+
+-- Child Bag 1.
+CREATE MATERIALIZED VIEW CHILD_1_Q AS
+SELECT R6.A AS A, R5.E AS E, R5.F AS F
+FROM EDGES AS R5(E, F)
+JOIN EDGES AS R6(A, F) ON R5.F = R6.F
+JOIN EDGES AS R7(A, E) ON R7.A = R6.A AND R7.E = R5.E;
+
+CREATE MATERIALIZED VIEW CHILD_1_P AS
+SELECT A, E
+FROM CHILD_1_Q;
+
+-- Child Bag 2.
+CREATE MATERIALIZED VIEW CHILD_2_Q AS
+SELECT R1.A AS A, R1.B AS B, R7.E AS E
+FROM EDGES AS R1(A, B)
+JOIN EDGES AS R7(A, E) ON R1.A = R7.A
+JOIN CHILD_1_P ON CHILD_1_P.A = R7.A AND (CHILD_1_P.A = R1.A) AND CHILD_1_P.E = R7.E;
+
+CREATE MATERIALIZED VIEW CHILD_2_P AS
+SELECT B, E
+FROM CHILD_2_Q;
+
+-- Child Bag 3.
+CREATE MATERIALIZED VIEW CHILD_3_Q AS
+SELECT R8.B AS B, R4.D AS D, R4.E AS E
+FROM EDGES AS R4(D, E)
+JOIN EDGES AS R8(B, D) ON R4.D = R8.D
+JOIN CHILD_2_P ON CHILD_2_P.B = R8.B AND CHILD_2_P.E = R4.E;
+
+CREATE MATERIALIZED VIEW CHILD_3_P AS
+SELECT B, D
+FROM CHILD_3_Q;
+
+-- Root Bag.
+CREATE MATERIALIZED VIEW ROOT_Q AS
+SELECT R2.B AS B, R3.C AS C, R8.D AS D
+FROM EDGES AS R2(B, C)
+JOIN EDGES AS R3(C, D) ON R3.C = R2.C
+JOIN EDGES AS R8(B, D) ON R8.B = R2.B AND R8.D = R3.D
+JOIN CHILD_3_P ON CHILD_3_P.B = R8.B AND (CHILD_3_P.B = R2.B) AND CHILD_3_P.D = R8.D AND (CHILD_3_P.D = R3.D);
+
+-- Result.
+CREATE MATERIALIZED VIEW RESULT AS
+SELECT CHILD_1_Q.A AS A, ROOT_Q.B AS B, ROOT_Q.C AS C, ROOT_Q.D AS D, CHILD_1_Q.E AS E, CHILD_1_Q.F AS F
+FROM ROOT_Q
+JOIN CHILD_3_Q ON ROOT_Q.B = CHILD_3_Q.B AND ROOT_Q.D = CHILD_3_Q.D
+JOIN CHILD_2_Q ON CHILD_3_Q.B = CHILD_2_Q.B AND (ROOT_Q.B = CHILD_2_Q.B) AND CHILD_3_Q.E = CHILD_2_Q.E
+JOIN CHILD_1_Q ON CHILD_2_Q.A = CHILD_1_Q.A AND CHILD_2_Q.E = CHILD_1_Q.E AND (CHILD_1_Q.E = CHILD_3_Q.E);
+
