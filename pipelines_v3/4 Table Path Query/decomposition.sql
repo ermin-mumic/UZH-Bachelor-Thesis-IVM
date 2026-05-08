@@ -35,7 +35,7 @@ CREATE TABLE PARTSUPP (
         "transport": {
             "name": "file_input",
             "config": {
-                "path": "/tpch_data/sf_10.0/partsupp.csv"
+                "path": "/{{FILE_PATH}}/partsupp.csv"
             }
         },
         "format": { 
@@ -62,7 +62,7 @@ CREATE TABLE CUSTOMER (
         "transport": {
             "name": "file_input",
             "config": {
-                "path": "/tpch_data/sf_10.0/customer.csv"
+                "path": "/{{FILE_PATH}}/customer.csv"
             }
         },
         "format": { 
@@ -90,7 +90,7 @@ CREATE TABLE ORDERS (
         "transport": {
             "name": "file_input",
             "config": {
-                "path": "/tpch_data/sf_10.0/orders.csv"
+                "path": "/{{FILE_PATH}}/orders.csv"
             }
         },
         "format": { 
@@ -125,7 +125,7 @@ CREATE TABLE LINEITEM (
         "transport": {
             "name": "file_input",
             "config": {
-                "path": "/tpch_data/sf_10.0/lineitem.csv"
+                "path": "/{{FILE_PATH}}/lineitem.csv"
             }
         },
         "format": { 
@@ -155,7 +155,12 @@ CREATE TABLE REGION (
 -- Child Bag 1.
 CREATE MATERIALIZED VIEW CHILD_1_Q AS
 SELECT *
-FROM CUSTOMER;
+FROM CUSTOMER
+JOIN (
+    SELECT DISTINCT CUSTKEY
+    FROM ORDERS
+)
+USING (CUSTKEY);
 
 CREATE MATERIALIZED VIEW CHILD_1_P AS
 SELECT DISTINCT CUSTKEY
@@ -165,6 +170,15 @@ FROM CHILD_1_Q;
 CREATE MATERIALIZED VIEW CHILD_2_Q AS
 SELECT * 
 FROM ORDERS
+JOIN (
+    SELECT DISTINCT ORDERKEY
+    FROM LINEITEM 
+)
+USING (ORDERKEY)
+JOIN (
+    SELECT DISTINCT CUSTKEY
+    FROM CUSTOMER
+) USING (CUSTKEY)
 JOIN CHILD_1_P USING (CUSTKEY);
 
 CREATE MATERIALIZED VIEW CHILD_2_P AS
@@ -174,23 +188,32 @@ FROM CHILD_2_Q;
 -- Child Bag 3.
 CREATE MATERIALIZED VIEW CHILD_3_Q AS
 SELECT *
-FROM PARTSUPP;
+FROM PARTSUPP
+JOIN (
+    SELECT DISTINCT PARTKEY, SUPPKEY
+    FROM LINEITEM
+)
+USING (PARTKEY, SUPPKEY);
 
 CREATE MATERIALIZED VIEW CHILD_3_P AS
 SELECT DISTINCT PARTKEY, SUPPKEY
 FROM CHILD_3_Q;
 
 -- Root Bag.
-CREATE MATERIALIZED VIEW ROOT_Q AS
+CREATE MATERIALIZED VIEW RESULT AS
 SELECT *
 FROM LINEITEM
+JOIN (
+    SELECT DISTINCT ORDERKEY
+    FROM ORDERS
+)
+USING (ORDERKEY)
+JOIN (
+    SELECT DISTINCT PARTKEY, SUPPKEY
+    FROM PARTSUPP
+)
+USING (PARTKEY, SUPPKEY)
 JOIN CHILD_2_P USING (ORDERKEY)
 JOIN CHILD_3_P USING (PARTKEY, SUPPKEY);
 
--- Result.
-CREATE MATERIALIZED VIEW RESULT AS
-SELECT *
-FROM ROOT_Q 
-JOIN CHILD_3_Q USING (PARTKEY, SUPPKEY)
-JOIN CHILD_2_Q USING (ORDERKEY)
-JOIN CHILD_1_Q USING (CUSTKEY);
+

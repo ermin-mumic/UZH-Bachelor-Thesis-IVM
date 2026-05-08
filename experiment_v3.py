@@ -15,7 +15,7 @@ class StatsPoller(threading.Thread):
         snapshot_func,
         interval = 0.02
     ):
-        super().__init__()
+        super().__init__(daemon=True)
         self.snapshot_func = snapshot_func
         self.interval = interval
         self.timeline = []
@@ -79,6 +79,16 @@ class Experiment:
             "total_completed_records": stats.total_completed_records or -1,
             "rss_mib": (stats.rss_bytes or -1) / (1024 * 1024),
         }
+    
+    def _get_result_count(self):
+        try: 
+            result_generator = self.pipeline.query("SELECT COUNT(*) AS total_count FROM RESULT")
+            first_row = next(result_generator)
+            return first_row["total_count"]
+    
+        except Exception as e:
+            print(f"Error querying result count: {e}")
+            return -1
 
     @staticmethod
     def _compute_throughput_rows_per_sec(end_snap):
@@ -103,29 +113,30 @@ class Experiment:
         print(f"{'#' * 70}\n")
 
         poller = StatsPoller(self._snapshot)
-        poller.start()
-
         self._start_pipeline()
+        poller.start()
         self.pipeline.wait_for_completion()
-
         poller.stop()
         poller.join()
 
         timeline = poller.timeline
         
+        result_count = self._get_result_count()
+        
         self._stop_pipeline()
         self.pipeline.clear_storage()
 
-        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(timeline[-1])
-        peak_memory_mib = max((p["rss_mib"] for p in timeline), default=0.0)
+        throughput_rows_per_sec = self._compute_throughput_rows_per_sec(timeline[-1]) if timeline else -1
+        peak_memory_mib = max((p["rss_mib"] for p in timeline), default=0.0) if timeline else -1
 
         payload = {
             "trial": trial_id,
             "pipeline_name": self.pipeline_name,
             "throughput_rows_per_sec": throughput_rows_per_sec,
-            "end_uptime_msecs": timeline[-1]["uptime_msecs"],
-            "completed_records_end": timeline[-1]["total_completed_records"],
-            "memory_end_mib": timeline[-1]["rss_mib"],
+            "end_uptime_msecs": timeline[-1]["uptime_msecs"] if timeline else -1,
+            "completed_records_end": timeline[-1]["total_completed_records"] if timeline else -1,
+            "result_count": result_count,
+            "memory_end_mib": timeline[-1]["rss_mib"] if timeline else -1,
             "memory_peak_mib": peak_memory_mib,
             "timeline": timeline,
         }
@@ -142,7 +153,7 @@ class Experiment:
 def parse_args():
     parser = argparse.ArgumentParser(description="Run Feldera experiment.")
     parser.add_argument("--pipeline-sql-path", required=True, help="Path to SQL file for pipeline definition.")
-    parser.add_argument("--dataset-path", required=True, help="Path to Data CSV file.")
+    parser.add_argument("--dataset-path", required=True, help="Path to Data CSV file. 'data/snap_data/x.csv")
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--output-dir", default=None)
     return parser.parse_args()
