@@ -13,7 +13,7 @@ class StatsPoller(threading.Thread):
     def __init__(
         self,
         snapshot_func,
-        interval = 0.02
+        interval = 5
     ):
         super().__init__(daemon=True)
         self.snapshot_func = snapshot_func

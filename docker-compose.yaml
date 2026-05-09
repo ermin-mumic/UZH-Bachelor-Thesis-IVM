@@ -10,7 +10,7 @@ services:
       # Otherwise, browsers will complain about CORS errors
       - "8080:8080"
     volumes:
-      - ./data:/data
+      - /local/scratch/emumic/data:/data
     stop_grace_period: 0s
     environment:
       - RUST_LOG=info,actix_web=error,tokio_postgres=info

@@ -5,36 +5,100 @@ import subprocess
 import datetime
 
 EXPERIMENTS = [
-    # ---- 4 Table Path Query - tpc-h - sf_0.01 ----
+    # ---- 4 Table Path Query - tpc-h - sf_1.0 ----
     {
         "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
-        "dataset-path": f"data/tpch_data/sf_0.01",
+        "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
-        "output-dir": f"results/tpch_data/sf_0.01/4 Table Path Query/baseline"
+        "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/baseline"
     },
     {
         "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
-        "dataset-path": f"data/tpch_data/sf_0.01",
+        "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
-        "output-dir": f"results/tpch_data/sf_0.01/4 Table Path Query/decomposition_full"
+        "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_full"
     },
     {
         "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
-        "dataset-path": f"data/tpch_data/sf_0.01",
+        "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
-        "output-dir": f"results/tpch_data/sf_0.01/4 Table Path Query/decomposition_no_projection_full"
+        "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_no_projection_full"
     },
     {
         "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
-        "dataset-path": f"data/tpch_data/sf_0.01",
+        "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
-        "output-dir": f"results/tpch_data/sf_0.01/4 Table Path Query/decomposition_no_projection"
+        "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_no_projection"
     },
     {
         "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
-        "dataset-path": f"data/tpch_data/sf_0.01",
+        "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
-        "output-dir": f"results/tpch_data/sf_0.01/4 Table Path Query/decomposition"
+        "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition"
+    },
+
+    # ---- 4 Table Path Query - tpc-h - sf_10.0 ----
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+        "dataset-path": f"data/tpch_data/sf_10.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/baseline"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+        "dataset-path": f"data/tpch_data/sf_10.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_full"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+        "dataset-path": f"data/tpch_data/sf_10.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_no_projection_full"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+        "dataset-path": f"data/tpch_data/sf_10.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_no_projection"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+        "dataset-path": f"data/tpch_data/sf_10.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition"
+    },
+
+    # ---- 4 Table Path Query - tpc-h - sf_100.0 ----
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+        "dataset-path": f"data/tpch_data/sf_100.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/baseline"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+        "dataset-path": f"data/tpch_data/sf_100.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_full"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+        "dataset-path": f"data/tpch_data/sf_100.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection_full"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+        "dataset-path": f"data/tpch_data/sf_100.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection"
+    },
+    {
+        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+        "dataset-path": f"data/tpch_data/sf_100.0",
+        "trials": 3,
+        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition"
     },
 
 
