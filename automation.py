@@ -70,36 +70,36 @@ EXPERIMENTS = [
     },
 
     # ---- 4 Table Path Query - tpc-h - sf_100.0 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
-        "dataset-path": f"data/tpch_data/sf_100.0",
-        "trials": 3,
-        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/baseline"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
-        "dataset-path": f"data/tpch_data/sf_100.0",
-        "trials": 3,
-        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
-        "dataset-path": f"data/tpch_data/sf_100.0",
-        "trials": 3,
-        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
-        "dataset-path": f"data/tpch_data/sf_100.0",
-        "trials": 3,
-        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
-        "dataset-path": f"data/tpch_data/sf_100.0",
-        "trials": 3,
-        "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+    #     "dataset-path": f"data/tpch_data/sf_100.0",
+    #     "trials": 3,
+    #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/baseline"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+    #     "dataset-path": f"data/tpch_data/sf_100.0",
+    #     "trials": 3,
+    #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+    #     "dataset-path": f"data/tpch_data/sf_100.0",
+    #     "trials": 3,
+    #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+    #     "dataset-path": f"data/tpch_data/sf_100.0",
+    #     "trials": 3,
+    #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+    #     "dataset-path": f"data/tpch_data/sf_100.0",
+    #     "trials": 3,
+    #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition"
+    # },
 
 
     # ---- Cyclic Query 1 - soc-Epinions1 ----
@@ -972,10 +972,10 @@ def run_automation():
             writer.writerow(["Timestamp", "Dataset", "Variant", "Status", "Duration_Min"])
 
     for exp in EXPERIMENTS:
-        subprocess.run(["docker-compose", "down", "-v"], check=False)
+        subprocess.run(["docker", "compose", "down", "-v"], check=False)
         subprocess.run(["docker", "system", "prune", "-f"], check=False)
-        subprocess.run(["docker-compose", "up", "-d"], check=False)
-        time.sleep(15)
+        subprocess.run(["docker", "compose", "up", "-d"], check=False)
+        time.sleep(30)
 
         cmd = ["python", "experiment_v3.py"]
 
