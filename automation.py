@@ -972,6 +972,11 @@ def run_automation():
             writer.writerow(["Timestamp", "Dataset", "Variant", "Status", "Duration_Min"])
 
     for exp in EXPERIMENTS:
+        subprocess.run(["docker-compose", "down", "-v"], check=False)
+        subprocess.run(["docker", "system", "prune", "-f"], check=False)
+        subprocess.run(["docker-compose", "up", "-d"], check=False)
+        time.sleep(15)
+
         cmd = ["python", "experiment_v3.py"]
 
         for key, value in exp.items():

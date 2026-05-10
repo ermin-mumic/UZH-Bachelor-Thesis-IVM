@@ -113,16 +113,29 @@ class Experiment:
         print(f"{'#' * 70}\n")
 
         poller = StatsPoller(self._snapshot)
-        self._start_pipeline()
-        poller.start()
-        self.pipeline.wait_for_completion()
-        poller.stop()
-        poller.join()
 
-        timeline = poller.timeline
-        
-        result_count = self._get_result_count()
-        
+        try:
+            self._start_pipeline()
+            poller.start()
+
+            self.pipeline.wait_for_completion()
+
+            result_count = self._get_result_count()
+
+            poller.stop()
+            poller.join()
+            timeline = poller.timeline
+
+        except Exception as e:
+            print(f"!!! TRIAL {trial_id} FAILED: {e}")
+            poller.stop()
+            poller.join()
+
+            self._stop_pipeline()
+            self.pipeline.clear_storage()
+            
+            raise
+
         self._stop_pipeline()
         self.pipeline.clear_storage()
 
