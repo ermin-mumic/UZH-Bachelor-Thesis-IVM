@@ -103,66 +103,66 @@ EXPERIMENTS = [
 
 
     # ---- Cyclic Query 1 - soc-Epinions1 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_9_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_9_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_9_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_9_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables"
+    # },
 
     # ---- Cyclic Query 1 - p2p-Gnutella31 ----
     {
@@ -290,66 +290,66 @@ EXPERIMENTS = [
 
 
     # ---- Cyclic Query 2 - soc-Epinions1 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_8_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_8_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_8_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_8_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables"
+    # },
 
     # ---- Cyclic Query 2 - p2p-Gnutella31 ----
     {
@@ -477,42 +477,42 @@ EXPERIMENTS = [
 
 
     # ---- Cyclic Query 3 - soc-Epinions1 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_5_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_5_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_5_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_5_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables"
+    # },
 
     # ---- Cyclic Query 3 - p2p-Gnutella31 ----
     {
@@ -592,66 +592,66 @@ EXPERIMENTS = [
 
 
     # ---- Cyclic Query 4 - soc-Epinions1 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_6_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_6_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_6_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_6_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables"
+    # },
 
     # ---- Cyclic Query 4 - p2p-Gnutella31 ----
     {
@@ -779,66 +779,66 @@ EXPERIMENTS = [
 
 
     # ---- Cyclic Query 5 - soc-Epinions1 ----
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_5_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_5_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables_full"
-    },
-    {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
-        "dataset-path": f"data/snap_data/soc-Epinions1.csv",
-        "trials": 3,
-        "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables"
-    },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_5_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_5_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables_full"
+    # },
+    # {
+    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
+    #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
+    #     "trials": 3,
+    #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables"
+    # },
 
     # ---- Cyclic Query 5 - p2p-Gnutella31 ----
     {
@@ -966,30 +966,29 @@ EXPERIMENTS = [
 ]
 
 def run_automation():
-    if not os.path.exists("RESULT.csv"):
-        with open("RESULT.csv", 'w', newline='') as f:
+    overview_file = "OVERVIEW.csv"
+    if not os.path.exists(overview_file):
+        with open(overview_file, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(["Timestamp", "Dataset", "Variant", "Status", "Duration_Min"])
+            writer.writerow(["Timestamp", "ID", "Dataset", "Variant", "Status", "Duration_Min"])
 
     for exp in EXPERIMENTS:
         subprocess.run(["docker", "compose", "down", "-v"], check=False)
         subprocess.run(["docker", "system", "prune", "-f"], check=False)
         subprocess.run(["docker", "compose", "up", "-d"], check=False)
-        time.sleep(30)
+        time.sleep(20)
 
         cmd = ["python", "experiment_v3.py"]
 
         for key, value in exp.items():
             cmd.append(f"--{key}")
             cmd.append(str(value))
-        
-        start_time = time.perf_counter()
 
-        status = "SUCCESS"
+        start_time = time.perf_counter()
 
         try:
             subprocess.run(cmd, timeout= 60 * 60 * 6, check=True)
-
+            status = "COMPLETED"
         except subprocess.TimeoutExpired:
             status = "TIMEOUT"
         except subprocess.CalledProcessError:
@@ -998,13 +997,13 @@ def run_automation():
             print(f"ERROR: {e}")
             status = "ERROR"
 
-        end_time = time.perf_counter()
-        duration_min = round((end_time - start_time) / 60, 2)
+        duration_min = round((time.perf_counter() - start_time) / 60, 2)
 
-        with open("RESULT.csv", "a", newline='') as f:
+        with open(overview_file, "a", newline='') as f:
             writer = csv.writer(f)
             writer.writerow([
                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    os.path.basename(os.path.dirname(exp["pipeline-sql-path"])),
                     os.path.basename(exp["dataset-path"]),
                     os.path.basename(exp["pipeline-sql-path"]),
                     status,

@@ -7,7 +7,21 @@ import time
 from feldera import FelderaClient
 from feldera.pipeline_builder import PipelineBuilder
 
+class TaskWorker(threading.Thread):
+    def __init__(
+            self,
+            task_func
+    ):
+        super().__init__(daemon=True)
+        self.task_func = task_func
+        self.result = None
+        self.error = None
 
+    def run(self):
+        try:
+            self.result = self.task_func()
+        except Exception as e:
+            self.error = e
 
 class StatsPoller(threading.Thread):
     def __init__(
@@ -56,7 +70,7 @@ class Experiment:
         with open(self.pipeline_sql_path, "r", encoding="utf-8") as f:
             template = f.read()
 
-        sql_code = template.replace('{{FILE_PATH}}', args.dataset_path)
+        sql_code = template.replace('{{FILE_PATH}}', self.dataset_path)
 
         print(f"Creating pipeline '{self.pipeline_name}' with '{self.dataset_path}'")
 
@@ -81,14 +95,9 @@ class Experiment:
         }
     
     def _get_result_count(self):
-        try: 
-            result_generator = self.pipeline.query("SELECT COUNT(*) AS total_count FROM RESULT")
-            first_row = next(result_generator)
-            return first_row["total_count"]
-    
-        except Exception as e:
-            print(f"Error querying result count: {e}")
-            return -1
+        result_generator = self.pipeline.query("SELECT COUNT(*) AS total_count FROM RESULT")
+        first_row = next(result_generator, None)
+        return first_row["total_count"] if first_row else 0
 
     @staticmethod
     def _compute_throughput_rows_per_sec(end_snap):
@@ -112,32 +121,46 @@ class Experiment:
         print(f"TRIAL {trial_id}/{self.trials}")
         print(f"{'#' * 70}\n")
 
-        poller = StatsPoller(self._snapshot)
+        INGESTION_TIMEOUT = 1800 # 30min
+        COUNT_TIMEOUT = 900 # 15min
+        
+        status = "SUCCESS"
 
-        try:
-            self._start_pipeline()
-            poller.start()
+        stats_poller = StatsPoller(self._snapshot) 
 
-            self.pipeline.wait_for_completion()
+        self._start_pipeline()
+        stats_poller.start()
 
-            result_count = self._get_result_count()
+        ingestion_worker = TaskWorker(self.pipeline.wait_for_completion)
+        ingestion_worker.start()
+        ingestion_worker.join(timeout=INGESTION_TIMEOUT)
 
-            poller.stop()
-            poller.join()
-            timeline = poller.timeline
+        if ingestion_worker.is_alive():
+            status = "Timeout"
+        elif ingestion_worker.error:
+            status = "CRASHED"
 
-        except Exception as e:
-            print(f"!!! TRIAL {trial_id} FAILED: {e}")
-            poller.stop()
-            poller.join()
+        stats_poller.stop()
+        stats_poller.join()
+    
+        end_snap = self._snapshot()
+        stats_poller.timeline.append(end_snap)
 
-            self._stop_pipeline()
-            self.pipeline.clear_storage()
-            
-            raise
+        count_worker = TaskWorker(self._get_result_count)
+        count_worker.start()
+        count_worker.join(timeout=COUNT_TIMEOUT)
 
+        if count_worker.is_alive():
+            result_count = "TIMEOUT"
+        elif count_worker.error:
+            result_count = f"ERROR: {count_worker.error}"
+        else:
+            result_count = count_worker.result
+        
         self._stop_pipeline()
         self.pipeline.clear_storage()
+
+        timeline = stats_poller.timeline
 
         throughput_rows_per_sec = self._compute_throughput_rows_per_sec(timeline[-1]) if timeline else -1
         peak_memory_mib = max((p["rss_mib"] for p in timeline), default=0.0) if timeline else -1
@@ -145,6 +168,7 @@ class Experiment:
         payload = {
             "trial": trial_id,
             "pipeline_name": self.pipeline_name,
+            "status":status,
             "throughput_rows_per_sec": throughput_rows_per_sec,
             "end_uptime_msecs": timeline[-1]["uptime_msecs"] if timeline else -1,
             "completed_records_end": timeline[-1]["total_completed_records"] if timeline else -1,
