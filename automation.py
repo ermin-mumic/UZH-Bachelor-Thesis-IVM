@@ -7,31 +7,31 @@ import datetime
 EXPERIMENTS = [
     # ---- 4 Table Path Query - tpc-h - sf_1.0 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/baseline.sql",
         "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/baseline"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_full.sql",
         "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection_full.sql",
         "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_no_projection_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection.sql",
         "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition_no_projection"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition.sql",
         "dataset-path": f"data/tpch_data/sf_1.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_1.0/4 Table Path Query/decomposition"
@@ -39,31 +39,31 @@ EXPERIMENTS = [
 
     # ---- 4 Table Path Query - tpc-h - sf_10.0 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/baseline.sql",
         "dataset-path": f"data/tpch_data/sf_10.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/baseline"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_full.sql",
         "dataset-path": f"data/tpch_data/sf_10.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection_full.sql",
         "dataset-path": f"data/tpch_data/sf_10.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_no_projection_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection.sql",
         "dataset-path": f"data/tpch_data/sf_10.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition_no_projection"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+        "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition.sql",
         "dataset-path": f"data/tpch_data/sf_10.0",
         "trials": 3,
         "output-dir": f"results/tpch_data/sf_10.0/4 Table Path Query/decomposition"
@@ -71,31 +71,31 @@ EXPERIMENTS = [
 
     # ---- 4 Table Path Query - tpc-h - sf_100.0 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/baseline.sql",
+    #     "pipeline-sql-path": f"pipelines/4 Table Path Query/baseline.sql",
     #     "dataset-path": f"data/tpch_data/sf_100.0",
     #     "trials": 3,
     #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/baseline"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_full.sql",
+    #     "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_full.sql",
     #     "dataset-path": f"data/tpch_data/sf_100.0",
     #     "trials": 3,
     #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection_full.sql",
+    #     "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection_full.sql",
     #     "dataset-path": f"data/tpch_data/sf_100.0",
     #     "trials": 3,
     #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition_no_projection.sql",
+    #     "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition_no_projection.sql",
     #     "dataset-path": f"data/tpch_data/sf_100.0",
     #     "trials": 3,
     #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition_no_projection"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/4 Table Path Query/decomposition.sql",
+    #     "pipeline-sql-path": f"pipelines/4 Table Path Query/decomposition.sql",
     #     "dataset-path": f"data/tpch_data/sf_100.0",
     #     "trials": 3,
     #     "output-dir": f"results/tpch_data/sf_100.0/4 Table Path Query/decomposition"
@@ -104,61 +104,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 1 - soc-Epinions1 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_9_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_9_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/baseline_9_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/chain_decomposition_no_projection_9_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 1/decomposition_no_projection_9_tables"
@@ -166,61 +166,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 1 - p2p-Gnutella31 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_9_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/baseline_9_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/chain_decomposition_no_projection_9_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/decomposition_no_projection_9_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 1/decomposition_no_projection_9_tables"
@@ -228,61 +228,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 1 - cit-HepTh ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/baseline_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/baseline_9_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/baseline_9_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/chain_decomposition_no_projection_9_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/chain_decomposition_no_projection_9_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/chain_decomposition_no_projection_9_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/decomposition_no_projection_9_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 1/decomposition_no_projection_9_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 1/decomposition_no_projection_9_tables"
@@ -291,61 +291,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 2 - soc-Epinions1 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_8_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_8_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/baseline_8_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/chain_decomposition_no_projection_8_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 2/decomposition_no_projection_8_tables"
@@ -353,61 +353,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 2 - p2p-Gnutella31 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_8_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/baseline_8_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/chain_decomposition_no_projection_8_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/decomposition_no_projection_8_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 2/decomposition_no_projection_8_tables"
@@ -415,61 +415,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 2 - cit-HepTh ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/baseline_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/baseline_8_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/baseline_8_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/chain_decomposition_no_projection_8_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/chain_decomposition_no_projection_8_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/chain_decomposition_no_projection_8_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/decomposition_no_projection_8_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 2/decomposition_no_projection_8_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 2/decomposition_no_projection_8_tables"
@@ -478,37 +478,37 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 3 - soc-Epinions1 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_5_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_5_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/baseline_5_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 3/chain_decomposition_no_projection_5_tables"
@@ -516,37 +516,37 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 3 - p2p-Gnutella31 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_5_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/baseline_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 3/chain_decomposition_no_projection_5_tables"
@@ -554,37 +554,37 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 3 - cit-HepTh ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/baseline_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/baseline_5_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/baseline_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/chain_decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 3/chain_decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 3/chain_decomposition_no_projection_5_tables"
@@ -593,61 +593,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 4 - soc-Epinions1 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_6_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_6_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/baseline_6_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/chain_decomposition_no_projection_6_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 4/decomposition_no_projection_6_tables"
@@ -655,61 +655,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 4 - p2p-Gnutella31 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_6_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/baseline_6_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/chain_decomposition_no_projection_6_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/decomposition_no_projection_6_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 4/decomposition_no_projection_6_tables"
@@ -717,61 +717,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 4 - cit-HepTh ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/baseline_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/baseline_6_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/baseline_6_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/chain_decomposition_no_projection_6_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/chain_decomposition_no_projection_6_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/chain_decomposition_no_projection_6_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/decomposition_no_projection_6_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 4/decomposition_no_projection_6_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 4/decomposition_no_projection_6_tables"
@@ -780,61 +780,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 5 - soc-Epinions1 ----
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_5_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_5_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/baseline_5_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/chain_decomposition_no_projection_5_tables"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_1_table"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables_full"
     # },
     # {
-    #     "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
+    #     "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
     #     "dataset-path": f"data/snap_data/soc-Epinions1.csv",
     #     "trials": 3,
     #     "output-dir": f"results/soc-Epinions1/Cyclic Query 5/decomposition_no_projection_5_tables"
@@ -842,61 +842,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 5 - p2p-Gnutella31 ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_5_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/baseline_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/chain_decomposition_no_projection_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/p2p-Gnutella31.csv",
         "trials": 3,
         "output-dir": f"results/p2p-Gnutella31/Cyclic Query 5/decomposition_no_projection_5_tables"
@@ -904,61 +904,61 @@ EXPERIMENTS = [
 
     # ---- Cyclic Query 5 - cit-HepTh ----
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/baseline_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/baseline_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/baseline_5_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/baseline_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/chain_decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/chain_decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/chain_decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/chain_decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/chain_decomposition_no_projection_5_tables"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/decomposition_no_projection_1_table_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_1_table.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_1_table.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/decomposition_no_projection_1_table"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables_full.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/decomposition_no_projection_5_tables_full"
     },
     {
-        "pipeline-sql-path": f"pipelines_v3/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
+        "pipeline-sql-path": f"pipelines/Cyclic Query 5/decomposition_no_projection_5_tables.sql",
         "dataset-path": f"data/snap_data/cit-HepTh.csv",
         "trials": 3,
         "output-dir": f"results/cit-HepTh/Cyclic Query 5/decomposition_no_projection_5_tables"
@@ -978,7 +978,7 @@ def run_automation():
         subprocess.run(["docker", "compose", "up", "-d"], check=False)
         time.sleep(20)
 
-        cmd = ["python", "experiment_v3.py"]
+        cmd = ["python", "experiment.py"]
 
         for key, value in exp.items():
             cmd.append(f"--{key}")
