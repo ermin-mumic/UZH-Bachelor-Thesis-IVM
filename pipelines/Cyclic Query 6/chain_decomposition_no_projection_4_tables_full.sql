@@ -21,50 +21,6 @@ CREATE TABLE R1 (
     }]'
 );
 
-CREATE TABLE R2 (
-    B bigint,
-    C bigint
-) WITH (
-    'materialized' = 'true',
-    'connectors' = '[{
-        "name": "R2_connector",
-        "transport": {
-            "name": "file_input",
-            "config": {
-                "path": "/{{FILE_PATH}}"
-            }
-        },
-        "format": { 
-            "name": "csv",
-            "config": {
-                "headers": true
-            }
-        }
-    }]'
-);
-
-CREATE TABLE R3 (
-    C bigint,
-    D bigint
-) WITH (
-    'materialized' = 'true',
-    'connectors' = '[{
-        "name": "R3_connector",
-        "transport": {
-            "name": "file_input",
-            "config": {
-                "path": "/{{FILE_PATH}}"
-            }
-        },
-        "format": { 
-            "name": "csv",
-            "config": {
-                "headers": true
-            }
-        }
-    }]'
-);
-
 CREATE TABLE R4 (
     D bigint,
     E bigint
@@ -87,13 +43,13 @@ CREATE TABLE R4 (
     }]'
 );
 
-CREATE TABLE R5 (
-    E bigint,
-    F bigint
+CREATE TABLE R7 (
+    A bigint,
+    E bigint
 ) WITH (
     'materialized' = 'true',
     'connectors' = '[{
-        "name": "R5_connector",
+        "name": "R7_connector",
         "transport": {
             "name": "file_input",
             "config": {
@@ -109,13 +65,13 @@ CREATE TABLE R5 (
     }]'
 );
 
-CREATE TABLE R6 (
-    A bigint,
-    F bigint
+CREATE TABLE R9 (
+    B bigint,
+    D bigint
 ) WITH (
     'materialized' = 'true',
     'connectors' = '[{
-        "name": "R6_connector",
+        "name": "R9_connector",
         "transport": {
             "name": "file_input",
             "config": {
@@ -133,39 +89,23 @@ CREATE TABLE R6 (
 
 -- Child Bag 1.
 CREATE MATERIALIZED VIEW CHILD_1_Q AS
-SELECT R1.A AS A, R1.B AS B, R6.F AS F
+SELECT R1.A AS A, R1.B AS B, R7.E AS E
 FROM R1
-JOIN R6 ON R1.A = R6.A;
+JOIN R7 ON R1.A = R7.A;
 
 CREATE MATERIALIZED VIEW CHILD_1_P AS
-SELECT DISTINCT B, F
+SELECT DISTINCT B, E
 FROM CHILD_1_Q;
 
--- Child Bag 2.
-CREATE MATERIALIZED VIEW CHILD_2_Q AS
-SELECT R2.B AS B, R2.C AS C, CHILD_1_P.F AS F
-FROM R2
-JOIN CHILD_1_P ON CHILD_1_P.B = R2.B;
-
-CREATE MATERIALIZED VIEW CHILD_2_P AS
-SELECT DISTINCT C, F
-FROM CHILD_2_Q;
-
--- Child Bag 3.
-CREATE MATERIALIZED VIEW CHILD_3_Q AS
-SELECT R4.D AS D, R4.E AS E, R5.F AS F
-FROM R4
-JOIN R5 ON R4.E = R5.E;
-
-CREATE MATERIALIZED VIEW CHILD_3_P AS
-SELECT DISTINCT D, F
-FROM CHILD_3_Q;
-
 -- Root Bag.
+CREATE MATERIALIZED VIEW ROOT_Q AS
+SELECT R9.B AS B, R9.D AS D, R4.E AS E
+FROM R4
+JOIN R9 ON R4.D = R9.D
+JOIN CHILD_1_P ON CHILD_1_P.B = R9.B AND CHILD_1_P.E = R4.E;
+
+-- Result.
 CREATE MATERIALIZED VIEW RESULT AS
-SELECT R3.C AS C, R3.D AS D, CHILD_2_P.F AS F
-FROM R3
-JOIN CHILD_2_P ON CHILD_2_P.C = R3.C
-JOIN CHILD_3_P ON CHILD_3_P.D = R3.D AND CHILD_3_P.F = CHILD_2_P.F;
-
-
+SELECT CHILD_1_Q.A AS A, CHILD_1_Q.B AS B, ROOT_Q.D AS D, ROOT_Q.E AS E
+FROM ROOT_Q
+JOIN CHILD_1_Q ON CHILD_1_Q.B = ROOT_Q.B AND CHILD_1_Q.E = ROOT_Q.E;
