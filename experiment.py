@@ -121,8 +121,8 @@ class Experiment:
         print(f"TRIAL {trial_id}/{self.trials}")
         print(f"{'#' * 70}\n")
 
-        INGESTION_TIMEOUT = 1800 # 30min
-        COUNT_TIMEOUT = 900 # 15min
+        INGESTION_TIMEOUT = 10800 # 3h
+        COUNT_TIMEOUT = 3600 # 1h
         
         status = "SUCCESS"
 
@@ -142,9 +142,12 @@ class Experiment:
 
         stats_poller.stop()
         stats_poller.join()
-    
-        end_snap = self._snapshot()
-        stats_poller.timeline.append(end_snap)
+
+        try:
+            end_snap = self._snapshot()
+            stats_poller.timeline.append(end_snap)
+        except Exception:
+            pass
 
         count_worker = TaskWorker(self._get_result_count)
         count_worker.start()
