@@ -138,7 +138,7 @@ class Experiment:
         if ingestion_worker.is_alive():
             status = "Timeout"
         elif ingestion_worker.error:
-            status = "CRASHED"
+            status = f"CRASHED: {ingestion_worker.error}"
 
         stats_poller.stop()
         stats_poller.join()
