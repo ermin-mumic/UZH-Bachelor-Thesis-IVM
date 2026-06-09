@@ -95,7 +95,12 @@ class Experiment:
         }
     
     def _get_result_count(self):
-        result_generator = self.pipeline.query("SELECT COUNT(*) AS total_count FROM RESULT")
+        if "faq" in self.pipeline_name.lower():
+            query = "SELECT * FROM RESULT"
+        else:
+            query = "SELECT COUNT(*) AS total_count FROM RESULT"
+
+        result_generator = self.pipeline.query(query)
         first_row = next(result_generator, None)
         return first_row["total_count"] if first_row else 0
 
