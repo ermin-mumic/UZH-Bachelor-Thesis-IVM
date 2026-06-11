@@ -11,6 +11,7 @@ services:
       - "8080:8080"
     volumes:
       - /local/scratch/emumic/data:/data
+      - /local/scratch/emumic/feldera_storage:/home/ubuntu/.feldera
     stop_grace_period: 0s
     environment:
       - RUST_LOG=info,actix_web=error,tokio_postgres=info

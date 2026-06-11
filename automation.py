@@ -2072,6 +2072,11 @@ def run_automation():
     for exp in EXPERIMENTS:
         subprocess.run(["docker", "compose", "down", "-v"], check=False)
         subprocess.run(["docker", "system", "prune", "-f"], check=False)
+
+        
+        scratch_dir = "/local/scratch/emumic/feldera_storage"
+        subprocess.run(["sudo", "rm", "-rf", scratch_dir], check=False)
+
         subprocess.run(["docker", "compose", "up", "-d"], check=False)
         time.sleep(20)
 
