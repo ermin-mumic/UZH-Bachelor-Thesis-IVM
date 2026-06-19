@@ -95,7 +95,9 @@ class Experiment:
         }
     
     def _get_result_count(self):
-        if "faq" in self.pipeline_name.lower():
+        if "min_path" in self.pipeline_name.lower():
+            query = "SELECT SUM(MIN_COST) AS total_count FROM RESULT"
+        elif "faq" in self.pipeline_name.lower():
             query = "SELECT * FROM RESULT"
         else:
             query = "SELECT COUNT(*) AS total_count FROM RESULT"
