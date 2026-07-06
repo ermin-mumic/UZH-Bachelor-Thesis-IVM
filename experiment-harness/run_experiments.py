@@ -2328,7 +2328,7 @@ EXPERIMENTS = [
 
 ]
 
-def run_automation():
+def run_experiments():
     overview_file = "OVERVIEW.csv"
     if not os.path.exists(overview_file):
         with open(overview_file, 'w', newline='') as f:
@@ -2392,4 +2392,5 @@ def run_automation():
 
 
 if __name__ == "__main__":
-    run_automation()
+    run_experiments
+()

@@ -1,0 +1,219 @@
+\chapter{Implementation}
+\label{ch:implementation}
+
+In this chapter, we detail the implementation of the components required to evaluate the theoretical IVM$^+$ approach in practice. This includes the manual translation of tree decompositions into Feldera SQL pipelines, as well as the development of an automated, multi-threaded benchmarking harness designed to orchestrate the experiments.
+
+\section{IVM$^+$ Translation and Pipeline Construction}
+\label{sec:manual_translation}
+
+Each experimental query variant is expressed as a self-contained Feldera SQL file that defines both the input schema with its data connectors and the sequence of materialized views encoding the query logic. All files are parameterized templates: the literal \texttt{\{\{FILE\_PATH\}\}} is substituted at runtime by the benchmarking harness (see Section~\ref{sec:benchmark_harness}) with the actual dataset path, allowing the same pipeline definition to run against multiple datasets without modification, provided they conform to the same relational schema (e.g., executing the same TPC-H query template across Scale Factors 1, 10, and 30).
+
+\subsection{IVM$^+$ Decomposition Translation}
+\label{sec:decomposition_translation}
+
+The IVM$^+$ algorithm (see Chapter~\ref{ch:ivm}) operates on a tree decomposition of the query hypergraph. Each node of the decomposition tree is a \emph{bag} that groups a subset of the query relations. Translating this structure into Feldera SQL, every bag is represented by a pair of materialized views, which instruct the DBSP engine to physically store and incrementally update the view's contents after every insert.:
+
+\begin{itemize}
+    \item \textbf{Q-view} (\texttt{CHILD\_N\_Q}, \texttt{ROOT\_Q}): corresponding to the $Q'$-relation in the theoretical formulation.
+    \item \textbf{P-view} (\texttt{CHILD\_N\_P}): computed as \texttt{SELECT DISTINCT} over the join attributes. This corresponds to the $P'$-relation.
+\end{itemize}
+
+Views are defined bottom-up following the tree structure, so each child's P-view is available when the parent's Q-view is computed. The final \texttt{RESULT} view reconstructs the full output by joining all Q-views back together.
+
+For multi-relation schemas, we use \texttt{JOIN \ldots USING} rather than explicit \texttt{ON} conditions. SQL's \texttt{JOIN USING} guarantees that the named join column appears only once in the output, making \texttt{SELECT *} unambiguous regardless of how many Q-views are chained together. For graph queries, where all relations share the same underlying \texttt{(src, tgt)} schema, each Q-view aliases its columns explicitly (e.g.\ \texttt{R1.A AS A, R1.B AS B}), and joins use explicit \texttt{ON} conditions instead.
+
+In addition to the full-join decomposition variants, we also implemented FAQ (Functional Aggregate Query) variants that compute an aggregate directly over the decomposition using a semiring, rather than materializing the full join result. These are discussed and evaluated in Chapter~\ref{ch:evaluation}.
+
+\subsection{Input Connectors}
+\label{sec:input_connectors}
+
+Feldera ingests data through connector annotations attached to \texttt{CREATE TABLE} declarations. We use the built-in \texttt{file\_input} connector with the CSV format. Two connector patterns appear across the pipelines, depending on the dataset.
+
+For multi-relation schemas such as TPC-H and IMDB, each table points to its own CSV file within the dataset directory:
+
+\begin{lstlisting}[language=SQL, caption={Per-table CSV connector for multi-relation datasets (TPC-H).}]
+CREATE TABLE ORDERS (
+    ORDERKEY bigint not null,
+    CUSTKEY  bigint not null,
+    ...
+    PRIMARY KEY (ORDERKEY)
+) WITH (
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": { "path": "/{{FILE_PATH}}/orders.csv" }
+        },
+        "format": { "name": "csv", "config": { "headers": true } }
+    }]'
+);
+\end{lstlisting}
+
+For homogeneous graph datasets (SNAP), all relations share the same edge schema. Two sub-variants exist here. In the \emph{single-table} variant, one \texttt{EDGES} table is declared with a single connector and then aliased at the query level with renamed columns (e.g.\ \texttt{EDGES AS R1(A, B)}). In the \emph{multi-table} variant, each logical relation $R_1, R_2, \ldots$ is declared as a separate table, each with its own connector pointing to the same CSV file. The multi-table form matches the theoretical schema more directly and avoids SQL aliasing, at the cost of loading the edge file once per relation. The performance implications of both strategies are discussed in Chapter~\ref{ch:evaluation}.
+
+\begin{lstlisting}[language=SQL, caption={Single-file CSV connector for graph datasets.}]
+CREATE TABLE EDGES (
+    src bigint,
+    tgt bigint
+) WITH (
+    'materialized' = 'true',
+    'connectors' = '[{
+        "transport": {
+            "name": "file_input",
+            "config": { "path": "/{{FILE_PATH}}" }
+        },
+        "format": { "name": "csv", "config": { "headers": true } }
+    }]'
+);
+\end{lstlisting}
+
+All tables in the dataset schema are always declared, even those not directly queried. Tables not participating in the query are declared without a connector (annotated \texttt{'materialized' = 'true'} only), which registers their column types in Feldera's catalog but causes no data to be ingested into them.
+
+\subsection{Pipeline Variants}
+\label{sec:pipeline_variants}
+
+We implemented three core pipeline types for each query. Each is a self-contained Feldera SQL file.
+
+\subsubsection{Baseline}
+\label{sec:baseline_pipelines}
+
+The baseline expresses the original query as a single flat join without any tree decomposition, serving as the non-IVM$^+$ reference point for the evaluation. The following example shows the 3-table TPC-H path query:
+
+\begin{lstlisting}[language=SQL, caption={Baseline 3-table TPC-H path query.}]
+CREATE MATERIALIZED VIEW RESULT AS
+SELECT *
+FROM LINEITEM
+JOIN SUPPLIER USING (SUPPKEY)
+JOIN CUSTOMER USING (NATIONKEY);
+\end{lstlisting}
+
+\subsubsection{IVM$^+$ Decomposition}
+\label{sec:decomp_standard}
+
+The IVM$^+$ decomposition follows the $Q'$-relation definition from Chapter~\ref{ch:ivm}: the Q-view for each bag is the restriction $Q[\chi(t)]$ of the full query to the bag's variables, with partial atoms projected to their shared variables as inline \texttt{JOIN (SELECT DISTINCT \ldots) USING (\ldots)} semijoins, and joined with the $P'$-views of any child bags. The following example shows the 3-table TPC-H path query, where \texttt{LINEITEM} and \texttt{CUSTOMER} are children of a root bag containing \texttt{SUPPLIER}:
+
+\begin{lstlisting}[language=SQL, caption={IVM$^+$ decomposition (3-table TPC-H).}]
+-- Child Bag 1: Q[chi(1)] -- LINEITEM with partial atoms projected.
+CREATE MATERIALIZED VIEW CHILD_1_Q AS
+SELECT * FROM LINEITEM
+JOIN (SELECT DISTINCT SUPPKEY FROM SUPPLIER) USING (SUPPKEY);
+
+CREATE MATERIALIZED VIEW CHILD_1_P AS
+SELECT DISTINCT SUPPKEY FROM CHILD_1_Q;
+
+-- Child Bag 2: Q[chi(2)] -- CUSTOMER with partial atoms projected.
+CREATE MATERIALIZED VIEW CHILD_2_Q AS
+SELECT * FROM CUSTOMER
+JOIN (SELECT DISTINCT NATIONKEY FROM SUPPLIER) USING (NATIONKEY);
+
+CREATE MATERIALIZED VIEW CHILD_2_P AS
+SELECT DISTINCT NATIONKEY FROM CHILD_2_Q;
+
+-- Root Bag: Q[chi(root)] joined with children's P-views.
+CREATE MATERIALIZED VIEW ROOT_Q AS
+SELECT *
+FROM SUPPLIER
+JOIN (SELECT DISTINCT SUPPKEY   FROM LINEITEM) USING (SUPPKEY)
+JOIN (SELECT DISTINCT NATIONKEY FROM CUSTOMER) USING (NATIONKEY)
+JOIN CHILD_1_P USING (SUPPKEY)
+JOIN CHILD_2_P USING (NATIONKEY);
+
+-- Result: full output reconstructed from all Q-views.
+CREATE MATERIALIZED VIEW RESULT AS
+SELECT *
+FROM ROOT_Q
+JOIN CHILD_1_Q USING (SUPPKEY)
+JOIN CHILD_2_Q USING (NATIONKEY);
+\end{lstlisting}
+
+These pipelines are annotated \texttt{decomposition\_full} in the pipeline files.
+
+\subsubsection{IVM$^+$ Decomposition Without Semijoin}
+\label{sec:decomp_no_semijoin}
+
+This variant uses the adjusted $Q^*$-relation definition from Chapter~\ref{ch:ivm}: only atoms whose variable set contains all bag variables ($\chi(t) \subseteq \mathbf{X}_i$) are included in a bag's Q-view. Atoms with partial overlap are dropped rather than projected. All bags with children are still joined with those children's $P'$-views in the bottom-up computation. These pipelines are annotated \texttt{decomposition\_no\_projection\_full} in the pipeline files.
+
+\paragraph{Restriction to graph datasets.}
+For the homogeneous graph queries, every atom is an instance of the same \texttt{EDGES} relation. An inline semijoin in a bag therefore reduces to filtering that bag by the set of nodes appearing on a single endpoint of the edge relation, i.e.\ $\pi_{\text{src}}\,E$ or $\pi_{\text{tgt}}\,E$. The elimination of dangling tuples that the decomposition relies on is already performed bottom-up by the children's $P'$-relations; the additional single-endpoint projections cover most nodes in the densely connected graphs we study, so they remove few tuples while still incurring the cost of maintaining the extra \texttt{SELECT DISTINCT} and join operators. For this reason we restrict the graph experiments to the without-semijoin variant ($Q^*$). The projection (semijoin) variant is evaluated only on the multi-relation TPC-H and IMDB datasets, where the atoms are distinct relations and the inline projections act as genuine filters.
+
+\begin{lstlisting}[language=SQL, caption={IVM$^+$ decomposition without semijoin (3-table TPC-H).}]
+-- Child Bag 1: Q*(chi(1)) = LINEITEM (chi(1) subset X_LINEITEM).
+CREATE MATERIALIZED VIEW CHILD_1_Q AS
+SELECT * FROM LINEITEM;
+
+CREATE MATERIALIZED VIEW CHILD_1_P AS
+SELECT DISTINCT SUPPKEY FROM CHILD_1_Q;
+
+-- Child Bag 2: Q*(chi(2)) = CUSTOMER (chi(2) subset X_CUSTOMER).
+CREATE MATERIALIZED VIEW CHILD_2_Q AS
+SELECT * FROM CUSTOMER;
+
+CREATE MATERIALIZED VIEW CHILD_2_P AS
+SELECT DISTINCT NATIONKEY FROM CHILD_2_Q;
+
+-- Root Bag: Q*(chi(root)) joined with children's P-views.
+CREATE MATERIALIZED VIEW ROOT_Q AS
+SELECT *
+FROM SUPPLIER
+JOIN CHILD_1_P USING (SUPPKEY)
+JOIN CHILD_2_P USING (NATIONKEY);
+
+-- Result: full output reconstructed from all Q-views.
+CREATE MATERIALIZED VIEW RESULT AS
+SELECT *
+FROM ROOT_Q
+JOIN CHILD_1_Q USING (SUPPKEY)
+JOIN CHILD_2_Q USING (NATIONKEY);
+\end{lstlisting}
+
+\subsection{Further Variants}
+\label{sec:further_variants}
+
+The three core pipeline types above were each extended along the following dimensions.
+
+\subsubsection{Input Connector Variants}
+\label{sec:connector_variants}
+
+All pipeline types --- including the baseline --- come in two connector sub-variants for homogeneous graph datasets (SNAP): a \emph{single-table} variant using one \texttt{EDGES} table with SQL aliasing, and a \emph{multi-table} variant with a separate table declaration per relation. Both sub-variants are described in Section~\ref{sec:input_connectors}; multi-relation datasets (TPC-H, IMDB) are unaffected as each table already has its own connector.
+
+\subsubsection{Root Orientation}
+\label{sec:decomp_root}
+
+Where the decomposition admits more than one root, both decomposition variants were evaluated under two different root orientations of the tree decomposition, labelled \textbf{D1} and \textbf{D2} in the result tables of Chapter~\ref{ch:evaluation}. A tree decomposition does not prescribe a canonical root; choosing a different bag as root changes which bag aggregates last and therefore which intermediate views grow largest. The \texttt{chain\_decomposition} pipeline files correspond to one orientation (\textbf{D1}), \texttt{decomposition} to the other (\textbf{D2}). Not every query admits two meaningfully distinct orientations, however: when the decomposition is trivial --- for instance when it consists of only two bags, or when its shape is symmetric under re-rooting --- the two orientations coincide, and only a single orientation (\textbf{D1}) is reported for that query. The specific root choice and its performance implications for each query are discussed in Chapter~\ref{ch:evaluation}.
+
+\subsubsection{Without Result Reconstruction}
+\label{sec:no_reconstruction}
+
+For both decomposition variants, a version exists that omits the final \texttt{RESULT} reconstruction join: \texttt{ROOT\_Q} is exposed directly as \texttt{RESULT}, containing only the root bag's columns. These pipelines (annotated without the \texttt{\_full} suffix) isolate the cost of maintaining the Q- and P-view hierarchy from the cost of joining all bags back together for the full output.
+
+\subsubsection{FAQ Variant}
+\label{sec:faq_variant}
+
+Building on the without-reconstruction pipelines, the FAQ (Functional Aggregate Query) variant replaces the final result with a semiring-based aggregate computed directly over the decomposition, rather than materialising the full join output. Both decomposition types have a corresponding FAQ variant, annotated \texttt{\_faq} in the pipeline files. A detailed discussion of the semiring formulation and its performance implications is deferred to Chapter~\ref{ch:evaluation}.
+
+\section{Automated Benchmark Harness}
+\label{sec:benchmark_harness}
+
+To reliably orchestrate the experiments, guarantee reproducible environments and capture precise system metrics, we developed a benchmarking framework in Python. The Feldera engine itself is deployed within a Docker container on a dedicated remote machine. Our framework, consisting of a top-level automation orchestrator (\texttt{automation.py}) and a core execution script (\texttt{experiment.py}), runs directly on this same remote host, interacting with the containerized engine locally via its REST API using the Feldera Python SDK wrapper.
+
+\subsection{Automation Orchestrator}
+Evaluating database engines requires isolation to ensure that residual memory caches or disk states from previous queries do not interfere with subsequent benchmarks. To achieve this, the overarching Automation Orchestrator enforces a strict "cold start" for every query variant in the experimental queue.
+
+Prior to execution, the orchestrator uses system-level commands to shut down the local Feldera Docker containers (\texttt{docker compose down -v}) and forcefully prune the Docker system. Crucially, we mapped the container's primary working directory to a physical volume on the host machine (\texttt{/local/scratch/emumic/feldera\_storage}) to accommodate the massive intermediate views required by IVM$^+$. During the cold start phase, the orchestrator completely wipes this host directory. Since Docker creates this directory as root, it cannot be deleted directly from the host without elevated privileges. To bypass this, the orchestrator spawns a temporary Ubuntu container with the host path bind-mounted and deletes the directory from within that container as root. The directory is then recreated with open permissions before the engine is restarted.
+
+The Docker containers are then rebuilt and given a 30-second initialization buffer, guaranteeing that every experiment begins with zero cached data. To manage the extensive suite of benchmarks safely, the orchestrator wraps the entire pipeline execution in a global 15-hour timeout threshold. Upon completion, timeout or crash, it logs the final status and duration to a global overview file before proceeding to the next configuration.
+
+\subsection{Execution Script}
+Once the orchestrator has prepared a clean environment, it triggers the core benchmarking script (\texttt{experiment.py}). To allow the containerized Feldera engine to access the host's local datasets without network overhead, the data directory on the remote machine is mounted as a volume directly into the Docker container. 
+
+To monitor these dataflow pipelines without interrupting the main execution flow, the script utilizes a multi-threaded architecture based on Python's native \texttt{threading} module:
+
+\begin{itemize}
+    \item \textbf{Task Workers (Blocking Execution):} We implemented a generic \texttt{TaskWorker} thread class to handle synchronous operations. Once the pipeline starts, a task worker is spawned to wait for the process to complete. To prevent infinite hangs, this thread is joined with a strict three-hour timeout constraint. A secondary task worker handles the final result-count query (with a one-hour timeout) to verify computational correctness.
+    
+    \item \textbf{Stats Poller (Asynchronous Monitoring):} Concurrent to the primary task worker, a \texttt{StatsPoller} daemon thread continuously queries Feldera's \texttt{/stats} API endpoint. The poller captures the pipeline's uptime, total completed records and Resident Set Size (RSS) memory footprint. The polling interval is strictly configured to 5 seconds. This thread is terminated via a threading event once the primary task worker successfully joins or times out.
+\end{itemize}
+
+Upon pipeline termination, the harness aggregates the chronological timeline of polled metrics, calculates the global throughput (rows per second), extracts the peak memory consumption and serializes the complete payload into a JSON artifact for later analysis. To isolate individual trials within the same experiment run, the harness additionally calls \texttt{pipeline.clear\_storage()} after each trial, wiping Feldera's internal incremental state so that the next trial begins from a clean state without requiring a full Docker restart.
+
+\section{Automated Query Parser}
+\label{sec:query_parser}

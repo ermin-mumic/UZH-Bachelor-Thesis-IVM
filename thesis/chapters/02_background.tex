@@ -1,0 +1,61 @@
+\chapter{Background}
+\label{ch:background}
+
+This chapter introduces the formal foundations underlying the IVM$^+$ approach evaluated in this thesis. We define the query model, the notion of tree decompositions, fractional hypertree width and the incremental view maintenance problem in the insert-only setting.
+
+\section{Relational Queries}
+\label{sec:queries}
+
+
+\section{Tree Decompositions}
+\label{sec:tree_decompositions}
+
+A \emph{tree decomposition} of a query $Q = R_1(\mathbf{X}_1) \bowtie \cdots \bowtie R_k(\mathbf{X}_k)$ is a rooted tree $\mathcal{T}$ whose nodes are called \emph{bags}. Each bag $t$ is associated with a set of variables $\chi(t)$. A valid tree decomposition satisfies two conditions:
+
+\begin{enumerate}
+    \item \textbf{Coverage:} Every atom $R_i(\mathbf{X}_i)$ is assigned to at least one bag $t$ with $\mathbf{X}_i \subseteq \chi(t)$.
+    \item \textbf{Connectivity:} For every variable $x \in \mathbf{X}$, the set of bags $\{t \mid x \in \chi(t)\}$ forms a connected subtree of $\mathcal{T}$.
+\end{enumerate}
+
+For a bag $t$ that is not the root, the \emph{bridge variables} are
+\[
+    \mathbf{Y}_t = \chi(t) \cap \chi(\mathrm{parent}(t)),
+\]
+the variables shared between $t$ and its parent. These link adjacent bags and play a central role in the IVM$^+$ algorithm.
+
+\paragraph{Example.}
+Consider the three-relation path query
+\[
+    Q = R(A, B) \bowtie S(B, C) \bowtie T(C, D).
+\]
+One valid tree decomposition assigns each atom to its own bag:
+\begin{itemize}
+    \item Bag~1 (left leaf): $\chi(1) = \{A, B\}$, containing atom $R(A, B)$.
+    \item Bag~2 (root): $\chi(2) = \{B, C\}$, containing atom $S(B, C)$.
+    \item Bag~3 (right leaf): $\chi(3) = \{C, D\}$, containing atom $T(C, D)$.
+\end{itemize}
+The bridge variables are $\mathbf{Y}_1 = \{B\}$ (shared between Bag~1 and the root) and $\mathbf{Y}_3 = \{C\}$ (shared between Bag~3 and the root). This decomposition directly corresponds to the SQL encoding used in the IVM$^+$ pipelines of this thesis (see Chapter~\ref{ch:implementation}).
+
+\section{Fractional Hypertree Width}
+\label{sec:fhw}
+
+The \emph{fractional hypertree width} of a query quantifies how complex it is to evaluate and serves as the key complexity parameter in the IVM$^+$ bound.
+
+For a set of atoms $\mathcal{A}$ and a set of variables $\mathbf{V}$, the \emph{fractional edge cover number} $\rho^*(\mathcal{A}, \mathbf{V})$ is the optimal value of the linear program:
+\[
+    \min \sum_{R_i(\mathbf{X}_i) \in \mathcal{A}} \lambda_i
+    \quad \text{subject to} \quad
+    \forall\, x \in \mathbf{V}:\; \sum_{\substack{R_i(\mathbf{X}_i) \in \mathcal{A} \\ x \in \mathbf{X}_i}} \lambda_i \geq 1,
+    \quad \lambda_i \in [0,1].
+\]
+Intuitively, $\rho^*$ measures how many atom schemas are needed to collectively cover all variables in $\mathbf{V}$, permitting fractional assignments.
+
+The \emph{fractional hypertree width} of $Q$, denoted $w(Q)$, is:
+\[
+    w(Q) = \min_{\mathcal{T}} \; \max_{t \in \mathcal{T}} \; \rho^*\!\left(\mathcal{A}_t,\, \chi(t)\right),
+\]
+where the minimum ranges over all valid tree decompositions $\mathcal{T}$ of $Q$, and $\mathcal{A}_t$ is the set of atoms assigned to bag $t$.
+
+\section{Incremental View Maintenance}
+\label{sec:ivm_background}
+

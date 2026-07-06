@@ -1,0 +1,134 @@
+\chapter{Evaluation}
+\label{ch:evaluation}
+
+This chapter evaluates the IVM$^+$ decomposition strategies of Chapter~\ref{ch:ivm}, as implemented in Chapter~\ref{ch:implementation}, against a flat-join baseline across five datasets. We first describe the experimental setup, the reported metrics and the variant notation (Sections~\ref{subsec:setup}--\ref{sec:methodology}). We then state the hypotheses that motivated the experiments (Section~\ref{sec:hypotheses}) and describe the workloads (Section~\ref{sec:workloads}). The remainder of the chapter (Section~\ref{sec:results_discussion}) tests each hypothesis against the measured results, and Section~\ref{sec:eval_summary} summarises the findings and threats to validity.
+
+\section{Experimental Setup}
+\label{subsec:setup}
+
+All experiments were conducted on a dedicated remote machine of the shared research cluster of the Department of Informatics (IfI) at the University of Zurich.
+
+\paragraph{Hardware.}
+The benchmarks were run on the \texttt{dast-cpu05} host, a CPU-only machine with two \textbf{Intel Xeon Silver 4214} processors at $2.20$\,GHz ($12$ cores each, for $24$ physical cores and $48$ hardware threads), \textbf{196\,GB} of main memory and a local \textbf{SSD}. Datasets reside on the node's scratch storage ($492$\,GB) and are read locally, so that data access introduces no network overhead. The host runs \textbf{Debian GNU/Linux 12} (bookworm) with Linux kernel \texttt{6.1.0-45-amd64}.
+
+\paragraph{Engine deployment.}
+The Feldera Engine was deployed locally on the same host using the official Feldera Docker image (\texttt{pipeline-manager} version~$0.286.0$),\footnote{The image was pulled via the mutable \texttt{latest} tag; for exact reproducibility we also report its resolved digest, which uniquely identifies the engine build used: \texttt{sha256:0422457841e8a642ae862b61fd0818c73bcd8fae66ab205bf3a1ce6537a5f752}.} with no changes to the engine itself other than the volume mounts described in Chapter~\ref{ch:implementation} (Section~\ref{sec:benchmark_harness}): the container's storage directory is bind-mounted to host scratch to accommodate the large intermediate views, and the dataset directory is mounted read-only into the container. The benchmarking harness runs directly on the host and drives the containerised engine through its REST API. Every query variant begins from a cold start, with the engine's storage wiped between variants as described in Section~\ref{sec:benchmark_harness}, so that no residual state or cache from a previous run can influence a measurement.
+
+\paragraph{Data ingestion.}
+Datasets were streamed from local CSV files into Feldera through the \texttt{file\_input} connectors detailed in Section~\ref{sec:input_connectors}, simulating high-velocity, insert-only ingestion.
+
+\paragraph{Measurement protocol.}
+Each experiment was repeated over \textbf{3 independent trials}. The reported \textbf{Time} and \textbf{Throughput} are the arithmetic mean over the three trials, whereas the reported \textbf{Peak RAM} is the \emph{maximum} resident-set size observed across the three trials, i.e.\ the worst-case memory footprint rather than an average. Peak memory is sampled every five seconds (Section~\ref{sec:caveats}).
+
+\section{Methodology and Reported Metrics}
+\label{sec:methodology}
+
+\subsection{Variant Notation}
+Throughout this chapter we compare the following variants, reported per query in the result tables (Tables~\ref{tab:results_soc-Epinions1}--\ref{tab:results_imdb_job}):
+\begin{itemize}
+    \item \textbf{Baseline}: the query expressed as a single flat join, with no decomposition (Section~\ref{sec:baseline_pipelines}).
+    \item \textbf{D1, D2} (root orientation): a tree decomposition does not prescribe a root, so the same decomposition can be rooted in different ways (Section~\ref{sec:decomp_root}). \textbf{D1} and \textbf{D2} denote two such orientations. \textbf{D1} is the \emph{less balanced} orientation: the tree is deeper and more chain-like, and where the relations differ in size the larger relations sit in the lower bags. \textbf{D2} is the \emph{more balanced} orientation: the bags are spread across independent branches and the larger relations sit closer to the root, so that the small leaf bags act as strong filters. When a query's decomposition admits only one meaningful orientation --- for instance a two-bag decomposition --- only \textbf{D1} is reported.
+    \item \textbf{Prime ($D'$)} (without semijoins): by default each bag's query includes the inline semijoin projections of atoms that only partially overlap the bag (the standard IVM$^+$ definition, Section~\ref{sec:decomp_standard}). The primed variants omit these, retaining only the atoms whose variables contain all of the bag's variables (the without-semijoins / $Q^*$ definition, Section~\ref{sec:decomp_no_semijoin}). On the graph datasets every atom is the same \texttt{EDGES} relation and only the without-semijoins variant is run (Section~\ref{sec:decomp_no_semijoin}); the graph rows are therefore reported as $D_1'$ and $D_2'$ throughout.
+    \item \textbf{Superscripts}: $D^{\text{full}}$ reconstructs the complete join output by re-joining all bags; the plain $D$ (indented) omits the final reconstruction and exposes only the root bag; $D^{\text{count}}$ is the FAQ/semiring variant that returns the full result \emph{count} without materialising the full output (Section~\ref{sec:faq_variant}).
+\end{itemize}
+
+\subsection{Metrics}
+For each variant we report the output size of the materialised \texttt{RESULT} view (in rows, \texttt{r}), the wall-clock \textbf{Time} (mean of three trials), the \textbf{Throughput} (mean records processed per second), the \textbf{Peak RAM} (resident set size). \texttt{TO} denotes an experiment that exceeded the timeout of 3h per trial (section experiment script), with the mean fraction of input processed shown in parentheses.
+
+\subsection{Correctness Checking}
+After each trial we verify the result by querying the row count of the maintained view. For full-reconstruction and baseline variants this is the count of the complete output; for the without-reconstruction variants ($D$, $D'$) it is the count of the root bag only, since the full output is intentionally not materialised. The $D^{\text{count}}$ (FAQ) variant is validated against the corresponding full count.
+
+\subsection{Caveats in Reading the Numbers}
+\label{sec:caveats}
+Several measurement artefacts must be kept in mind when interpreting the tables:
+\begin{itemize}
+    \item \textbf{Averaging noise.} Reported times are the mean of three trials. Differences on the order of $0.05$\,min therefore lie within trial-to-trial variance and should not be over-interpreted.
+    \item \textbf{Memory sampling.} Peak RAM is sampled every five seconds. For very short experiments (e.g.\ $0.10$\,min) the reported value may reflect a single, possibly unrepresentative, snapshot rather than the true peak.
+    \item \textbf{Throughput is not comparable across connector variants.} Throughput counts all records ingested and processed. In the multi-connector configuration the same edge file is ingested once per relation, inflating the record denominator by the number of connectors; consequently the multi-connector throughput can appear several times larger than the single-connector value even when wall-clock time is essentially identical. Wall-clock \textbf{Time} is therefore the comparable metric across connector strategies.
+\end{itemize}
+
+\section{Hypotheses}
+\label{sec:hypotheses}
+
+The experiments were designed around five hypotheses derived from the theory of Chapters~\ref{ch:background}--\ref{ch:ivm}.
+
+\begin{description}
+    \item[\hypertarget{h1}{H1 (Tree orientation).}] A tree decomposition fixes the bags but not the root. Re-rooting changes the parent--child relationships between bags and therefore the direction in which the $P'$-semijoin filters propagate and the order in which the bags are computed bottom-up. A child propagates $P'_c = \pi_{Y_c} Q'_c$ to its parent; the smaller (more selective) this $P'$ relation, the more parent tuples the semijoin eliminates and the cheaper it is to maintain. We therefore expect the orientation that lets small, selective filters flow toward a heavy root, reducing the size of the largest materialised bag relation, to perform best and \emph{a priori} expect the more balanced orientation (\textbf{D2}) to achieve this better than the deeper, more chain-like orientation (\textbf{D1}).
+
+    \item[\hypertarget{h2}{H2 (Input-connector strategy).}] For the self-join graph queries, ingesting the edge relation once through a single connector and aliasing it in SQL should perform comparably to declaring one connector per relation, because the dominant cost is tuple \emph{processing} rather than ingestion. The single-connector variant may be marginally cheaper as the data is ingested and parsed only once.
+
+    \item[\hypertarget{h3}{H3 (Acyclic queries).}] Acyclic queries have $w(Q)=1$, so an optimal decomposition places one relation per bag, closely mirroring the join tree a query optimiser would build for the baseline. We therefore expect the \emph{full-reconstruction} decomposition ($D^{\text{full}}$) to offer no throughput advantage over the baseline while paying a memory overhead, as it materialises every bag view in addition to the final result. The \emph{without-reconstruction} decomposition ($D$) should instead be cheap, since it only maintains the bag hierarchy and exposes the root bag. We expect the reconstruction step to dominate the cost of $D^{\text{full}}$. Beyond the unavoidable cost of materialising a potentially large output, the final re-join of all bag views is executed by Feldera as an ordinary SQL join, with the join order and algorithm chosen by its optimiser; since the engine compiles joins to binary (pairwise) operators rather than a worst-case-optimal multiway join such as leapfrog triejoin, and we do not control the order in which it re-joins the bags, this reconstruction may be carried out far less efficiently than the decomposition's tree structure would in principle allow. We further expect the inline semijoins of the \emph{with-semijoins} variant to add redundant maintenance work unless they act as strong filters.
+
+    \item[\hypertarget{h4}{H4 (Cyclic queries).}] Cyclic queries have $w(Q)>1$, and are precisely the queries for which a flat binary-join plan can produce large intermediate results. We expect the baseline to suffer exactly this intermediate explosion, whereas the decomposition avoids it: rather than materialising the full flat join, it groups relations into bags and connects them through the projected $P'$-relations, bounding the largest intermediate to roughly the heaviest bag's local join instead of the flat plan's blow-up.\footnote{The clean $N^{w(Q)-1}$ bound assumes each bag is evaluated optimally. Since Feldera also uses binary joins \emph{within} a bag, the realised benefit comes from the bags being smaller sub-patterns connected by cheap projections rather than from a guaranteed worst-case-optimal bound.}
+    The variant-level overheads are the same as in \hyperlink{h3}{H3}: the \emph{without-reconstruction} variant ($D$) is cheap, the \emph{with-semijoins} variant adds redundant maintenance work unless its projections filter strongly, and the \emph{full-reconstruction} variant ($D^{\text{full}}$) pays the reconstruction cost discussed there. Unlike the acyclic case, however, we expect the intermediate-bounding benefit to outweigh these overheads: the decomposition should beat the baseline even under full reconstruction when the output is feasible, and by a wider margin for the without-reconstruction and count variants. For very simple or sparse cyclic queries no intermediate explosion occurs, so the optimiser's flat plan may already be good and the decomposition's overhead may dominate; we therefore expect the decomposition's advantage to grow with data density and scale.
+
+    \item[\hypertarget{h5}{H5 (Semiring / FAQ aggregation).}] Because we expect the without-reconstruction decomposition to be fast whereas the final re-join of all bags to be expensive, we hypothesise that a semiring formulation --- mapping joins to multiplication and projections to addition over an implicit per-tuple count of $1$ --- can deliver the full result \emph{count} at close to the (cheap) without-reconstruction cost, avoiding the (expensive) materialisation of the full output. The same machinery generalises to other semirings (e.g.\ a $(\min,+)$ semiring for minimum-cost paths).
+\end{description}
+
+\section{Workloads}
+\label{sec:workloads}
+
+We evaluate three classes of dataset:
+\begin{itemize}
+    \item \textbf{Graph datasets (SNAP):} \texttt{soc-Epinions1}, \texttt{cit-HepTh} and \texttt{p2p-Gnutella31}. Each query is a self-join over the single \texttt{EDGES} relation. For every dataset we run one path query and several cyclic queries of increasing complexity. These datasets exercise H1, H2 and H4. As all atoms are the same relation, only the without-semijoin variant is used (Section~\ref{sec:decomp_no_semijoin}).
+    \item \textbf{TPC-H:} two acyclic path queries (over 4 and 5 tables) at scale factors 1, 10 and 30. These exercise H3 at increasing scale. A property of these queries is that every join is a foreign-key-to-primary-key join; by referential integrity and primary-key uniqueness each child tuple matches exactly one parent, so the joins enrich rather than filter or multiply tuples. The output cardinality is therefore identical across all variants (equal to $|\texttt{LINEITEM}|$), and even the without-reconstruction decomposition --- which holds \texttt{LINEITEM} in its root --- reports the same count. Two further queries, one whose output exceeds and one whose output falls below $|\texttt{LINEITEM}|$, are in progress to test whether variant differences emerge once the output cardinality decouples from the heaviest relation.
+    \item \textbf{IMDB (JOB):} acyclic queries (and a cyclic query in progress) over the multi-relation Join-Order-Benchmark schema. Because the atoms are distinct relations, both the projection ($D$) and no-projection ($D'$) variants are evaluated, making this the richest dataset for H3.
+\end{itemize}
+
+\section{Results and Discussion}
+\label{sec:results_discussion}
+
+We discuss the results by hypothesis, drawing on Tables~\ref{tab:results_soc-Epinions1}--\ref{tab:results_imdb_job}. 
+
+%\subsection{H1 --- Tree Orientation}
+%\label{sec:disc_h1}
+%
+%The orientation effect is large but its \emph{direction} is query-dependent, so \hyperlink{h1}{H1} holds only partially. The decisive factor is which bag becomes the heavy root and how large the intermediate it materialises is, rather than balancedness per se.
+%
+%The more balanced orientation \textbf{D2} wins where it produces a smaller or comparable root intermediate: on \texttt{cit-HepTh} Cyclic Query~4, $D_2'^{\text{full}}$ completes in $19.07$\,min against $24.08$\,min for $D_1'^{\text{full}}$, and the without-reconstruction $D_2'$ runs in $3.16$\,min versus $6.03$\,min for $D_1'$; on \texttt{soc-Epinions1} Cyclic Query~5, $D_2'$ ($11.34$\,min) is roughly twice as fast as $D_1'$ ($24.19$\,min).
+%
+%The less balanced orientation \textbf{D1} wins, however, when the balanced root happens to aggregate a much larger intermediate. On \texttt{soc-Epinions1} Cyclic Query~2 the root bag of $D_2'$ holds $28{,}048{,}050$ rows against only $3{,}544{,}194$ for $D_1'$, and the full count consequently takes $12.93$\,min for $D_2'^{\text{count}}$ versus $1.77$\,min for $D_1'^{\text{count}}$ --- a $7\times$ gap in favour of \textbf{D1}. This reflects a hard limit on what orientation can achieve: the $P'$ semijoins only remove dangling tuples and cannot shrink a bag below its \emph{semantic size} --- the number of distinct tuples its variables take in the true answer. When an orientation places a semantically large bag (here a dense two-atom ``wedge'' pattern) at the root, no amount of filtering can rescue it. A similar reversal appears on Cyclic Query~1 of the same dataset ($D_1'$ $0.85$\,min vs $D_2'$ $1.47$\,min). The hypothesis that a balanced orientation is \emph{uniformly} better is thus not supported: orientation should be chosen per query based on the resulting root intermediate size.
+%
+%\subsection{H2 --- Input-Connector Strategy}
+%\label{sec:disc_h2}
+%
+%\hyperlink{h2}{H2} is confirmed once throughput inflation is accounted for. Across the graph datasets the wall-clock time of the single- and multi-connector variants is essentially identical: e.g.\ the 5-path query on \texttt{soc-Epinions1} completes in $0.10$\,min under both the single and the five-connector configuration, and on \texttt{p2p-Gnutella31} the baseline path query runs in $0.19$\,min in both cases. The throughput figures differ by roughly the connector count (e.g.\ $81{,}663$\,r/s vs $410{,}822$\,r/s), but this is an artefact of counting the re-ingested edge file once per connector (Section~\ref{sec:caveats}), not a genuine speed-up.
+%
+%Where a difference exists, the multi-connector variant is marginally \emph{slower} and uses somewhat more memory, consistent with the extra ingestion: on \texttt{cit-HepTh} Cyclic Query~1, $D_1^{\text{full}}$ takes $0.94$\,min ($7.7$\,GiB) with a single connector against $1.11$\,min ($9.5$\,GiB) with nine. This supports the hypothesis that processing, not ingestion, dominates, with the single-connector variant being the slightly leaner choice.
+%
+%\subsection{H3 --- Acyclic Queries}
+%\label{sec:disc_h3}
+%
+%The acyclic results (TPC-H and IMDB) support \hyperlink{h3}{H3} on all counts.
+%
+%\paragraph{Materialisation overhead of full reconstruction.} On TPC-H the full-reconstruction decomposition matches the baseline in time but not in memory, and the gap widens with scale. At scale factor~10 (4-table query) the baseline runs in $10.34$\,min using $16.2$\,GiB, while $D_1^{\text{full}}$ takes $12.29$\,min and $42.2$\,GiB --- a $2.6\times$ memory overhead for no speed-up. At scale factor~30 both full-reconstruction variants ($D_1^{\text{full}}$ and $D_1'^{\text{full}}$) crash with out-of-memory, confirming that the forced materialisation of all bag views is the binding constraint.
+%
+%\paragraph{The lean variants match or beat the baseline.} The without-reconstruction, no-projection variant is consistently the most efficient. At scale factor~10 (4-table) $D_1'$ completes in $9.95$\,min using only $12.4$\,GiB --- faster and far leaner than the baseline --- and at scale factor~30 it finishes in $29.98$\,min where the full variants crash. This matches the expectation that, for $w(Q)=1$ queries, the decomposition's value is in bounding intermediates, not in reconstructing the full output.
+%
+%\paragraph{Semijoins add redundant work.} Comparing the projection and no-projection variants isolates the cost of the inline semijoins. On IMDB Acyclic Query~2 the no-projection variants are uniformly faster than their projection counterparts ($D_1'$ at $1.10$\,min vs $D_1$ at $1.18$\,min; $D_1'^{\text{full}}$ at $1.91$\,min vs $D_1^{\text{full}}$ at $2.02$\,min), consistent with the redundant-semijoin overhead discussed in Section~\ref{sec:decomp_no_semijoin}.
+%
+%\paragraph{Decomposition can beat a suboptimal baseline.} On IMDB Acyclic Query~2 the decomposition is markedly faster than the baseline ($D_1'$ $1.10$\,min vs baseline $2.91$\,min at comparable memory), indicating that the optimiser's flat-join plan is suboptimal and that the bag structure bounds intermediates more effectively. Conversely, the trivial IMDB Acyclic Query~1 shows no meaningful difference between any variants (all $\approx 0.18$\,min), as expected when the query is small enough that plan choice is irrelevant.
+%
+%\subsection{H4 --- Cyclic Queries}
+%\label{sec:disc_h4}
+%
+%The cyclic results strongly support \hyperlink{h4}{H4}, including its caveat for simple/sparse instances.
+%
+%\paragraph{Dense graphs: large wins.} On the denser \texttt{soc-Epinions1} and \texttt{cit-HepTh} graphs the baseline frequently times out or runs orders of magnitude slower, while the decomposition completes quickly. On \texttt{cit-HepTh} Cyclic Query~2 the baseline takes $80.77$\,min against $1.88$\,min for $D_1'^{\text{full}}$ --- a $43\times$ speed-up at comparable memory --- and on \texttt{soc-Epinions1} Cyclic Query~1 the baseline times out entirely while the decomposition finishes in about a minute. This is the join-explosion-bounding behaviour predicted by the $w(Q)>1$ analysis.
+%
+%\paragraph{Sparse graphs: baseline competitive.} On the sparse \texttt{p2p-Gnutella31}, where the cyclic queries return very few rows (e.g.\ $0$, $1$, or $51$ result tuples), no join explosion occurs and the baseline is competitive or faster: on Cyclic Query~4 the baseline runs in $0.11$\,min against $0.35$\,min for $D_1'^{\text{full}}$, the decomposition's extra views now being pure overhead. This confirms the hypothesised regime in which the optimiser's plan is already good and the decomposition does not pay off.
+%
+%\subsection{H5 --- Semiring / FAQ Aggregation}
+%\label{sec:disc_h5}
+%
+%\hyperlink{h5}{H5} is confirmed: the semiring count variant delivers the full result count at close to the cheap without-reconstruction cost, far below the cost of full materialisation. On \texttt{cit-HepTh} Cyclic Query~2, $D_1'^{\text{count}}$ returns the correct $266{,}404{,}327$-row count in $0.52$\,min using $7.7$\,GiB, against $1.88$\,min and $16.1$\,GiB for the full-reconstruction $D_1'^{\text{full}}$ --- roughly $3.6\times$ faster at half the memory --- while remaining close to the without-reconstruction $D_1'$ time of $0.44$\,min. The advantage is starker where full reconstruction is infeasible: on \texttt{soc-Epinions1} Cyclic Query~5, $D_1'^{\text{full}}$ times out, yet $D_1'^{\text{count}}$ completes in $41.83$\,min and returns the full count. This demonstrates that the fast, bounded decomposition can be extended with semirings to recover aggregate answers without paying the reconstruction cost.
+%
+%The generalisation to other semirings --- attaching a random integer cost in $[1,10]$ to every edge and computing, via a $(\min,+)$ semiring (joins $\mapsto +$, projections $\mapsto \min$), the minimum-cost 3-path per origin, summed for a single reported figure --- is in progress and will be reported alongside the count results. Likewise, the two additional TPC-H queries whose output cardinality differs from $|\texttt{LINEITEM}|$ will test whether the variant equivalence observed on the current TPC-H queries persists once the output decouples from the heaviest relation.
+%
+%\section{Summary of Findings and Threats to Validity}
+%\label{sec:eval_summary}
+%
+%\paragraph{Summary.} The decomposition's benefit is concentrated on cyclic, dense queries (H4) and on acyclic queries where the optimiser's plan is poor (H3); on well-optimised acyclic and sparse cyclic queries it offers no advantage and pays a materialisation overhead. Full reconstruction is the main liability --- it inflates memory and can crash at scale --- whereas the without-reconstruction and semiring-count variants are consistently efficient (H3, H5). Orientation matters but must be chosen per query rather than by a fixed balancedness rule (H1), and the single-connector ingestion strategy is the marginally leaner choice (H2).
+%
+%\paragraph{Threats to validity.} The measurement caveats of Section~\ref{sec:caveats} (averaging noise, coarse memory sampling, connector-dependent throughput) bound the precision of small differences. Results are specific to Feldera's DBSP engine and its optimiser; a different engine might choose different baseline plans and shift the H3/H4 boundaries. Finally, several cells remain to be (re-)measured, and the additional TPC-H and IMDB queries are still in progress; the conclusions above are therefore preliminary where so noted.
+%

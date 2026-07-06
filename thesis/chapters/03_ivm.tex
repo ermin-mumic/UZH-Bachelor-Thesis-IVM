@@ -1,0 +1,91 @@
+\chapter{The IVM$^+$ Approach}
+\label{ch:ivm}
+
+\section{Problem Setting}
+\label{sec:ivm_problem}
+
+We consider the \emph{insert-only} incremental view maintenance problem. The database $D$ starts empty, and a stream of $N$ single-tuple insertions arrives one at a time. After each insertion into some relation $R_i$, the maintained result $Q(D)$ must reflect the updated state. We do not consider tuple deletions.
+
+The algorithm of Abo Khamis et al., which we call \emph{IVM$^+$}, maintains $Q(D)$ with \emph{amortized} $O(N^{w(Q)-1})$ update time per insertion, where $N$ is the current database size and $w(Q)$ is the fractional hypertree width of $Q$ (see Chapter~\ref{ch:background}). For the acyclic queries in this thesis, $w(Q) = 1$, giving $O(1)$ amortized update time per insert.
+
+\section{Bag Relations and Bridge Variables}
+\label{sec:bag_relations}
+
+The IVM$^+$ algorithm operates on a fixed tree decomposition $\mathcal{T}$ of $Q$. We recall that each bag $t \in \mathcal{T}$ has a variable set $\chi(t)$ (see Definition~\ref{sec:tree_decompositions}). Two further notions are needed to define the algorithm's data structures.
+
+\paragraph{Bridge variables.}
+For every non-root bag $t$, the \emph{bridge variables} are the variables shared with its parent:
+\[
+    \mathbf{Y}_t = \chi(t) \cap \chi(\mathrm{parent}(t)).
+\]
+Bridge variables are the interface through which a bag communicates with its parent in the tree.c
+\paragraph{Restriction of a query.}
+Given a query $Q = R_1(\mathbf{X}_1) \bowtie \cdots \bowtie R_k(\mathbf{X}_k)$ and a set of variables $\mathbf{Y}$, the \emph{restriction} $Q[\mathbf{Y}]$ is the query obtained by retaining only those atoms $R_i(\mathbf{X}_i)$ for which $\mathbf{X}_i \cap \mathbf{Y} \neq \emptyset$, and projecting each such atom onto its variables in $\mathbf{Y}$:
+\[
+    Q[\mathbf{Y}] = \bowtie_{\,i\,:\,\mathbf{X}_i \cap \mathbf{Y} \neq \emptyset} \;\pi_{\mathbf{X}_i \cap \mathbf{Y}}\, R_i(\mathbf{X}_i).
+\]
+Atoms whose variable sets are disjoint from $\mathbf{Y}$ contribute nothing and are dropped. Atoms that are entirely contained in $\mathbf{Y}$ (i.e.\ $\mathbf{X}_i \subseteq \mathbf{Y}$) appear unchanged.
+
+\paragraph{Q-relation and P-relation.}
+For each bag $t$, we define two base relations:
+\begin{itemize}
+    \item The \textbf{Q-relation} $Q_t = Q[\chi(t)]$ is the restriction of the full query to the bag's variables.
+    \item The \textbf{P-relation} $P_t = \pi_{\mathbf{Y}_t} Q_t$ is the projection of the Q-relation onto the bridge variables of $t$.
+\end{itemize}
+The Q-relation groups within each bag all query atoms that share variables with that bag, and the P-relation summarises which bridge variable values actually appear in the bag's result.
+
+\section{The IVM$^+$ Algorithm}
+\label{sec:ivm_algorithm}
+
+\subsection{Q'- and P'-Relations}
+\label{sec:qp_relations}
+
+The IVM$^+$ algorithm refines the base Q- and P-relations by propagating information bottom-up through the tree. For each bag $t$, define:
+\begin{align}
+    Q'_t(\chi(t)) &= Q_t(\chi(t)) \;\bowtie\! \bowtie_{c \,\in\, \mathrm{children}(t)} P'_c(\mathbf{Y}_c), \label{eq:qprime} \\[4pt]
+    P'_t(\mathbf{Y}_t) &= \pi_{\mathbf{Y}_t}\, Q'_t(\chi(t)). \label{eq:pprime}
+\end{align}
+The $Q'$-relation extends the bag's own query with the $P'$-relations of all its children. Each child's $P'$-relation acts as a \emph{semijoin filter}: it restricts the parent's join to only those bridge variable values that actually have a matching tuple somewhere in the child's subtree. The $P'$-relation of bag $t$ is then the projection of $Q'_t$ onto the bridge variables, ready to be used by $t$'s own parent.
+
+These relations are computed \emph{bottom-up}: leaf bags have no children, so $Q'_t = Q_t$ for leaves. Once all children of a bag $t$ have their $P'$-relations, $Q'_t$ can be computed, followed immediately by $P'_t$.
+
+\subsection{Result Reconstruction}
+\label{sec:result_reconstruction}
+
+The full query result is obtained at the root bag $r$ by joining all $Q'$-relations together along their shared variables:
+\[
+    Q(D) = Q'_r \;\bowtie\! \bowtie_{t \,\neq\, r} Q'_t.
+\]
+In practice, this is expressed as a final SQL view that joins all bag Q-views along the bridge columns.
+
+\subsection{Complexity}
+\label{sec:complexity}
+
+
+\section{Variant: Without Semijoin}
+\label{sec:variant_no_semijoin}
+
+In the standard IVM$^+$ algorithm, the Q-relation $Q_t = Q[\chi(t)]$ includes \emph{all} atoms that share at least one variable with the bag, projecting each to the bag's variable set. 
+We investigate a variant that adjusts this definition: the bag query retains only those atoms whose variable set \emph{contains all} bag variables, i.e.\ atoms $R_i(\mathbf{X}_i)$ for which $\chi(t) \subseteq \mathbf{X}_i$:
+\[
+    Q^*_t = \bowtie_{\,i\,:\,\chi(t) \subseteq \mathbf{X}_i} R_i(\mathbf{X}_i).
+\]
+Atoms that cover only a strict subset of $\chi(t)$ are dropped entirely rather than projected. The $Q'^*$- and $P'^*$-relations are defined analogously to Equations~\eqref{eq:qprime}--\eqref{eq:pprime} using $Q^*_t$ in place of $Q_t$.
+
+\paragraph{Motivation.}
+The projected atoms in the standard definition act as filters: they eliminate bag tuples whose bridge variable values have no matching partner in the projected relation. However, when the bridge variables are already fully constrained by another atom in the same bag, this additional filtering may be redundant, introducing join work without reducing the intermediate view size. The variant without semijoin reduction avoids this overhead by simply not including such atoms.
+
+\paragraph{Example.}
+Consider the 3-path query $Q = R(A,B) \bowtie S(B,C) \bowtie T(C,D)$ with the tree decomposition from Section~\ref{sec:tree_decompositions}. The root bag has $\chi(2) = \{B, C\}$, containing atom $S(B,C)$.
+
+Under the \emph{standard} definition, the root Q-relation includes the projections of all atoms intersecting $\{B,C\}$:
+\[
+    Q_2 = \pi_B R(A,B) \;\bowtie\; S(B,C) \;\bowtie\; \pi_C T(C,D).
+\]
+The terms $\pi_B R$ and $\pi_C T$ are inline semijoins that restrict $S$ to bridge values seen in $R$ and $T$ respectively.
+
+Under the \emph{variant without semijoin}, only atom $S(B,C)$ satisfies $\chi(2) = \{B,C\} \subseteq \{B,C\} = \mathbf{X}_S$; atoms $R(A,B)$ and $T(C,D)$ do not cover all of $\chi(2)$ (both are missing one variable) and are therefore dropped:
+\[
+    Q^*_2 = S(B,C).
+\]
+The root Q-view is then simply the full relation $S$, and filtering by children's bridge values is still applied via the $P'$-relations of the child bags. The trade-off between the two variants in terms of throughput and memory is evaluated in Chapter~\ref{ch:evaluation}. Prove that result still correct.

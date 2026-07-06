@@ -1,0 +1,36 @@
+\documentclass{report} 
+
+% --- Packages ---
+\usepackage{booktabs} 
+\usepackage{amsmath} 
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{listings}   
+
+\begin{document}
+
+% --- Front ---
+%\pagenumbering{roman}
+%\input{frontmatter/titlepage}
+%\\input{frontmatter/abstract}
+
+\tableofcontents
+\cleardoublepage
+
+% --- Main Body ---
+\pagenumbering{arabic} 
+%\\include{chapters/01_introduction}
+\include{chapters/02_background}
+\include{chapters/03_ivm}
+\include{chapters/04_implementation}
+\include{chapters/05_evaluation}
+%\\include{chapters/06_conclusion}
+
+% --- Bibliography ---
+%\bibliographystyle{plain}
+%\bibliography{references}
+
+\input{tables/results_tables}
+
+\end{document}
