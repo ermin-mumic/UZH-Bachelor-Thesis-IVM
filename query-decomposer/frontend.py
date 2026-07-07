@@ -30,8 +30,8 @@ method = st.radio("Method", ["IVM+", "IVM+* (Strict)"], horizontal=True)
 strict_mode = (method == "IVM+* (Strict)")
 if st.button("Decompose", disabled=not both_filled):
     try:
-        tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = run_pipeline(schema_sql, query_sql)
-        st.session_state["pipeline"] = (tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table)
+        tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table = run_pipeline(schema_sql, query_sql)
+        st.session_state["pipeline"] = (tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table)
         st.session_state["error"] = None
     except Exception as e:
         st.session_state["error"] = str(e)
@@ -42,11 +42,11 @@ if st.session_state.get("error"):
 
 pipeline = st.session_state.get("pipeline")
 if pipeline:
-    tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = pipeline
+    tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table = pipeline
 
 
     # --- output area: SQL on left, tree on right ---
-    st.markdown(f"**Treewidth:** {treewidth}")
+    st.markdown(f"**Fractional Hypertree Width:** {fhw}")
 
     out_col1, out_col2 = st.columns(2)
 
