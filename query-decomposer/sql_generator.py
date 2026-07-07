@@ -30,7 +30,7 @@ def compute_bridge_vars(bags, parent, root):
     return bridge_vars
 
 
-def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list, alias_to_table):
+def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list, alias_to_table, strict_mode):
     overlap = edges[table] & bag_vars
     if not overlap:
         return None   # table contributes nothing to this bag
@@ -39,6 +39,8 @@ def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list, alias_
 
     # check if all table vars in bag
     is_full = (overlap == edges[table])
+    if strict_mode and not is_full:
+        return None   # strict variant: only include table if ALL its vars are in this bag
 
     select_cols = []
     needs_rename = False
@@ -65,16 +67,20 @@ def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list, alias_
     return sql, overlap
 
 
-def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table):
+def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table, strict_mode):
     bag_vars = bags[bag_id]
 
     # collect all fragments that contribute to this bag
     fragments = []
     for table in tables:
-        result = build_q_fragment(table, bag_vars, edges, var_to_col, predicates.get(table, []), alias_to_table)
+        result = build_q_fragment(table, bag_vars, edges, var_to_col, predicates.get(table, []), alias_to_table, strict_mode)
         if result is not None:
             sql, overlap = result
             fragments.append((sql, overlap, table))
+
+    if not fragments:
+        # no fragments, no accumulated join variables
+        return None, set()
 
     # sort largest overlap first so accumulated grows as fast as possible
     fragments.sort(key=lambda f: len(f[1]), reverse=True)
@@ -89,12 +95,13 @@ def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_t
         shared = accumulated & frag_overlap      # only vars already on the left side
         using_cols = ", ".join(sorted(shared))
         from_clause += f"\nJOIN {frag_sql} USING ({using_cols})"
-        accumulated |= frag_overlap              # add this fragment's vars to accumulated (union)
+        accumulated |= frag_overlap
 
-    return f"SELECT *\nFROM {from_clause}"
+    # return SQL and the set of variables Q actually covers (may be subset of bag in strict mode)
+    return f"SELECT *\nFROM {from_clause}", accumulated
 
 
-def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1):
+def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1, strict_mode=False):
 
     # --- Step 1: orient the tree ---
     children, parent = orient_tree(bags, tree_edges, root)
@@ -110,14 +117,32 @@ def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_
         for child in children[bag_id]:
             emit_views(child)
 
-        # build the Q relation 
-        q_sql = build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table)
+        # build the Q relation; returns (sql, covered_vars) or (None, set()) for bags with no Q relation
+        q_sql, q_vars = build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table, strict_mode)
 
-        # extend Q with each child's P' view to get Q'
-        q_prime_sql = q_sql
-        for child in children[bag_id]:
-            using_cols = ", ".join(sorted(bridge_vars[child]))
+        if q_sql is None and not children[bag_id]:
+            raise ValueError(f"Bag {bag_id} has no contributing tables and no children in strict mode.")
+
+        # extend Q to get Q'
+        # always use accumulated & bridge_vars[child] for USING:
+        # - non-strict: q_vars = all bag vars, so intersection = bridge_vars[child]
+        # - strict: q_vars may be subset of bag vars, intersection avoids referencing missing columns
+        if q_sql is None:
+            # start from first child's P' view
+            first_child, *rest_children = children[bag_id]
+            q_prime_sql = f"SELECT *\nFROM BAG_{first_child}_PPRIME"
+            accumulated = set(bridge_vars[first_child])
+            child_list = rest_children
+        else:
+            q_prime_sql = q_sql
+            accumulated = set(q_vars)
+            child_list = children[bag_id]
+
+        for child in child_list:
+            shared = accumulated & bridge_vars[child]
+            using_cols = ", ".join(sorted(shared))
             q_prime_sql += f"\nJOIN BAG_{child}_PPRIME USING ({using_cols})"
+            accumulated |= bridge_vars[child]
 
         if bag_id == root:
             views.append(f"-- Root Bag.\nCREATE MATERIALIZED VIEW ROOT_QPRIME AS\n{q_prime_sql};")
@@ -128,6 +153,25 @@ def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_
             views.append(f"CREATE MATERIALIZED VIEW BAG_{bag_id}_PPRIME AS\nSELECT DISTINCT {bridge_cols} FROM BAG_{bag_id}_QPRIME;")
 
     emit_views(root)
+
+    # --- Step 4: Create result view top-down (rejoin all bags Q' relations on bridge variables) ---
+    reconstruction_joins = []
+
+    def dfs_reconstruction(bag_id):
+        for child in children[bag_id]:
+            using_cols = ", ".join(sorted(bridge_vars[child]))
+            reconstruction_joins.append(f"JOIN BAG_{child}_QPRIME USING ({using_cols})")
+            dfs_reconstruction(child)
+
+    dfs_reconstruction(root)
+
+    if reconstruction_joins:
+        from_clause = "ROOT_QPRIME\n" + "\n".join(reconstruction_joins)
+    else:
+        # only 1 bag in decomposition (nothin to rejoin)
+        from_clause = "ROOT_QPRIME"
+    
+    views.append(f"-- Full result reconstruction.\nCREATE MATERIALIZED VIEW RESULT AS\nSELECT * FROM {from_clause};")
 
     return views
 
@@ -166,7 +210,9 @@ if __name__ == "__main__":
     }
     predicates_2 = {}
 
-    views = generate_sql(tables_2, edges_2, var_to_col_2, bags_2, tree_edges_2, predicates_2)
+    alias_to_table_2 = {}
+
+    views = generate_sql(tables_2, edges_2, var_to_col_2, bags_2, tree_edges_2, predicates_2, alias_to_table_2)
 
     print("=== Generated SQL ===\n")
     for view_sql in views:

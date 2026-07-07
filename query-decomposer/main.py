@@ -14,8 +14,8 @@ def run_pipeline(schema_sql, query_sql):
     return tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table
 
 
-def generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root):
-    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root)
+def generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode=False):
+    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode)
 
 
 if __name__ == "__main__":

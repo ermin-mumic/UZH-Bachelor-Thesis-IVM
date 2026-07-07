@@ -26,6 +26,8 @@ with col2:
 
 both_filled = schema_sql.strip() != "" and query_sql.strip() != ""
 
+method = st.radio("Method", ["IVM+", "IVM+* (Strict)"], horizontal=True)
+strict_mode = (method == "IVM+* (Strict)")
 if st.button("Decompose", disabled=not both_filled):
     try:
         tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = run_pipeline(schema_sql, query_sql)
@@ -91,7 +93,7 @@ if pipeline:
 
     with out_col1:
         try:
-            views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root)
+            views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode)
             st.markdown("**Generated SQL:**")
             st.code("\n\n".join(views), language="sql")
         except Exception as e:

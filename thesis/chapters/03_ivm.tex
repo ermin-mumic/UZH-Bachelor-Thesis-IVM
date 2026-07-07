@@ -66,11 +66,11 @@ In practice, this is expressed as a final SQL view that joins all bag Q-views al
 \label{sec:variant_no_semijoin}
 
 In the standard IVM$^+$ algorithm, the Q-relation $Q_t = Q[\chi(t)]$ includes \emph{all} atoms that share at least one variable with the bag, projecting each to the bag's variable set. 
-We investigate a variant that adjusts this definition: the bag query retains only those atoms whose variable set \emph{contains all} bag variables, i.e.\ atoms $R_i(\mathbf{X}_i)$ for which $\chi(t) \subseteq \mathbf{X}_i$:
+We investigate a \emph{strict variant} that adjusts this definition: the bag query retains only those atoms whose variable set is fully contained within the bag variables. Formally, an atom $R_i(\mathbf{X}_i)$ is included in $Q^*_t$ if and only if $\mathbf{X}_i \subseteq \chi(t)$:
 \[
-    Q^*_t = \bowtie_{\,i\,:\,\chi(t) \subseteq \mathbf{X}_i} R_i(\mathbf{X}_i).
+    Q^*_t = \bowtie_{\,i\,:\,\mathbf{X}_i \subseteq \chi(t)} R_i(\mathbf{X}_i).
 \]
-Atoms that cover only a strict subset of $\chi(t)$ are dropped entirely rather than projected. The $Q'^*$- and $P'^*$-relations are defined analogously to Equations~\eqref{eq:qprime}--\eqref{eq:pprime} using $Q^*_t$ in place of $Q_t$.
+Atoms that share variables with $\chi(t)$ but are not fully contained i.e, those for which $\mathbf{X}_i \not\subseteq \chi(t)$ are omitted entirely from $Q^*_t$ rather than projected. The $Q'^*$- and $P'^*$-relations are defined analogously to Equations~\eqref{eq:qprime}--\eqref{eq:pprime} using $Q^*_t$ in place of $Q_t$. 
 
 \paragraph{Motivation.}
 The projected atoms in the standard definition act as filters: they eliminate bag tuples whose bridge variable values have no matching partner in the projected relation. However, when the bridge variables are already fully constrained by another atom in the same bag, this additional filtering may be redundant, introducing join work without reducing the intermediate view size. The variant without semijoin reduction avoids this overhead by simply not including such atoms.
