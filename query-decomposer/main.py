@@ -8,15 +8,14 @@ def run_pipeline(schema_sql, query_sql):
     # parse → hypergraph → htd
     # returns all intermediate data needed for sql generation
     schema = parse_schema(schema_sql)
-    tables, _, joins, predicates = parse_query(query_sql, schema)
-    _, var_to_col, edges = build_hypergraph(schema, tables, joins)
+    tables, alias_to_table, joins, predicates, combined_schema = parse_query(query_sql, schema)
+    _, var_to_col, edges = build_hypergraph(combined_schema, tables, joins, alias_to_table)
     bags, tree_edges, treewidth = run_htd(edges, tables)
-    return tables, edges, var_to_col, bags, tree_edges, treewidth, predicates
+    return tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table
 
 
-def generate(tables, edges, var_to_col, bags, tree_edges, predicates, root):
-    # reruns sql generation with a different root
-    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, root)
+def generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root):
+    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root)
 
 
 if __name__ == "__main__":
@@ -50,8 +49,8 @@ if __name__ == "__main__":
         JOIN CUSTOMER USING (NATIONKEY)
     """
 
-    tables, edges, var_to_col, bags, tree_edges, treewidth, predicates = run_pipeline(schema_sql_2, query_sql_2)
-    views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, root=1)
+    tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = run_pipeline(schema_sql_2, query_sql_2)
+    views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1)
 
     print(f"-- Treewidth: {treewidth}")
     print()

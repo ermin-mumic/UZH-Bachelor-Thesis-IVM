@@ -28,8 +28,8 @@ both_filled = schema_sql.strip() != "" and query_sql.strip() != ""
 
 if st.button("Decompose", disabled=not both_filled):
     try:
-        tables, edges, var_to_col, bags, tree_edges, treewidth, predicates = run_pipeline(schema_sql, query_sql)
-        st.session_state["pipeline"] = (tables, edges, var_to_col, bags, tree_edges, treewidth, predicates)
+        tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = run_pipeline(schema_sql, query_sql)
+        st.session_state["pipeline"] = (tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table)
         st.session_state["error"] = None
     except Exception as e:
         st.session_state["error"] = str(e)
@@ -40,7 +40,7 @@ if st.session_state.get("error"):
 
 pipeline = st.session_state.get("pipeline")
 if pipeline:
-    tables, edges, var_to_col, bags, tree_edges, treewidth, predicates = pipeline
+    tables, edges, var_to_col, bags, tree_edges, treewidth, predicates, alias_to_table = pipeline
 
 
     # --- output area: SQL on left, tree on right ---
@@ -91,7 +91,7 @@ if pipeline:
 
     with out_col1:
         try:
-            views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, root)
+            views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root)
             st.markdown("**Generated SQL:**")
             st.code("\n\n".join(views), language="sql")
         except Exception as e:

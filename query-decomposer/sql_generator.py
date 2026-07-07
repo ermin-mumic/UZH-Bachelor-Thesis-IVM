@@ -30,10 +30,12 @@ def compute_bridge_vars(bags, parent, root):
     return bridge_vars
 
 
-def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list):
+def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list, alias_to_table):
     overlap = edges[table] & bag_vars
     if not overlap:
         return None   # table contributes nothing to this bag
+
+    physical = alias_to_table.get(table, table)  # e.g, "R1" → "EDGES", "ORDERS" → "ORDERS"
 
     # check if all table vars in bag
     is_full = (overlap == edges[table])
@@ -48,29 +50,28 @@ def build_q_fragment(table, bag_vars, edges, var_to_col, predicates_list):
         else:
             select_cols.append(var)
 
-    # full table + no renames + no filter → bare table reference 
+    # full table + no renames + no filter → bare table reference
     if is_full and not needs_rename and not predicates_list:
-        return table, overlap
+        return physical, overlap
 
     where_clause = f" WHERE {' AND '.join(predicates_list)}" if predicates_list else ""
 
     if is_full and not needs_rename:
-        # has filter but full table → SELECT * with WHERE
-        sql = f"(SELECT * FROM {table}{where_clause})"
+        sql = f"(SELECT * FROM {physical}{where_clause})"
     else:
         distinct = "" if is_full else "DISTINCT "
-        sql = f"(SELECT {distinct}{', '.join(select_cols)} FROM {table}{where_clause})"
+        sql = f"(SELECT {distinct}{', '.join(select_cols)} FROM {physical}{where_clause})"
 
     return sql, overlap
 
 
-def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates):
+def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table):
     bag_vars = bags[bag_id]
 
     # collect all fragments that contribute to this bag
     fragments = []
     for table in tables:
-        result = build_q_fragment(table, bag_vars, edges, var_to_col, predicates.get(table, []))
+        result = build_q_fragment(table, bag_vars, edges, var_to_col, predicates.get(table, []), alias_to_table)
         if result is not None:
             sql, overlap = result
             fragments.append((sql, overlap, table))
@@ -93,7 +94,7 @@ def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates):
     return f"SELECT *\nFROM {from_clause}"
 
 
-def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, root=1):
+def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1):
 
     # --- Step 1: orient the tree ---
     children, parent = orient_tree(bags, tree_edges, root)
@@ -110,7 +111,7 @@ def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, root=1
             emit_views(child)
 
         # build the Q relation 
-        q_sql = build_q_view(bag_id, bags, tables, edges, var_to_col, predicates)
+        q_sql = build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_table)
 
         # extend Q with each child's P' view to get Q'
         q_prime_sql = q_sql

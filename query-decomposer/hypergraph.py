@@ -1,9 +1,9 @@
-def build_hypergraph(schema, tables, joins):
+def build_hypergraph(combined_schema, tables, joins, alias_to_table):
     # 1. UNION FIND ALGORITHM
     # every (table, col) starts as own group (only for tables part of the query)
     parent = {}
     for table in tables:
-        for col in schema[table]:
+        for col in combined_schema[table]:
             parent[(table, col)] = (table, col)   # every (table, col) is its own root
 
     #find the root of x's group
@@ -36,20 +36,22 @@ def build_hypergraph(schema, tables, joins):
         tbl, col = root
         return f"{tbl}_{col}" if col_name_counts[col] > 1 else col
 
-    # col_to_var:  (table, col) -> canonical name to build hyperedges
-    # var_to_col:  (table, canonical name) -> actual col name used in SQL generation
+    # col_to_var:  (table, col) -> canonical name of root to build hyperedges
+    # var_to_col:  (table, canonical name) -> actual physical col name used in SQL generation
     col_to_var = {}
     var_to_col = {}
     for (table, col) in parent:
         root = find((table, col))
         canon = canonical(root)
         col_to_var[(table, col)] = canon
-        var_to_col[(table, canon)] = col
-
+        phys_table = alias_to_table.get(table, table)
+        phys_cols  = combined_schema[phys_table]
+        vars_list  = combined_schema[table]
+        var_to_col[(table, canon)] = phys_cols[vars_list.index(col)]
 
     edges = {}
     for table in tables:
-        edges[table] = frozenset(col_to_var[(table, col)] for col in schema[table])
+        edges[table] = frozenset(col_to_var[(table, col)] for col in combined_schema[table])
 
     return col_to_var, var_to_col, edges
 

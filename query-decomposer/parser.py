@@ -40,10 +40,11 @@ def parse_query(sql, schema):
         raise ValueError(f"Invalid SQL syntax in query:\n{e}") from e
 
 
-    tables = []          # tables involved in join in order
-    alias_to_table = {}  # maps alias to table name and table name to table name
+    tables = []          # alias names of tables in query order (alias = physical name when no alias)
+    alias_to_table = {}  # alias → physical table name (also physical → physical for bare tables)
     joins = []           # join conditions as 4 tuples e.g. ("Table1", "JOIN Attribute1", "Table2", "JOIN Attribute2")
-    predicates = {}      # table_name -> list of SQL strings e.g. {"R1": ["A > 5", "A < 100"]}
+    predicates = {}      # alias → list of SQL strings e.g. {"R1": ["A > 5"]}
+    combined_schema = dict(schema)  # schema extended with alias entries so hypergraph can find their variables (self joins)
 
     def register_table(tbl_node):
         name = tbl_node.name.upper()
@@ -52,7 +53,18 @@ def parse_query(sql, schema):
         if name not in schema:
             raise ValueError(f"Table {name} is not defined.")
 
-        tables.append(name)
+        # extract column rename list from AS alias(col1, col2, ...)
+        alias_node = tbl_node.args.get("alias")
+        col_list = []
+        if alias_node:
+            col_list = [c.name.upper() for c in (alias_node.args.get("columns") or [])]
+
+        # if aliased table
+        if alias != name:
+            # use explicit col list if given, otherwise copy physical schema columns
+            combined_schema[alias] = col_list if col_list else list(schema[name])
+
+        tables.append(alias)
         alias_to_table[alias] = name
         alias_to_table[name] = name
 
@@ -76,6 +88,19 @@ def parse_query(sql, schema):
     tbl = from_node.find(exp.Table)
     register_table(tbl)
 
+    def resolve_table_ref(ref):
+        # Resolve a table reference (alias or physical name) in a join to the alias identifier in tables. Edge case: FROM EDGES AS R1... JOIN ON EDGES.B 
+        ref = ref.upper()
+        if ref in tables:
+            return ref
+        matches = [a for a, phys in alias_to_table.items() if phys == ref and a in tables]
+        if len(matches) == 1:
+            return matches[0]
+        elif len(matches) > 1:
+            raise ValueError(f"Ambiguous table reference '{ref}' — multiple aliases exist for this table. Use the alias directly.")
+        else:
+            raise ValueError(f"Unknown table reference '{ref}'.")
+
     # -- JOIN CLAUSES --
     for join in ast.args.get("joins") or []:
 
@@ -84,20 +109,20 @@ def parse_query(sql, schema):
             continue
 
         register_table(tbl)
-        tbl_name = tbl.name.upper()
+        tbl_alias = (tbl.alias or tbl.name).upper()        # alias identifier (= physical name when no alias)
 
         # --- Case 1: JOIN ... USING (col) ---
         # join.args["using"] is a list of Identifier nodes, one per column named
         for col in join.args.get("using") or []:
             col_name = col.name.upper()
 
-            if col_name not in schema[tbl_name]:
-                raise ValueError(f"Table {tbl_name} has no column {col_name}.")
+            if col_name not in combined_schema[tbl_alias]:
+                raise ValueError(f"Table {tbl_alias} has no column {col_name}.")
 
             found = False
             for prev_tbl in tables[:-1]:
-                if col_name in schema.get(prev_tbl, []):
-                    joins.append((prev_tbl, col_name, tbl_name, col_name))
+                if col_name in combined_schema.get(prev_tbl, []):
+                    joins.append((prev_tbl, col_name, tbl_alias, col_name))
                     found = True
 
             if not found:
@@ -110,8 +135,8 @@ def parse_query(sql, schema):
             left_col  = eq.left
             right_col = eq.right
             if isinstance(left_col, exp.Column) and isinstance(right_col, exp.Column):
-                lt = alias_to_table.get(left_col.table.upper(),  left_col.table.upper())
-                rt = alias_to_table.get(right_col.table.upper(), right_col.table.upper())
+                lt = resolve_table_ref(left_col.table.upper())
+                rt = resolve_table_ref(right_col.table.upper())
                 joins.append((lt, left_col.name.upper(), rt, right_col.name.upper()))
 
     # -- WHERE CLAUSE --
@@ -129,11 +154,10 @@ def parse_query(sql, schema):
             tables_in_cond = set()
             for col in cols:
                 if col.table:
-                    tbl = alias_to_table.get(col.table.upper(), col.table.upper())
-                    tables_in_cond.add(tbl)
+                    tables_in_cond.add(resolve_table_ref(col.table.upper()))
                 else:
-                    # unqualified column: find owner from schema
-                    owners = [t for t in tables if col.name.upper() in schema.get(t, [])]
+                    # unqualified column: find owner from combined_schema
+                    owners = [t for t in tables if col.name.upper() in combined_schema.get(t, [])]
                     if len(owners) == 1:
                         tables_in_cond.add(owners[0])
                     elif len(owners) > 1:
@@ -151,13 +175,22 @@ def parse_query(sql, schema):
 
             tbl = next(iter(tables_in_cond)) # extract that 1 table
 
-            # walk node and apply lambda: strip table qualifiers: R1.A > 5  →  A > 5
+            # build column → physical col mapping for this table/alias
+            phys_table  = alias_to_table.get(tbl, tbl)
+            var_names   = combined_schema[tbl]
+            phys_cols   = combined_schema[phys_table]
+            var_to_phys = {var: phys_cols[i] for i, var in enumerate(var_names) if i < len(phys_cols)}
+
+            # walk node and apply lambda: strip table qualifiers AND map column names to physical cols
+            # e.g. R1.A > 5  →  SRC > 5  (for EDGES AS R1(A, B) where EDGES has [SRC, DST])
+            # for regular tables var_to_phys is identity so predicate is unchanged
             clean = cond.transform(
-                lambda node: exp.column(node.name) if isinstance(node, exp.Column) else node
+                lambda node: exp.column(var_to_phys.get(node.name.upper(), node.name))
+                             if isinstance(node, exp.Column) else node
             )
             predicates.setdefault(tbl, []).append(clean.sql()) # inserts key if it doesnt exist yet with default value []
 
-    return tables, alias_to_table, joins, predicates
+    return tables, alias_to_table, joins, predicates, combined_schema
 
 
 if __name__ == "__main__":
@@ -391,7 +424,7 @@ CREATE TABLE REGION (
     for table, cols in schema.items():
         print(f"  {table}: {cols}")
 
-    tables, alias_to_table, joins, predicates = parse_query(query_sql_3, schema)
+    tables, alias_to_table, joins, predicates, combined_schema = parse_query(query_sql_3, schema)
     print("\n=== Query ===")
     print(f" Tables used: {tables}")
     print(f" Join conditions:")
