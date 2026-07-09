@@ -9,15 +9,15 @@ def run_pipeline(schema_sql, query_sql):
     # parse → hypergraph → htd → fhw
     # returns all intermediate data needed for sql generation
     schema = parse_schema(schema_sql)
-    tables, alias_to_table, joins, predicates, combined_schema = parse_query(query_sql, schema)
+    tables, alias_to_table, joins, predicates, combined_schema, agg_type, special_col = parse_query(query_sql, schema)
     _, var_to_col, edges = build_hypergraph(combined_schema, tables, joins, alias_to_table)
     bags, tree_edges, treewidth = run_htd(edges, tables)
     fhw = compute_fhw(bags, edges)
-    return tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table
+    return tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table, agg_type, special_col
 
 
-def generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode=False):
-    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode)
+def generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode=False, agg_type="STAR", special_col=None):
+    return generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root, strict_mode, agg_type, special_col)
 
 
 if __name__ == "__main__":
@@ -51,8 +51,8 @@ if __name__ == "__main__":
         JOIN CUSTOMER USING (NATIONKEY)
     """
 
-    tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table = run_pipeline(schema_sql_2, query_sql_2)
-    views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1)
+    tables, edges, var_to_col, bags, tree_edges, treewidth, fhw, predicates, alias_to_table, agg_type, special_col = run_pipeline(schema_sql_2, query_sql_2)
+    views = generate(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1, agg_type=agg_type, special_col=special_col)
 
     print(f"-- Treewidth: {treewidth}")
     print()

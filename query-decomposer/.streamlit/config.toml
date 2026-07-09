@@ -1,0 +1,5 @@
+[theme]
+base = "light"
+linkUnderline = false
+primaryColor = "#0028A5"  # UZH blue
+

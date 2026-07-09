@@ -101,7 +101,19 @@ def build_q_view(bag_id, bags, tables, edges, var_to_col, predicates, alias_to_t
     return f"SELECT *\nFROM {from_clause}", accumulated
 
 
-def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1, strict_mode=False):
+def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_to_table, root=1, strict_mode=False, agg_type="STAR", special_col=None):
+
+    # aggregate mode: each P' view carries an ANNOTATION_<bag> column and the result is a
+    # single scalar instead of the reconstructed join.
+    # COUNT(*) uses the (+, x) semiring with an implicit local annotation of 1 per row.
+    aggregate = agg_type != "STAR"
+
+    def annotation_expr(child_ids):
+        # a bag's annotation = SUM over its Q' rows of (local annotation x product of child annotations).
+        # for COUNT(*) the local annotation is 1, so a leaf bag is just COUNT(*).
+        if child_ids:
+            return "SUM(" + " * ".join(f"ANNOTATION_{c}" for c in child_ids) + ")"
+        return "COUNT(*)"
 
     # --- Step 1: orient the tree ---
     children, parent = orient_tree(bags, tree_edges, root)
@@ -150,28 +162,36 @@ def generate_sql(tables, edges, var_to_col, bags, tree_edges, predicates, alias_
             views.append(f"-- Bag {bag_id}.\nCREATE MATERIALIZED VIEW BAG_{bag_id}_QPRIME AS\n{q_prime_sql};")
 
             bridge_cols = ", ".join(sorted(bridge_vars[bag_id]))
-            views.append(f"CREATE MATERIALIZED VIEW BAG_{bag_id}_PPRIME AS\nSELECT DISTINCT {bridge_cols} FROM BAG_{bag_id}_QPRIME;")
+            if aggregate:
+                views.append(f"CREATE MATERIALIZED VIEW BAG_{bag_id}_PPRIME AS\nSELECT {bridge_cols}, {annotation_expr(children[bag_id])} AS ANNOTATION_{bag_id}\nFROM BAG_{bag_id}_QPRIME\nGROUP BY {bridge_cols};")
+            else:
+                views.append(f"CREATE MATERIALIZED VIEW BAG_{bag_id}_PPRIME AS\nSELECT DISTINCT {bridge_cols} FROM BAG_{bag_id}_QPRIME;")
 
     emit_views(root)
 
-    # --- Step 4: Create result view top-down (rejoin all bags Q' relations on bridge variables) ---
-    reconstruction_joins = []
-
-    def dfs_reconstruction(bag_id):
-        for child in children[bag_id]:
-            using_cols = ", ".join(sorted(bridge_vars[child]))
-            reconstruction_joins.append(f"JOIN BAG_{child}_QPRIME USING ({using_cols})")
-            dfs_reconstruction(child)
-
-    dfs_reconstruction(root)
-
-    if reconstruction_joins:
-        from_clause = "ROOT_QPRIME\n" + "\n".join(reconstruction_joins)
+    # --- Step 4: Result view ---
+    if aggregate:
+        # single scalar
+        views.append(f"-- Aggregation Result.\nCREATE MATERIALIZED VIEW RESULT AS\nSELECT {annotation_expr(children[root])} AS RESULT FROM ROOT_QPRIME;")
     else:
-        # only 1 bag in decomposition (nothin to rejoin)
-        from_clause = "ROOT_QPRIME"
-    
-    views.append(f"-- Full result reconstruction.\nCREATE MATERIALIZED VIEW RESULT AS\nSELECT * FROM {from_clause};")
+        # full result: rejoin all bags' Q' relations top-down on bridge variables
+        reconstruction_joins = []
+
+        def dfs_reconstruction(bag_id):
+            for child in children[bag_id]:
+                using_cols = ", ".join(sorted(bridge_vars[child]))
+                reconstruction_joins.append(f"JOIN BAG_{child}_QPRIME USING ({using_cols})")
+                dfs_reconstruction(child)
+
+        dfs_reconstruction(root)
+
+        if reconstruction_joins:
+            from_clause = "ROOT_QPRIME\n" + "\n".join(reconstruction_joins)
+        else:
+            # only 1 bag in decomposition (nothin to rejoin)
+            from_clause = "ROOT_QPRIME"
+
+        views.append(f"-- Full Result.\nCREATE MATERIALIZED VIEW RESULT AS\nSELECT * FROM {from_clause};")
 
     return views
 

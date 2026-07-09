@@ -1,0 +1,6 @@
+feldera==0.286.0
+duckdb==1.5.1
+pandas==2.3.3
+numpy>=2.2.4
+numexpr>=2.10.0
+bottleneck>=1.4.0

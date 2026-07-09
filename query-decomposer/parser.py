@@ -7,7 +7,7 @@ def parse_schema(sql):
     try:
         statements = sqlglot.parse(sql)
     except ParseError as e:
-        raise ValueError(f"Invalid SQL syntax in table definitions:\n{e}") from e
+        raise ValueError(f"Invalid SQL syntax in table definitions.") from e
 
     schema = {}
 
@@ -37,7 +37,7 @@ def parse_query(sql, schema):
     try:
         ast = sqlglot.parse_one(sql)
     except ParseError as e:
-        raise ValueError(f"Invalid SQL syntax in query:\n{e}") from e
+        raise ValueError(f"Invalid SQL syntax in query.") from e
 
 
     tables = []          # alias names of tables in query order (alias = physical name when no alias)
@@ -77,10 +77,20 @@ def parse_query(sql, schema):
     if not isinstance(ast, exp.Select):
         raise ValueError("Query must be a SELECT statement.")
 
+    # agg_type: "STAR" (SELECT *) or "COUNT_STAR" (SELECT COUNT(*))
+    # special_col: column name for col-based aggregations
     exprs = ast.args.get("expressions") or []
-    if len(exprs) != 1 or not isinstance(exprs[0], exp.Star):
-        raise ValueError("Query must use SELECT * (full conjunctive query).")
-    
+    if len(exprs) != 1:
+        raise ValueError("Query must select exactly one expression (SELECT * or SELECT COUNT(*)).")
+
+    sel = exprs[0]
+    if isinstance(sel, exp.Star):
+        agg_type, special_col = "STAR", None
+    elif isinstance(sel, exp.Count) and isinstance(sel.this, exp.Star):
+        agg_type, special_col = "COUNT_STAR", None
+    else:
+        raise ValueError("Only SELECT * and SELECT COUNT(*) are supported.")
+
     # -- FROM CLAUSE -- (must have only 1 table)
     from_node = ast.find(exp.From)
     if not from_node:
@@ -190,7 +200,7 @@ def parse_query(sql, schema):
             )
             predicates.setdefault(tbl, []).append(clean.sql()) # inserts key if it doesnt exist yet with default value []
 
-    return tables, alias_to_table, joins, predicates, combined_schema
+    return tables, alias_to_table, joins, predicates, combined_schema, agg_type, special_col
 
 
 if __name__ == "__main__":
@@ -424,7 +434,7 @@ CREATE TABLE REGION (
     for table, cols in schema.items():
         print(f"  {table}: {cols}")
 
-    tables, alias_to_table, joins, predicates, combined_schema = parse_query(query_sql_3, schema)
+    tables, alias_to_table, joins, predicates, combined_schema, agg_type, special_col = parse_query(query_sql_3, schema)
     print("\n=== Query ===")
     print(f" Tables used: {tables}")
     print(f" Join conditions:")

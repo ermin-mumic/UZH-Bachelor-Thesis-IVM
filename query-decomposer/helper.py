@@ -188,7 +188,7 @@ CREATE TABLE REGION (
 
 sql_3 = """
     CREATE MATERIALIZED VIEW RESULT AS
-    SELECT *
+    SELECT COUNT(COLUMNTEST)
     FROM LINEITEM
     JOIN ORDERS USING (ORDERKEY)
     JOIN CUSTOMER USING (CUSTKEY)
@@ -232,7 +232,7 @@ JOIN EDGES AS R5(A, D) ON R5.A = R1.A AND R5.D = R4.D AND (R5.D =R3.D);
 """
 
 
-ast_query = sqlglot.parse_one(sql_4)
+ast_query = sqlglot.parse_one(sql_3)
 ast_schema = sqlglot.parse(sql_schema_4)
 print(repr(ast_query))
 #print(repr(ast_schema))
