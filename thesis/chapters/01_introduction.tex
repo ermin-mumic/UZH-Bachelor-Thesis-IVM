@@ -1,0 +1,55 @@
+\chapter{Introduction}
+\label{ch:introduction}
+
+A \emph{materialized view} stores the result of a query so that it can be read directly instead of being recomputed on each access.
+When the underlying database changes, this stored result must be kept consistent.
+Recomputing it from scratch after every change is often wasteful, since it repeats the entire computation even though only a small part of the input has changed.
+\emph{Incremental view maintenance} (IVM) addresses this by updating the materialized result to reflect only the changes caused by each update.
+
+In general, IVM is realized by constructing a data structure that encodes the query result and maintaining it incrementally as the database changes, so that the up-to-date result can be read from it when needed~\cite{olteanu2024IVM}.
+How efficiently a query can be maintained depends on its structure and on the type of updates allowed.
+
+\medskip
+
+Abo~Khamis et al.~\cite{abokhamis2024Insert-Only} study the maintenance of \emph{full conjunctive queries}, join queries returning all attributes of the relations they combine, contrasting the \emph{insert-only} and \emph{insert-delete} settings.
+We focus on the insert-only setting, in which tuples are only inserted and never deleted.
+Such workloads arise in many practical settings, such as append-only event streams and continuously growing analytical datasets.
+They show that, in this setting, a stream of inserts can be processed one tuple at a time in the same total time as evaluating the query once over the final database.
+Incremental maintenance is therefore asymptotically no more expensive than a single static evaluation, and for acyclic queries it costs only amortized constant time per insert.
+Their approach organizes this maintenance around a \emph{tree decomposition} of the query; we refer to it as the \emph{IVM$^+$ approach}.
+
+Although the IVM$^+$ approach is theoretical in nature, in the insert-only setting it can be expressed directly as a set of SQL views; the insert-delete setting, by contrast, requires a more elaborate construction.
+The IVM$^+$ approach can therefore be realized on top of an existing IVM engine simply by rewriting the input query into these views, without modifying the engine itself.
+This makes it lightweight to deploy, requiring only a query rewrite rather than the design or modification of a dedicated system.
+
+\medskip
+
+In this thesis, we investigate whether the IVM$^+$ approach is beneficial in practice when realized at the SQL level on an existing IVM engine.
+We make two contributions:
+
+\begin{itemize}
+  \item \textbf{A query decomposer.} 
+  We present a tool that, given a full conjunctive SQL query, computes a tree decomposition and produces the corresponding IVM$^+$ realization as a set of SQL views.
+  The entire translation is performed at the SQL level, without modifying the engine.
+  The tool supports both the standard IVM$^+$ approach and an adjusted variant that we introduce in Chapter~\ref{ch:ivm}.
+  It can also compute aggregates such as \texttt{COUNT} over the query result directly on the decomposition via semiring annotations, rather than materialising all result tuples, for both the standard approach and the variant.
+
+  \item \textbf{An empirical evaluation on Feldera.}
+  Several modern IVM engines exist, including DBToaster~\cite{koch2014DBToaster}, Dynamic Yannakakis~\cite{idris2017DynamicYannakakis}, F-IVM~\cite{kara2024F-IVM}, CROWN~\cite{wang2023CROWN}, and RAIVM~\cite{relationalai2026RAIVM}.
+  As our target engine we use Feldera~\cite{feldera2026}, a general-purpose engine based on the DBSP model~\cite{budiu2023DBSP} that incrementally maintains SQL views as the underlying data changes.
+  In Feldera, queries are expressed as SQL views, which makes the rewritten IVM$^+$ views a natural fit.
+  We compare the maintenance performance of the rewritten queries against that of the original queries.
+\end{itemize}
+
+The theoretical efficiency of IVM$^+$ relies on worst-case-optimal join algorithms, a specialised class of join algorithms that general-purpose engines such as Feldera do not employ.
+Whether the approach is beneficial in this setting is therefore not obvious; our evaluation asks whether the query decomposition improves performance in practice regardless.
+\emph{[summary of main results to be added.]}
+
+\medskip
+
+The remainder of this thesis is organised as follows.
+Chapter~\ref{ch:background} introduces the necessary background: the query model, tree decompositions and fractional hypertree width.
+Chapter~\ref{ch:ivm} formalises the insert-only maintenance problem and presents the IVM$^+$ approach, our adjusted variant, and a semiring extension for computing aggregates.
+Chapter~\ref{ch:implementation} describes the query decomposer and the experiment harness, and how the approach is realised as Feldera views.
+Chapter~\ref{ch:evaluation} reports the experimental setup, datasets, and results.
+Chapter~\ref{ch:conclusion} concludes and discusses future work.

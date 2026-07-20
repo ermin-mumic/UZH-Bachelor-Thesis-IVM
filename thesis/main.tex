@@ -6,7 +6,9 @@
 \usepackage{caption}
 \usepackage{hyperref}
 \usepackage{longtable}
-\usepackage{listings}   
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
 
 \begin{document}
 
@@ -20,7 +22,7 @@
 
 % --- Main Body ---
 \pagenumbering{arabic} 
-%\\include{chapters/01_introduction}
+\include{chapters/01_introduction}
 \include{chapters/02_background}
 \include{chapters/03_ivm}
 \include{chapters/04_implementation}
@@ -28,8 +30,8 @@
 %\\include{chapters/06_conclusion}
 
 % --- Bibliography ---
-%\bibliographystyle{plain}
-%\bibliography{references}
+\bibliographystyle{plain}
+\bibliography{references}
 
 \input{tables/results_tables}
 

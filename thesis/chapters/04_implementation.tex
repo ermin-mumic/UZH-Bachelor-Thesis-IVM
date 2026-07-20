@@ -2,6 +2,21 @@
 \label{ch:implementation}
 
 In this chapter, we detail the implementation of the components required to evaluate the theoretical IVM$^+$ approach in practice. This includes the manual translation of tree decompositions into Feldera SQL pipelines, as well as the development of an automated, multi-threaded benchmarking harness designed to orchestrate the experiments.
+\paragraph{Materialization policy.}
+Feldera materializes a relation only when explicitly requested, and materializes a
+base table automatically when a \texttt{PRIMARY KEY} is declared, since it must
+maintain a key index. Materialization additionally stores a relation's full
+contents so it can be queried at runtime; it is a storage feature rather than a
+performance optimization. To keep the comparison fair, we hold materialization
+identical across all variants except for the single view whose output each
+experiment reads. All base tables use the same schema in every variant, so any
+storage they incur (for example, from primary keys) is constant across the
+baseline and the IVM$^+$ configurations and cancels out of the comparison. Among
+the derived views we materialize only the terminal view that an experiment
+measures --- the reconstructed \texttt{RESULT} for the baseline and the rejoining
+variant, and the root bag for the non-rejoining variant --- and leave all
+intermediate bag views non-materialized. We keep the terminal view materialized so
+that Feldera does not prune the computation that feeds it.
 
 \section{IVM$^+$ Translation and Pipeline Construction}
 \label{sec:manual_translation}

@@ -1,11 +1,22 @@
 \chapter{The IVM$^+$ Approach}
 \label{ch:ivm}
 
+This chapter presents the IVM$^+$ approach of Abo~Khamis et al.~\cite{abokhamis2024Insert-Only}, an adjusted variant that we introduce, and a semiring-based extension for computing aggregates.
+Section~\ref{sec:ivm_problem} defines the insert-only maintenance problem, and Section~\ref{sec:bag_relations} introduces the bag relations and bridge variables on which the approach is built.
+Section~\ref{sec:ivm_algorithm} presents the IVM$^+$ algorithm and its complexity, Section~\ref{sec:variant_no_semijoin} the adjusted variant, and Section~\ref{sec:semiring} the semiring extension.
+Throughout, the approach is described at the level of relational views, independently of any particular engine; its realisation on Feldera is deferred to Chapter~\ref{ch:implementation}.
+
 \section{Problem Setting}
 \label{sec:ivm_problem}
 
-We consider the \emph{insert-only} incremental view maintenance problem. The database $D$ starts empty, and a stream of $N$ single-tuple insertions arrives one at a time. After each insertion into some relation $R_i$, the maintained result $Q(D)$ must reflect the updated state. We do not consider tuple deletions.
+We study the \emph{insert-only} incremental view maintenance problem for a fixed query $Q$~\cite{abokhamis2024Insert-Only}.
+The database $\mathcal{D}$ is initially empty and grows by single-tuple insertions, applied one at a time; neither their number nor which tuples they insert is known in advance.
+Writing $\mathcal{D}^{(0)} = \emptyset$ and $\mathcal{D}^{(\tau)}$ for the database after the $\tau$-th insertion, the task is to maintain the result $Q(\mathcal{D}^{(\tau)})$ after each insertion.
+The cost of interest is the time needed to process the insertions.
 
+Abo~Khamis et al.\ also study the \emph{insert-delete} setting, in which tuples may additionally be deleted, and the maintenance of the \emph{change} to the result rather than the full result; we consider only insert-only maintenance of the full result.
+
+Abo~Khamis et al.\ also study the \emph{insert-delete} setting, in which tuples may additionally be deleted, and the maintenance of the \emph{change} to the result rather than the full result; we consider only insert-only maintenance of the full result.
 The algorithm of Abo Khamis et al., which we call \emph{IVM$^+$}, maintains $Q(D)$ with \emph{amortized} $O(N^{w(Q)-1})$ update time per insertion, where $N$ is the current database size and $w(Q)$ is the fractional hypertree width of $Q$ (see Chapter~\ref{ch:background}). For the acyclic queries in this thesis, $w(Q) = 1$, giving $O(1)$ amortized update time per insert.
 
 \section{Bag Relations and Bridge Variables}
@@ -89,3 +100,6 @@ Under the \emph{variant without semijoin}, only atom $S(B,C)$ satisfies $\chi(2)
     Q^*_2 = S(B,C).
 \]
 The root Q-view is then simply the full relation $S$, and filtering by children's bridge values is still applied via the $P'$-relations of the child bags. The trade-off between the two variants in terms of throughput and memory is evaluated in Chapter~\ref{ch:evaluation}. Prove that result still correct.
+
+\section{Aggregates via Semirings}
+\label{sec:semiring}
