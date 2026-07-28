@@ -86,8 +86,8 @@ This is one of several valid tree decompositions of $Q_\diamond$; Section~\ref{s
 \begin{figure}[ht]
   \centering
   \begin{tikzpicture}[bag/.style={draw, ellipse, minimum width=24mm, minimum height=11mm, inner sep=2pt}]
-    \node[bag] (r) at (0,1.9) {$\{A,B,D\}$};
-    \node[bag] (c) at (0,0)   {$\{B,C,D\}$};
+    \node[bag, label={[font=\small]left:$b_1$}] (r) at (0,1.9) {$\{A,B,D\}$};
+    \node[bag, label={[font=\small]left:$b_2$}] (c) at (0,0)   {$\{B,C,D\}$};
     \draw (r) -- (c);
   \end{tikzpicture}
   \caption{A tree decomposition of $Q_\diamond$.}
@@ -116,7 +116,6 @@ The \emph{fractional hypertree width}~\cite{grohe2014} $w(Q)$ of $Q$ is the smal
 w(Q) = \min_{(\mathcal{T}, \chi)} \; \max_{b \in \mathcal{T}} \; \rho^\ast(\chi(b)).
 \]
 In particular, a tree decomposition with a single bag has that bag equal to $\mathrm{vars}(Q)$, so the maximum over its bags is just $\rho^\ast(\mathrm{vars}(Q))$; since $w(Q)$ minimizes over all tree decompositions, $w(Q) \le \rho^\ast(\mathrm{vars}(Q))$.
-What $w(Q)$ means for the cost of maintaining a query is taken up in Chapter~\ref{ch:ivm}.
 
 \paragraph{Running example.}
 The single-bag decomposition has $\rho^\ast(\{A,B,C,D\}) = 2$: giving $E_1(A,B)$ and $E_3(C,D)$ weight $1$ each covers all four variables, and no cover is lighter.
@@ -125,7 +124,7 @@ No tree decomposition can do better, hence $w(Q_\diamond) = \tfrac{3}{2} < 2$.
 
 \medskip
 
-The IVM$^+$ approach is built on a tree decomposition of minimum fractional hypertree width.
+The IVM$^+$ approach is built on a tree decomposition of minimum fractional hypertree width, which governs the cost of maintaining the query~\cite{abokhamis2024Insert-Only}.
 Computing such a decomposition is NP-hard~\cite{fischl2018}, and approximation algorithms exist~\cite{marx2010}.
-Our decomposer instead uses a practical heuristic: it generates candidate decompositions with a min-fill heuristic and selects the one of least fractional hypertree width, as described in more detail in Chapter~\ref{ch:implementation}.
+Our decomposer instead uses a practical heuristic: it generates candidate decompositions with a Minimum Fill-in heuristic~\cite{bodlaender2005} and selects the one of least fractional hypertree width, as described in more detail in Chapter~\ref{ch:implementation}.
 

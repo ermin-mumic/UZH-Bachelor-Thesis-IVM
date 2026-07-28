@@ -9,6 +9,27 @@
 \usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
+\usepackage{float}
+\usepackage{xcolor}
+
+% Code listing style
+\lstset{
+  basicstyle=\small\ttfamily,
+  keywords={CREATE,TABLE,VIEW,MATERIALIZED,WITH,SELECT,DISTINCT,FROM,JOIN,USING,ON,AS,GROUP,BY,SUM,COUNT,PRIMARY,KEY,AND,OR,NOT,NULL,BIGINT,INT},
+  keywordstyle=\bfseries\color{blue!60!black},
+  sensitive=true,
+  morecomment=[l]{--},
+  commentstyle=\itshape\color{gray},
+  backgroundcolor=\color{gray!10},
+  frame=single,
+  columns=fullflexible,
+  breaklines=true,
+  showstringspaces=false,
+  keepspaces=true,
+}
+
+% Big natural-join operator
+\newcommand*{\bigbowtie}{\mathop{\vcenter{\hbox{\scalebox{1.6}{$\bowtie$}}}}\limits}
 
 \begin{document}
 
