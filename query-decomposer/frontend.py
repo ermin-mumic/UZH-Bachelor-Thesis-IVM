@@ -15,7 +15,22 @@ with st.container(horizontal=True, vertical_alignment="center"):
     st.title("Query Decomposer", width="content", anchor=False)
     with st.popover(":material/info:", type="tertiary"):
         st.markdown(
-            "See the [README](PLACEHOLDER_README_URL) for the full list of supported features and limitations."
+            """
+**Supported**
+- `SELECT *` (full join) or `SELECT COUNT(*)`
+- Inner equi-joins: `JOIN ... ON a = b`, `JOIN ... USING (col)`
+- Table/column aliases and self-joins
+- Single-relation `WHERE` filters, combined with `AND`
+- A `CREATE [MATERIALIZED] VIEW ... AS` wrapper and Feldera table annotations are accepted and ignored
+
+**Not supported**
+- Other aggregates or column projections
+- Non-equi and outer joins
+- `WHERE` conditions spanning multiple relations
+- Subqueries
+
+Validate your SQL in a database engine first. See the [README](PLACEHOLDER_README_URL) for details.
+"""
         )
 
 
@@ -28,9 +43,8 @@ with col1:
         "Table Definitions",
         label_visibility="collapsed",
         placeholder=(
-            "CREATE TABLE FLIGHT (\n    FLIGHT_ID bigint,\n    SRC varchar(5),\n    DST varchar(5),\n    PRIMARY KEY (FLIGHT_ID)\n);\n"
-            "\nCREATE TABLE AIRPORT (\n    AIRPORT_ID bigint,\n    CODE varchar(5),\n    CITY varchar(25),\n    PRIMARY KEY (AIRPORT_ID)\n);\n"
-        ),
+            "CREATE TABLE EDGES (\n    src bigint,\n    tgt bigint\n);"
+            ),
         height=400,
     )
 
@@ -40,12 +54,7 @@ with col2:
         "Query",
         label_visibility="collapsed",
         placeholder=(
-            "SELECT *\n"
-            "FROM FLIGHT AS F1\n"
-            "JOIN FLIGHT AS F2 ON F1.DST = F2.SRC\n"
-            "JOIN FLIGHT AS F3 ON F2.DST = F3.SRC AND F3.DST = F1.SRC\n"
-            "JOIN AIRPORT ON AIRPORT.CODE = F1.SRC\n"
-            "WHERE AIRPORT.CITY = 'Zurich'"
+            "SELECT * \nFROM EDGES AS R1(A, B) \nJOIN EDGES AS R2(B, C) ON R1.B = R2.B \nJOIN EDGES AS R3(C, D) ON R2.C = R3.C \nJOIN EDGES AS R4(B, D) ON R4.D = R3.D AND R4.B = R2.B AND (R4.B = R1.B) \nJOIN EDGES AS R5(A, D) ON R5.A = R1.A AND R5.D = R4.D AND (R5.D =R3.D);"
         ),
         height=400,
     )
