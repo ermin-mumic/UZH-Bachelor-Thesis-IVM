@@ -29,7 +29,7 @@ with st.container(horizontal=True, vertical_alignment="center"):
 - `WHERE` conditions spanning multiple relations
 - Subqueries
 
-Validate your SQL in a database engine first. See the [README](PLACEHOLDER_README_URL) for details.
+Validate your SQL in a database engine first. See the [README](https://github.com/ermin-mumic/UZH-Bachelor-Thesis-IVM/tree/main/query-decomposer#readme) for details.
 """
         )
 
@@ -54,7 +54,7 @@ with col2:
         "Query",
         label_visibility="collapsed",
         placeholder=(
-            "SELECT * \nFROM EDGES AS R1(A, B) \nJOIN EDGES AS R2(B, C) ON R1.B = R2.B \nJOIN EDGES AS R3(C, D) ON R2.C = R3.C \nJOIN EDGES AS R4(B, D) ON R4.D = R3.D AND R4.B = R2.B AND (R4.B = R1.B) \nJOIN EDGES AS R5(A, D) ON R5.A = R1.A AND R5.D = R4.D AND (R5.D =R3.D);"
+            "SELECT * \nFROM EDGES AS R1(A, B) \nJOIN EDGES AS R2(B, C) ON R1.B = R2.B \nJOIN EDGES AS R3(C, D) ON R2.C = R3.C \nJOIN EDGES AS R4(B, D) ON R4.D = R3.D AND R4.B = R2.B AND (R4.B = R1.B) \nJOIN EDGES AS R5(A, D) ON R5.A = R1.A AND R5.D = R4.D AND (R5.D = R3.D);"
         ),
         height=400,
     )
