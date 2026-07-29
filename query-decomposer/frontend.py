@@ -29,6 +29,8 @@ with st.container(horizontal=True, vertical_alignment="center"):
 - `WHERE` conditions spanning multiple relations
 - Subqueries
 
+_Inputs are assumed set-valued — duplicate rows can over-count._
+
 Validate your SQL in a database engine first. See the [README](https://github.com/ermin-mumic/UZH-Bachelor-Thesis-IVM/tree/main/query-decomposer#readme) for details.
 """
         )

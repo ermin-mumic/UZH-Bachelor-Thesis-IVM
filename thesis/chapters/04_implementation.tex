@@ -45,7 +45,7 @@ Materializing a table or view can slow the pipeline down, as more data must be w
 \label{sec:pipeline}
 
 This section realises the construction of Chapter~\ref{ch:ivm} as a Feldera pipeline.
-Each bag becomes a \emph{$Q'$-view} for its $Q'$-relation and a \emph{$P'$-view} for its $P'$-relation.
+Each bag becomes a \emph{$Q'$-view} for its $Q'$-relation, and each non-root bag additionally a \emph{$P'$-view} for its $P'$-relation.
 The views are built bottom-up, so a child's $P'$-view is ready when its parent's $Q'$-view is computed, and a final \texttt{RESULT} view produces the query's output.
 We name a non-root bag's views \texttt{BAG\_N\_QPRIME} and \texttt{BAG\_N\_PPRIME}, and the root's \texttt{ROOT\_QPRIME}.
 IVM$^+$ and the variant differ only in how the $Q'$-view is defined.
@@ -176,6 +176,15 @@ Because every input tuple has an implicit annotation of one, the base tables nee
 An aggregate that reads a column, such as \texttt{MIN}, has no such implicit annotation: each relation must then carry its value explicitly and be counted in a single \emph{canonical} bag, or its value would be combined more than once.
 We therefore implement only \texttt{COUNT(*)}.
 
+\medskip
+
+Both the reconstruction and the \texttt{COUNT(*)} above assume the base relations are sets, as Section~\ref{sec:queries} defines a relation to be.
+The reconstruction relies on the natural join being idempotent, $R \bowtie R = R$: an atom contained in several bags is effectively joined with itself when their $Q'$-views are recombined, which changes nothing on a set.
+The count relies on the same fact through the implicit annotation of one.
+Under SQL's bag semantics this no longer holds: a duplicated input row makes such an atom count once per bag it lies in, so the result over-counts.
+Our datasets, introduced in Chapter~\ref{ch:evaluation}, are set-valued (the relational ones are primary-keyed and the graph edge sets carry no duplicate edges), so this does not arise.
+It could also be handled directly by counting each atom in a single \emph{canonical} bag and joining a deduplicated projection of it elsewhere, the same mechanism the \texttt{MIN} case above would require.
+
 \section{Query Decomposer}
 \label{sec:decomposer}
 
@@ -251,7 +260,7 @@ The selected bags and tree are passed to the SQL generator.
 \subsection{SQL generator}
 
 The generator turns the bags and tree from the previous stage into the SQL views of Section~\ref{sec:pipeline}, producing automatically the translation presented there for $Q_\diamond$.
-It first \emph{orients} the tree by choosing a root, by default bag~1, though any bag may serve as root, which gives every bag a parent and a set of children.
+It first \emph{orients} the tree by choosing a root, by default bag~1, though any bag may serve as root, arranging the bags into a rooted tree.
 For each non-root bag it then computes the \emph{bridge variables} it shares with its parent.
 
 The views are emitted bottom-up, each bag after its children, so a child's $P'$-view is ready when its parent needs it, matching the construction of Section~\ref{sec:pipeline}.
@@ -264,6 +273,8 @@ For a non-root bag it also emits the $P'$-view.
 
 Finally the generator emits the \texttt{RESULT} view, the reconstruction join of all the $Q'$-views for a full-result query, or the single \texttt{COUNT(*)} scalar for an aggregate.
 For $Q_\diamond$ the generator produces the views of Section~\ref{sec:pipeline}, up to the tool's own bag numbering.
+
+\medskip
 
 The decomposer exposes two choices, each of which regenerates the views: switching between IVM$^+$ and the variant, and re-rooting the tree at a different bag.
 Re-rooting changes the parent--child structure of the bags, and so the views and the size of the intermediate results they hold, even though the final result is unchanged.
@@ -290,12 +301,13 @@ These views are the artifact the experiment harness deploys.
 
 The decomposer handles \emph{full conjunctive queries} over an input schema, the class the IVM$^+$ approach targets.
 The schema is given as \texttt{CREATE TABLE} statements, of which the parser reads only the column definitions and ignores the rest, so the Feldera-specific connector and materialisation annotations of Section~\ref{sec:pipeline} may be left in place and the same schema used for a pipeline can be handed to the decomposer unchanged.
+The query, similarly, may be wrapped in a \texttt{CREATE [MATERIALIZED] VIEW \ldots AS} statement, which the parser ignores, so a Feldera view definition can be handed in unchanged too.
 
 A query must be a single \texttt{SELECT *} or \texttt{SELECT COUNT(*)}.
 In both cases the decomposer emits the bag views and a final \texttt{RESULT} view.
 For \texttt{SELECT *} the \texttt{RESULT} view reconstructs the full join, and for \texttt{SELECT COUNT(*)} it returns the count, computed on the decomposition by the semiring aggregate of Section~\ref{sec:pipeline}.
 Tables and columns may be aliased, and a relation may occur several times, so self-joins such as $Q_\diamond$ are supported, written either \texttt{EDGES AS R1} or with a renamed column list \texttt{EDGES AS R1(A, B)}.
-Joins must be equi-joins, written \texttt{JOIN \ldots ON $c_1$ = $c_2$} or \texttt{JOIN \ldots USING}.
+Joins must be equi-joins, written \texttt{JOIN \ldots ON} or \texttt{JOIN \ldots USING}.
 The \texttt{WHERE} clause may carry filters that each reference a single relation, combined with \texttt{AND}, and each such filter is pushed into that relation's subquery.
 
 \medskip
@@ -307,50 +319,21 @@ A \texttt{WHERE} condition that spans more than one relation is rejected, whethe
 A filter on each relation separately, joined by \texttt{AND}, is the supported form.
 Subqueries are not supported.
 
+The construction also assumes \emph{set-valued} inputs: on relations with duplicate rows the result can over-count, since an atom lying in several bags is then counted once per bag (Section~\ref{sec:pipeline}).
+
 Finally, the decomposer performs only the checks its translation needs and is not a full SQL validator.
 A query should therefore be validated in a database engine, for instance Feldera itself, before it is given to the decomposer.
 
 \bigskip
 
-In this chapter, we detail the implementation of the components required to evaluate the theoretical IVM$^+$ approach in practice. This includes the manual translation of tree decompositions into Feldera SQL pipelines, as well as the development of an automated, multi-threaded benchmarking harness designed to orchestrate the experiments.
-\paragraph{Materialization policy.}
-Feldera materializes a relation only when explicitly requested, and materializes a
-base table automatically when a \texttt{PRIMARY KEY} is declared, since it must
-maintain a key index. Materialization additionally stores a relation's full
-contents so it can be queried at runtime; it is a storage feature rather than a
-performance optimization. To keep the comparison fair, we hold materialization
-identical across all variants except for the single view whose output each
-experiment reads. All base tables use the same schema in every variant, so any
-storage they incur (for example, from primary keys) is constant across the
-baseline and the IVM$^+$ configurations and cancels out of the comparison. Among
-the derived views we materialize only the terminal view that an experiment
-measures --- the reconstructed \texttt{RESULT} for the baseline and the rejoining
-variant, and the root bag for the non-rejoining variant --- and leave all
-intermediate bag views non-materialized. We keep the terminal view materialized so
-that Feldera does not prune the computation that feeds it.
+automated, multi-threaded benchmarking harness designed to orchestrate the experiments.
 
-final result reconstruction throug:In practice, this is expressed as a final SQL view that joins all bag Q-views along the bridge columns.
+
 
 \section{IVM$^+$ Translation and Pipeline Construction}
 \label{sec:manual_translation}
 
 Each experimental query variant is expressed as a self-contained Feldera SQL file that defines both the input schema with its data connectors and the sequence of materialized views encoding the query logic. All files are parameterized templates: the literal \texttt{\{\{FILE\_PATH\}\}} is substituted at runtime by the benchmarking harness (see Section~\ref{sec:benchmark_harness}) with the actual dataset path, allowing the same pipeline definition to run against multiple datasets without modification, provided they conform to the same relational schema (e.g., executing the same TPC-H query template across Scale Factors 1, 10, and 30).
-
-\subsection{IVM$^+$ Decomposition Translation}
-\label{sec:decomposition_translation}
-
-The IVM$^+$ algorithm (see Chapter~\ref{ch:ivm}) operates on a tree decomposition of the query hypergraph. Each node of the decomposition tree is a \emph{bag} that groups a subset of the query relations. Translating this structure into Feldera SQL, every bag is represented by a pair of materialized views, which instruct the DBSP engine to physically store and incrementally update the view's contents after every insert.:
-
-\begin{itemize}
-    \item \textbf{Q-view} (\texttt{CHILD\_N\_Q}, \texttt{ROOT\_Q}): corresponding to the $Q'$-relation in the theoretical formulation.
-    \item \textbf{P-view} (\texttt{CHILD\_N\_P}): computed as \texttt{SELECT DISTINCT} over the join attributes. This corresponds to the $P'$-relation.
-\end{itemize}
-
-Views are defined bottom-up following the tree structure, so each child's P-view is available when the parent's Q-view is computed. The final \texttt{RESULT} view reconstructs the full output by joining all Q-views back together.
-
-For multi-relation schemas, we use \texttt{JOIN \ldots USING} rather than explicit \texttt{ON} conditions. SQL's \texttt{JOIN USING} guarantees that the named join column appears only once in the output, making \texttt{SELECT *} unambiguous regardless of how many Q-views are chained together. For graph queries, where all relations share the same underlying \texttt{(src, tgt)} schema, each Q-view aliases its columns explicitly (e.g.\ \texttt{R1.A AS A, R1.B AS B}), and joins use explicit \texttt{ON} conditions instead.
-
-In addition to the full-join decomposition variants, we also implemented FAQ (Functional Aggregate Query) variants that compute an aggregate directly over the decomposition using a semiring, rather than materializing the full join result. These are discussed and evaluated in Chapter~\ref{ch:evaluation}.
 
 \subsection{Input Connectors}
 \label{sec:input_connectors}
@@ -543,5 +526,3 @@ To monitor these dataflow pipelines without interrupting the main execution flow
 
 Upon pipeline termination, the harness aggregates the chronological timeline of polled metrics, calculates the global throughput (rows per second), extracts the peak memory consumption and serializes the complete payload into a JSON artifact for later analysis. To isolate individual trials within the same experiment run, the harness additionally calls \texttt{pipeline.clear\_storage()} after each trial, wiping Feldera's internal incremental state so that the next trial begins from a clean state without requiring a full Docker restart.
 
-\section{Automated Query Parser}
-\label{sec:query_parser}
