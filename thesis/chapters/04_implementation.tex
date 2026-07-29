@@ -324,6 +324,64 @@ The construction also assumes \emph{set-valued} inputs: on relations with duplic
 Finally, the decomposer performs only the checks its translation needs and is not a full SQL validator.
 A query should therefore be validated in a database engine, for instance Feldera itself, before it is given to the decomposer.
 
+\section{Experiment Harness}
+\label{sec:harness}
+
+The \emph{experiment harness} is the second tool: it measures how the pipelines of Section~\ref{sec:pipeline} perform on Feldera.
+Given a pipeline and a dataset, it deploys the pipeline on Feldera (Section~\ref{sec:feldera}) and starts it, which ingests the data through the input connectors, and while the pipeline runs it polls Feldera to measure its throughput and peak memory use.
+It repeats this over many pipeline--dataset combinations, so the experiments of Chapter~\ref{ch:evaluation} run unattended and under identical conditions.
+
+Feldera runs inside a Docker container, and the harness is two Python scripts and a small aggregator that drive it, shown in Figure~\ref{fig:ch4_harness}: an \emph{orchestrator} that steps through the experiments, an \emph{execution} script that runs a single one and measures it, and a \emph{result aggregation} step that collects the measurements.
+We describe the three in turn.
+The datasets, the machine the experiments were run on, and the pipeline variants that are compared belong to the evaluation and are introduced in Chapter~\ref{ch:evaluation}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./figures/ch4_experiment_harness.pdf}
+  \caption{Overview of the experiment harness.}
+  \label{fig:ch4_harness}
+\end{figure}
+
+\subsection{Orchestrator}
+
+The orchestrator, \texttt{run\_experiments.py}, holds the list of experiments to run and steps through them one at a time.
+Each entry names a pipeline (the SQL tables and views of Section~\ref{sec:pipeline}), a dataset, the number of trials, and an output directory for the results.
+Which experiments run is controlled by commenting entries in or out.
+
+Before each one it performs a \emph{cold start}, so that every experiment begins from an identical clean state.
+Restarting the Feldera container clears its in-memory state, but Feldera also keeps its data on disk (Section~\ref{sec:feldera}), in a directory mounted from the host that outlives the container.
+The orchestrator therefore also deletes this directory before bringing up a fresh container, so that no data or cache from the previous experiment carries over and distorts the measurement.
+
+The orchestrator then runs the execution script on the experiment under a fifteen-hour timeout, and logs the outcome (completed, timed out, or crashed) and the duration to the overview file \texttt{OVERVIEW.csv}, which gives an at-a-glance record of how a long suite of experiments is progressing.
+
+\subsection{Execution}
+
+The execution script, \texttt{experiment.py}, runs a single experiment: one pipeline on one dataset, repeated for the requested number of trials.
+It reads the pipeline's SQL and substitutes the placeholder \texttt{\{\{FILE\_PATH\}\}} with the dataset path, so the connectors of Section~\ref{sec:pipeline} read that dataset.
+One pipeline file can therefore serve several datasets of the same schema.
+It then deploys the pipeline on Feldera through the Feldera Python SDK and starts it, at which point Feldera ingests the dataset through the input connectors.
+
+Measuring a run means doing two things at once: sampling Feldera's statistics while waiting for the ingestion to finish.
+The script therefore uses two threads.
+A poller samples Feldera every five seconds, recording the pipeline's uptime, the number of records it has processed, and its resident memory, the amount of RAM it is using.
+A second thread waits for the ingestion to complete, under a three-hour timeout after which the run is recorded as timed out.
+Running the two in parallel keeps the polling going for the whole run without blocking on the wait.
+
+Once ingestion finishes, the script queries the \texttt{RESULT} view for its row count, or the aggregate value for the aggregate pipelines, as a correctness check: every variant of a query must return the same result, so a disagreeing count exposes a faulty pipeline.
+From the polled samples it then computes the two performance metrics.
+The \emph{throughput}, the number of processed records divided by the uptime, measures how fast the pipeline ingests the data and incrementally maintains its views.
+The \emph{peak memory} is the largest resident memory seen.
+These, with the result count and the full sample timeline, are written to a per-trial JSON file in the output directory, and the script clears Feldera's storage between trials, so each trial also starts from a clean state without a full container restart.
+Because the engine and the data are fixed and the pipelines give the same result, these measurements isolate the effect of rewriting the query as a decomposition.
+Whether maintaining the query as the decomposition's views is cheaper than as a single flat view is the subject of Chapter~\ref{ch:evaluation}.
+
+\subsection{Result aggregation}
+
+Each trial leaves one JSON file in the experiment's output directory.
+A small script, \texttt{summarize\_results.py}, reads them and reduces a pipeline's trials to a single summary: the average throughput and running time, the peak memory, and the result count.
+It also flags any pipeline whose trials disagree on the result count or the outcome, which would signal a non-deterministic or faulty run.
+These summaries are the figures reported in Chapter~\ref{ch:evaluation}.
+
 \bigskip
 
 automated, multi-threaded benchmarking harness designed to orchestrate the experiments.

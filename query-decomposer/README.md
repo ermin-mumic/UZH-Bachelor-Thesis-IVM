@@ -110,8 +110,8 @@ The **frontend** (`frontend.py`) is a [Streamlit](https://streamlit.io) app wrap
 
 ## Limitations
 
-- `COUNT(*)` is the only aggregate; `MIN` / `MAX` / `SUM` / `COUNT(col)` and column projections are not supported
-- Only equi-joins; inequality and outer joins are not
+- `COUNT(*)` is the only aggregate — `MIN` / `MAX` / `SUM` / `COUNT(col)` and column projections are not supported
+- Only equi-joins — inequality and outer joins are not
 - Each `WHERE` condition must reference a single relation (no cross-relation comparisons or disjunctions)
 - No subqueries
 - Assumes **set-valued** input relations, as IVM⁺ does. Under SQL's bag semantics, duplicate input rows can make the result over-count when a duplicated atom lies in more than one bag, since it is then counted in each
@@ -159,4 +159,4 @@ Licensed under the MIT License — see [LICENSE](../LICENSE).
 
 ---
 
-Part of a Bachelor's thesis at the University of Zurich ([DaST group](https://www.ifi.uzh.ch/dast)). See the [repository overview](../README.md) for the rest of the project, including the [experiment harness](../experiment-harness).
+Part of a Bachelor's thesis at the University of Zurich ([DaST group](https://www.ifi.uzh.ch/dast)). See the [repository overview](../README.md) for the rest of the project, including the [experiment harness](../experiment-harness#readme).
