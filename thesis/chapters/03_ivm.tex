@@ -2,19 +2,7 @@
 \label{ch:ivm}
 
 This chapter presents the IVM$^+$ approach of Abo~Khamis et al.~\cite{abokhamis2024Insert-Only}, an adjusted variant that we introduce, and a semiring-based extension for computing aggregates.
-Section~\ref{sec:ivm_problem} defines the insert-only maintenance problem, and Section~\ref{sec:bag_relations} introduces the bag relations and bridge variables on which the approach is built.
-Section~\ref{sec:ivm_algorithm} then instantiates this construction for the IVM$^+$ approach, Section~\ref{sec:variant_no_semijoin} for our adjusted variant, and Section~\ref{sec:semiring} extends it to aggregates via semirings.
-Throughout, the approach is described at the level of relational views, independently of any particular engine; its realisation on Feldera is deferred to Chapter~\ref{ch:implementation}.
-
-\section{Problem Setting}
-\label{sec:ivm_problem}
-
-We study the \emph{insert-only} incremental view maintenance problem for a fixed query $Q$~\cite{abokhamis2024Insert-Only}.
-The database $\mathcal{D}$ is initially empty and grows by single-tuple insertions, applied one at a time; neither their number nor which tuples they insert is known in advance.
-Writing $\mathcal{D}^{(0)} = \emptyset$ and $\mathcal{D}^{(\tau)}$ for the database after the $\tau$-th insertion, the task is to maintain the result $Q(\mathcal{D}^{(\tau)})$ after each insertion.
-The cost of interest is the time needed to process the insertions.
-
-Abo~Khamis et al.\ also study the \emph{insert-delete} setting, in which tuples may additionally be deleted, and the maintenance of the \emph{change} to the result rather than the full result; we consider only insert-only maintenance of the full result.
+Throughout, the approach is described at the level of relational views, independently of any particular engine, and its realisation on Feldera is deferred to Chapter~\ref{ch:implementation}.
 
 \section{Bag Relations and Bridge Variables}
 \label{sec:bag_relations}
@@ -133,11 +121,11 @@ Compared with $Q_{b_1}$ and $Q_{b_2}$ in Section~\ref{sec:ivm_algorithm}, the pr
 \section{Aggregates via Semirings}
 \label{sec:semiring}
 
-So far, the full query result is obtained by joining the $Q'$-relations of all bags (Section~\ref{sec:bag_relations}).
-In many cases, however, one does not need the result itself, only an \emph{aggregate} over it, such as the number of result tuples counted by \texttt{COUNT(*)}.
+So far, the full query result is obtained by joining the $Q'$-relations of all the bags in the tree decomposition (Section~\ref{sec:bag_relations}).
+In many cases, however, one does not need to enumerate the full result, only an \emph{aggregate} over it, such as the number of result tuples counted by \texttt{COUNT(*)}.
 Such an aggregate can be computed directly on the decomposition, without ever materialising the full result, by attaching \emph{semiring annotations} to the tuples of the atoms.
 
-A semiring annotation tags each tuple with a value that the query carries along and combines as it joins and projects.
+A semiring annotation tags each tuple with a value from a semiring domain that the query carries along and combines as it joins and projects.
 By choosing what these values are and how they combine, the same query computes different summaries of the result, such as counts, probabilities, or provenance~\cite{green2007}.
 We use this to compute \texttt{COUNT(*)}.
 Its realisation as SQL views, for both IVM$^+$ and the variant, is described in Chapter~\ref{ch:implementation}, and its performance is evaluated in Chapter~\ref{ch:evaluation}.

@@ -1,51 +1,151 @@
 \chapter{Evaluation}
 \label{ch:evaluation}
 
-This chapter evaluates the IVM$^+$ decomposition strategies of Chapter~\ref{ch:ivm}, as implemented in Chapter~\ref{ch:implementation}, against a flat-join baseline across five datasets. We first describe the experimental setup, the reported metrics and the variant notation (Sections~\ref{subsec:setup}--\ref{sec:methodology}). We then state the hypotheses that motivated the experiments (Section~\ref{sec:hypotheses}) and describe the workloads (Section~\ref{sec:workloads}). The remainder of the chapter (Section~\ref{sec:results_discussion}) tests each hypothesis against the measured results, and Section~\ref{sec:eval_summary} summarises the findings and threats to validity.
+This chapter evaluates the decomposition of Chapter~\ref{ch:ivm}, realised as the SQL pipelines of Chapter~\ref{ch:implementation}, against a flat-join baseline.
+The baseline is not an unmaintained query but the same query handed to Feldera as a single flat view, which the engine keeps up to date incrementally exactly as it does the decomposition's bag views.
+The engine and the data are held fixed, so what we isolate is the effect of the rewrite alone: whether maintaining the query as its decomposition's views is cheaper, in throughput and peak memory, than maintaining it as one flat view. The variants that materialise the full output all return the same result, which doubles as a correctness check (Section~\ref{sec:methodology}).
+
+The reported metrics and the pipeline notation are defined in full here, expanding the brief description given with the harness (Section~\ref{sec:harness}). The experimental setup, datasets, hypotheses, and results then follow in turn.
 
 \section{Experimental Setup}
-\label{subsec:setup}
+\label{sec:setup}
 
-All experiments were conducted on a dedicated remote machine of the shared research cluster of the Department of Informatics (IfI) at the University of Zurich.
+All experiments were run on \texttt{dast-cpu05}, a CPU-only node of the DaST research cluster at the Department of Informatics (IfI), University of Zurich.
 
-\paragraph{Hardware.}
-The benchmarks were run on the \texttt{dast-cpu05} host, a CPU-only machine with two \textbf{Intel Xeon Silver 4214} processors at $2.20$\,GHz ($12$ cores each, for $24$ physical cores and $48$ hardware threads), \textbf{196\,GB} of main memory and a local \textbf{SSD}. Datasets reside on the node's scratch storage ($492$\,GB) and are read locally, so that data access introduces no network overhead. The host runs \textbf{Debian GNU/Linux 12} (bookworm) with Linux kernel \texttt{6.1.0-45-amd64}.
+The node has two Intel Xeon Silver 4214 processors at $2.20$\,GHz ($12$ cores each, for $24$ physical cores and $48$ hardware threads), $196$\,GB of main memory and a local SSD. Datasets reside on the node's local scratch storage ($492$\,GB) and are read locally, so that data access introduces no network overhead. The host runs Debian GNU/Linux 12 (bookworm) with Linux kernel \texttt{6.1.0-45-amd64}.
 
-\paragraph{Engine deployment.}
-The Feldera Engine was deployed locally on the same host using the official Feldera Docker image (\texttt{pipeline-manager} version~$0.286.0$),\footnote{The image was pulled via the mutable \texttt{latest} tag; for exact reproducibility we also report its resolved digest, which uniquely identifies the engine build used: \texttt{sha256:0422457841e8a642ae862b61fd0818c73bcd8fae66ab205bf3a1ce6537a5f752}.} with no changes to the engine itself other than the volume mounts described in Chapter~\ref{ch:implementation} (Section~\ref{sec:benchmark_harness}): the container's storage directory is bind-mounted to host scratch to accommodate the large intermediate views, and the dataset directory is mounted read-only into the container. The benchmarking harness runs directly on the host and drives the containerised engine through its REST API. Every query variant begins from a cold start, with the engine's storage wiped between variants as described in Section~\ref{sec:benchmark_harness}, so that no residual state or cache from a previous run can influence a measurement.
+The Feldera engine was deployed on the same host from the official Feldera Docker image (\texttt{pipeline-manager}) in its default configuration, with no changes to the engine itself other than the volume mounts described in Section~\ref{sec:harness}: the container's storage directory is bind-mounted to host scratch to hold the large intermediate views, and the dataset directory is mounted read-only into the container. We pin Feldera to version $0.286.0$ in both \texttt{docker-compose.yaml} (the engine image) and \texttt{requirements.txt} (the Python client), so that the engine and the harness driving it move together. The host ran Docker Engine $29.7.0$ and Python $3.11$. The harness runs directly on the host and drives the containerised engine through its REST API. Every variant begins from a cold start, with the engine's storage wiped between variants (Section~\ref{sec:harness}), so that no residual state or cache from an earlier run can influence a measurement.
 
-\paragraph{Data ingestion.}
-Datasets were streamed from local CSV files into Feldera through the \texttt{file\_input} connectors detailed in Section~\ref{sec:input_connectors}, simulating high-velocity, insert-only ingestion.
+The datasets were streamed from local CSV files into Feldera through the \texttt{file\_input} connectors described in Section~\ref{sec:pipeline}, simulating a high-velocity, insert-only ingestion.
 
-\paragraph{Measurement protocol.}
-Each experiment was repeated over \textbf{3 independent trials}. The reported \textbf{Time} and \textbf{Throughput} are the arithmetic mean over the three trials, whereas the reported \textbf{Peak RAM} is the \emph{maximum} resident-set size observed across the three trials, i.e.\ the worst-case memory footprint rather than an average. Peak memory is sampled every five seconds (Section~\ref{sec:caveats}).
-
-\section{Methodology and Reported Metrics}
+\section{Metrics and Pipelines}
 \label{sec:methodology}
 
-\subsection{Variant Notation}
-Throughout this chapter we compare the following variants, reported per query in the result tables (Tables~\ref{tab:results_soc-Epinions1}--\ref{tab:results_imdb_job}):
-\begin{itemize}
-    \item \textbf{Baseline}: the query expressed as a single flat join, with no decomposition (Section~\ref{sec:baseline_pipelines}).
-    \item \textbf{D1, D2} (root orientation): a tree decomposition does not prescribe a root, so the same decomposition can be rooted in different ways (Section~\ref{sec:decomp_root}). \textbf{D1} and \textbf{D2} denote two such orientations. \textbf{D1} is the \emph{less balanced} orientation: the tree is deeper and more chain-like, and where the relations differ in size the larger relations sit in the lower bags. \textbf{D2} is the \emph{more balanced} orientation: the bags are spread across independent branches and the larger relations sit closer to the root, so that the small leaf bags act as strong filters. When a query's decomposition admits only one meaningful orientation --- for instance a two-bag decomposition --- only \textbf{D1} is reported.
-    \item \textbf{Prime ($D'$)} (without semijoins): by default each bag's query includes the inline semijoin projections of atoms that only partially overlap the bag (the standard IVM$^+$ definition, Section~\ref{sec:decomp_standard}). The primed variants omit these, retaining only the atoms whose variables contain all of the bag's variables (the without-semijoins / $Q^*$ definition, Section~\ref{sec:decomp_no_semijoin}). On the graph datasets every atom is the same \texttt{EDGES} relation and only the without-semijoins variant is run (Section~\ref{sec:decomp_no_semijoin}); the graph rows are therefore reported as $D_1'$ and $D_2'$ throughout.
-    \item \textbf{Superscripts}: $D^{\text{full}}$ reconstructs the complete join output by re-joining all bags; the plain $D$ (indented) omits the final reconstruction and exposes only the root bag; $D^{\text{count}}$ is the FAQ/semiring variant that returns the full result \emph{count} without materialising the full output (Section~\ref{sec:faq_variant}).
-\end{itemize}
-
 \subsection{Metrics}
-For each variant we report the output size of the materialised \texttt{RESULT} view (in rows, \texttt{r}), the wall-clock \textbf{Time} (mean of three trials), the \textbf{Throughput} (mean records processed per second), the \textbf{Peak RAM} (resident set size). \texttt{TO} denotes an experiment that exceeded the timeout of 3h per trial (section experiment script), with the mean fraction of input processed shown in parentheses.
 
-\subsection{Correctness Checking}
-After each trial we verify the result by querying the row count of the maintained view. For full-reconstruction and baseline variants this is the count of the complete output; for the without-reconstruction variants ($D$, $D'$) it is the count of the root bag only, since the full output is intentionally not materialised. The $D^{\text{count}}$ (FAQ) variant is validated against the corresponding full count.
+As described in Section~\ref{sec:harness}, the harness samples the running pipeline every five seconds, and once more when it finishes, recording at each sample its uptime, the number of input records processed so far, and its resident-set size (RSS).
+Every figure we report is derived from this polling.
+From a finished run we take three metrics: the \emph{time}, the wall-clock duration until the pipeline has ingested the whole dataset and its views are up to date, the \emph{throughput}, the number of input records processed per second, computed as the total records over that uptime, and the \emph{peak memory}, the largest RSS seen across all samples of the run.
+Alongside these we report the size of the materialised \texttt{RESULT} view, in rows, and the \emph{speedup}, the ratio of the baseline's time to the variant's time, which expresses how many times faster (or, when below one, slower) a variant maintains the query than the flat baseline.
 
-\subsection{Caveats in Reading the Numbers}
+Every experiment is run as three independent trials, with the engine's storage cleared between them so that each trial starts from a clean state.
+We report the time and throughput as the mean over the three trials, and the peak memory as the maximum over them, so that the memory figure reflects the worst case a run reached rather than a smoothed average.
+An entry marked \texttt{TO} denotes an experiment in which all three trials hit the three-hour timeout without finishing.
+For such an experiment we still report the peak memory the engine reached and, in parentheses, the mean fraction of the input processed when the timeout struck, but not its output size, throughput, or speedup, since the run never completed. A run that instead crashes after exhausting the storage volume is marked \texttt{OOS} and reported the same way.
+The baseline is the reference for the speedup and so is always $1.00\times$. When the baseline itself times out, its true time exceeds the three-hour timeout, so a variant that finished is reported with a lower-bound speedup $>\!N\times$, where $N$ is the timeout divided by the variant's time.
+Table~\ref{tab:metrics} summarises the metrics and how each is aggregated.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Metric} & \textbf{Per trial} & \textbf{Reported} \\
+    \midrule
+    Time        & final uptime                          & mean over the 3 trials \\
+    Throughput  & records processed $\div$ final uptime  & mean over the 3 trials \\
+    Peak memory & largest RSS among the trial's samples  & maximum over the 3 trials \\
+    Output size & rows in the \texttt{RESULT} view       & identical across trials \\
+    Speedup     & ---                                    & baseline time $\div$ variant time \\
+    \bottomrule
+  \end{tabular}
+  \caption{The reported metrics and how each is aggregated over the three trials. On a run that did not finish, whether timed out (\texttt{TO}) or out of storage (\texttt{OOS}), only peak memory is reported.}
+  \label{tab:metrics}
+\end{table}
+
+\medskip
 \label{sec:caveats}
-Several measurement artefacts must be kept in mind when interpreting the tables:
+A few measurement artefacts should be kept in mind when reading the tables:
 \begin{itemize}
-    \item \textbf{Averaging noise.} Reported times are the mean of three trials. Differences on the order of $0.05$\,min therefore lie within trial-to-trial variance and should not be over-interpreted.
-    \item \textbf{Memory sampling.} Peak RAM is sampled every five seconds. For very short experiments (e.g.\ $0.10$\,min) the reported value may reflect a single, possibly unrepresentative, snapshot rather than the true peak.
-    \item \textbf{Throughput is not comparable across connector variants.} Throughput counts all records ingested and processed. In the multi-connector configuration the same edge file is ingested once per relation, inflating the record denominator by the number of connectors; consequently the multi-connector throughput can appear several times larger than the single-connector value even when wall-clock time is essentially identical. Wall-clock \textbf{Time} is therefore the comparable metric across connector strategies.
+    \item \textbf{Averaging noise.} The reported times are the mean of three trials, so differences on the order of $0.05$\,min lie within trial-to-trial variance and should not be over-interpreted.
+    \item \textbf{Memory sampling.} Peak memory is sampled every five seconds, so for a very short run (for example $0.10$\,min) the reported value may reflect a single, possibly unrepresentative, snapshot rather than the true peak.
 \end{itemize}
+
+\subsection{Pipelines and Variants}
+\label{sec:variants}
+
+Every query is run as a flat baseline and as a family of decomposition variants. In the result tables (Tables~\ref{tab:results_soc-Epinions1}--\ref{tab:results_imdb_job}) each decomposition variant is named by a compact symbol recording three choices: how the decomposition tree is rooted, whether it uses the standard IVM$^+$ decomposition or our variant, and how much of the result the pipeline reconstructs.
+
+\begin{itemize}
+    \item \textbf{Baseline}: the query as a single flat join, with no decomposition. This is the reference against which the decomposition variants are compared.
+    \item \textbf{Orientation ($D_1$, $D_2$)}: the bag relations and their $P'$-semijoin filters are defined over a \emph{rooted} tree decomposition (Section~\ref{sec:bag_relations}), but the decomposition itself does not fix the root. Re-rooting changes which bag is a parent of which, and so the direction in which the $P'$-relations filter and the order in which the bags are maintained. $D_1$ and $D_2$ denote two orientations of the same decomposition: $D_1$ is the less balanced one, a deeper, more chain-like tree with the larger relations in the lower bags, and $D_2$ is the more balanced one, with the bags spread across independent branches and the larger relations nearer the root. Where a decomposition admits only one meaningful orientation, for example a two-bag one, we report only $D_1$.
+    \item \textbf{IVM$^+$ ($D$) or the variant ($D'$)}: the unprimed $D$ builds each bag query the standard IVM$^+$ way, keeping every atom that shares a variable with the bag and projecting the partially overlapping ones onto the bag's variables as semijoin filters (Section~\ref{sec:ivm_algorithm}). The primed $D'$ is our variant, which drops those projected atoms and keeps only the atoms fully contained in the bag (Section~\ref{sec:variant_no_semijoin}). The two give the same result and differ only in intermediate size and join work.
+    \item \textbf{Reconstruction ($D^{\text{full}}$, $D$, $D^{\text{count}}$)}: $D^{\text{full}}$ performs the reconstruction join over all the bags to materialise the complete result (Section~\ref{sec:bag_relations}). The plain $D$, shown indented beneath its $D^{\text{full}}$, stops at the root bag and skips the reconstruction, maintaining only the bag hierarchy. $D^{\text{count}}$ returns the size of the full result through the counting semiring, without ever materialising the output (Section~\ref{sec:semiring}).
+\end{itemize}
+
+After every trial the harness verifies the run by reading the row count of the maintained output view (Section~\ref{sec:harness}). For the baseline and the full-reconstruction variants this is the size of the complete result, which they must all agree on. The without-reconstruction variants materialise only the root bag, so their reported count is that bag's size rather than the full result, and the count variant is checked against the full result size, which it must reproduce through the counting semiring without materialising the output.
+
+Because the baseline maintains the full join result as a single materialised view, a like-for-like comparison must ask the decomposition to produce that same output. The full-reconstruction variant ($D^{\text{full}}$) does so, re-joining the bags into the complete result, so it and the baseline maintain the same answer and differ only in how they compute it. The without-reconstruction variant ($D$) instead stops at the root bag and never forms the full output. This is closer to how incremental maintenance is normally used, keeping a compact structure the result can be read from on demand rather than the result itself (Chapter~\ref{ch:introduction}), so it is not a like-for-like competitor to the baseline but a measure of how cheaply the decomposition alone can be maintained. The count variant ($D^{\text{count}}$) lies between the two, reporting the result's size without materialising it.
+
+\medskip
+All experiments were run as pipelines in which every table and every view is materialised, so that any of them can be queried directly. In practice this is often unnecessary, so it is a conservative choice, and one that weighs more heavily on the decomposition, which introduces many additional views. As described in Section~\ref{sec:feldera}, materialising a table or view can slow a pipeline down, so any advantage the decomposition shows here is obtained despite this. To gauge the effect, we ran a subset of the experiments in which only each pipeline's terminal view is materialised (Section~\ref{sec:pipeline}). Tables with a primary key stay materialised regardless, since Feldera maintains those automatically (Section~\ref{sec:feldera}). These runs are reported separately, one table per dataset, in Appendix~\ref{app:results_ablation}.
+
+\section{Datasets and Queries}
+\label{sec:datasets}
+
+We evaluate on three classes of dataset, introduced here together with the queries run on each.
+
+\subsection{Graph datasets}
+The graph datasets are three directed graphs from the SNAP collection~\cite{snapnets}, each stored as a single \texttt{EDGES} relation. \texttt{soc-Epinions1} is a who-trusts-whom social network ($|V| = 75'879$, $|E| = 508'837$), \texttt{cit-HepTh} an arXiv high-energy-physics citation network ($|V| = 27'770$, $|E| = 352'807$), and \texttt{p2p-Gnutella31} a Gnutella peer-to-peer snapshot ($|V| = 62'586$, $|E| = 147'892$). Every query is a self-join over the edge relation: one acyclic query and several cyclic queries (Table~\ref{tab:queries_graph}).
+
+Because every atom is the same \texttt{EDGES} relation, the projections that separate IVM$^+$ from the variant only filter a bag down to the nodes with an edge on one endpoint, almost every node in a dense graph, and so barely filter while still costing extra work. We therefore run only the variant on these datasets ($D'$).
+
+Each query is run under two input configurations. In the first, the edge file is ingested through a single connector into one \texttt{EDGES} table, which the query aliases once per atom. In the second, each atom has its own table, all loaded with the same edge file, so the query remains a self-join but over separate copies of the data. Both configurations produce the same result and are reported separately, labelled by the number of connectors. We compare them on time rather than throughput, since the multi-connector runs re-ingest the same file and inflate the record count.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}llc@{}}
+    \toprule
+    \textbf{Query} & \textbf{Structure} & $\boldsymbol{w(Q)}$ \\
+    \midrule
+    5 Path Query   & path, five edges          & $1$ \\
+    Cyclic Query 1 & 6-cycle with three chords & $\tfrac{3}{2}$ \\
+    Cyclic Query 2 & 6-cycle with two chords   & $2$ \\
+    Cyclic Query 3 & diamond ($Q_\diamond$)    & $\tfrac{3}{2}$ \\
+    Cyclic Query 4 & 6-cycle                   & $2$ \\
+    Cyclic Query 5 & 5-cycle                   & $2$ \\
+    Cyclic Query 6 & 4-cycle                   & $2$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{The queries run on the graph datasets, with their fractional hypertree width $w(Q)$. Full definitions are given in Appendix~\ref{app:queries}. Cyclic Query 3 is the running example $Q_\diamond$ (Section~\ref{sec:queries}).}
+  \label{tab:queries_graph}
+\end{table}
+
+\subsection{TPC-H}
+TPC-H~\cite{poess2000} is a standard decision-support benchmark over an eight-relation schema. We generate it at three scale factors, 1, 10, and 30, and run three acyclic queries and one cyclic query (Table~\ref{tab:queries_tpch}).
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}llc@{}}
+    \toprule
+    \textbf{Query} & \textbf{Structure} & $\boldsymbol{w(Q)}$ \\
+    \midrule
+    3 Table Path Query & path over three tables & $1$ \\
+    4 Table Path Query & path over four tables  & $1$ \\
+    5 Table Path Query & path over five tables  & $1$ \\
+    Cyclic Query 7     & 4-cycle over four tables & $2$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{The queries run on TPC-H, with their fractional hypertree width $w(Q)$. Full definitions are given in Appendix~\ref{app:queries}.}
+  \label{tab:queries_tpch}
+\end{table}
+
+\subsection{IMDB (JOB)}
+The Join Order Benchmark (JOB)~\cite{leis2015} is derived from the real Internet Movie Database, and unlike the synthetic TPC-H data it contains real-world, correlated data. We run two acyclic queries and one cyclic query (Table~\ref{tab:queries_imdb}).
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}llc@{}}
+    \toprule
+    \textbf{Query} & \textbf{Structure} & $\boldsymbol{w(Q)}$ \\
+    \midrule
+    Acyclic Query 1 & path over five tables      & $1$ \\
+    Acyclic Query 2 & tree over ten tables       & $1$ \\
+    Cyclic Query 8  & 3-cycle over three tables & $\tfrac{3}{2}$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{The queries run on IMDB (JOB), with their fractional hypertree width $w(Q)$. Full definitions are given in Appendix~\ref{app:queries}.}
+  \label{tab:queries_imdb}
+\end{table}
 
 \section{Hypotheses}
 \label{sec:hypotheses}
@@ -64,16 +164,6 @@ The experiments were designed around five hypotheses derived from the theory of 
 
     \item[\hypertarget{h5}{H5 (Semiring / FAQ aggregation).}] Because we expect the without-reconstruction decomposition to be fast whereas the final re-join of all bags to be expensive, we hypothesise that a semiring formulation --- mapping joins to multiplication and projections to addition over an implicit per-tuple count of $1$ --- can deliver the full result \emph{count} at close to the (cheap) without-reconstruction cost, avoiding the (expensive) materialisation of the full output. The same machinery generalises to other semirings (e.g.\ a $(\min,+)$ semiring for minimum-cost paths).
 \end{description}
-
-\section{Workloads}
-\label{sec:workloads}
-
-We evaluate three classes of dataset:
-\begin{itemize}
-    \item \textbf{Graph datasets (SNAP):} \texttt{soc-Epinions1}, \texttt{cit-HepTh} and \texttt{p2p-Gnutella31}. Each query is a self-join over the single \texttt{EDGES} relation. For every dataset we run one path query and several cyclic queries of increasing complexity. These datasets exercise H1, H2 and H4. As all atoms are the same relation, only the without-semijoin variant is used (Section~\ref{sec:decomp_no_semijoin}).
-    \item \textbf{TPC-H:} two acyclic path queries (over 4 and 5 tables) at scale factors 1, 10 and 30. These exercise H3 at increasing scale. A property of these queries is that every join is a foreign-key-to-primary-key join; by referential integrity and primary-key uniqueness each child tuple matches exactly one parent, so the joins enrich rather than filter or multiply tuples. The output cardinality is therefore identical across all variants (equal to $|\texttt{LINEITEM}|$), and even the without-reconstruction decomposition --- which holds \texttt{LINEITEM} in its root --- reports the same count. Two further queries, one whose output exceeds and one whose output falls below $|\texttt{LINEITEM}|$, are in progress to test whether variant differences emerge once the output cardinality decouples from the heaviest relation.
-    \item \textbf{IMDB (JOB):} acyclic queries (and a cyclic query in progress) over the multi-relation Join-Order-Benchmark schema. Because the atoms are distinct relations, both the projection ($D$) and no-projection ($D'$) variants are evaluated, making this the richest dataset for H3.
-\end{itemize}
 
 \section{Results and Discussion}
 \label{sec:results_discussion}

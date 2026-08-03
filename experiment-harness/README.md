@@ -50,7 +50,7 @@ Pointed at one results folder (set at the bottom of the script), it reads that f
 
 ### Prerequisites
 
-- Docker, with Docker Compose — the daemon must be running (start Docker Desktop on macOS or Windows — on Linux it is usually already running as a service)
+- Docker, with Docker Compose — the daemon must be running (start Docker Desktop on macOS or Windows — on Linux, run `sudo systemctl start docker` if it is not already running as a service)
 - Python 3, then `pip install -r requirements.txt`
 
 `run_experiments.py` starts Feldera itself: `docker compose` pulls Feldera's `pipeline-manager` image from its registry and runs it — nothing to install by hand. Its version is pinned in `docker-compose.yaml` to match the Feldera SDK in `requirements.txt`.

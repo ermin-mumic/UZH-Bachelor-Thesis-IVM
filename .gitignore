@@ -5,6 +5,7 @@ __pycache__/
 tpch_data/
 data/
 results/
+results_ablation/
 .venv/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/

@@ -1,0 +1,161 @@
+\chapter{Query Definitions}
+\label{app:queries}
+
+This appendix gives the full definition of every query used in the evaluation (Chapter~\ref{ch:evaluation}), written in the join notation of Section~\ref{sec:queries}. The corresponding tree decompositions can be reproduced with the query decomposer.
+
+\section{Graph queries}
+\label{app:queries_graph}
+
+Every graph query is a self-join over the single edge relation $E$, so each atom $E_i$ denotes an occurrence of $E$.
+
+\medskip
+\noindent\textbf{Path Query.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(D,E) \bowtie E_5(E,F)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 1.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(D,E) \bowtie E_5(E,F) \\
+& {} \bowtie E_6(A,F) \bowtie E_7(A,E) \bowtie E_8(A,D) \bowtie E_9(B,D)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 2.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(D,E) \bowtie E_5(E,F) \\
+& {} \bowtie E_6(A,F) \bowtie E_7(A,E) \bowtie E_8(B,D)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 3} ($Q_\diamond$)\textbf{.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(B,D) \bowtie E_5(A,D)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 4.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(D,E) \bowtie E_5(E,F) \bowtie E_6(A,F)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 5.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(D,E) \bowtie E_5(A,E)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 6.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& E_1(A,B) \bowtie E_2(B,D) \bowtie E_3(A,E) \bowtie E_4(D,E)
+\end{aligned}$
+
+\section{TPC-H queries}
+\label{app:queries_tpch}
+
+For readability, each relation is written with only its join attributes; in the actual queries the relations also carry their remaining attributes. In the 5-Table Path Query the \texttt{NATION} relation is used twice, as $\mathrm{NATION}_C$ (the customer's nation) and $\mathrm{NATION}_S$ (the supplier's nation), with the corresponding keys $\mathrm{NATIONKEY}_C$ and $\mathrm{NATIONKEY}_S$.
+
+\medskip
+\noindent\textbf{3-Table Path Query.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{LINEITEM}(\mathrm{SUPPKEY}) \\
+& {} \bowtie \mathrm{SUPPLIER}(\mathrm{SUPPKEY}, \mathrm{NATIONKEY}) \\
+& {} \bowtie \mathrm{CUSTOMER}(\mathrm{NATIONKEY})
+\end{aligned}$
+
+\medskip
+\noindent\textbf{4-Table Path Query.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{LINEITEM}(\mathrm{ORDERKEY}, \mathrm{PARTKEY}, \mathrm{SUPPKEY}) \\
+& {} \bowtie \mathrm{ORDERS}(\mathrm{ORDERKEY}, \mathrm{CUSTKEY}) \\
+& {} \bowtie \mathrm{CUSTOMER}(\mathrm{CUSTKEY}) \\
+& {} \bowtie \mathrm{PARTSUPP}(\mathrm{PARTKEY}, \mathrm{SUPPKEY})
+\end{aligned}$
+
+\medskip
+\noindent\textbf{5-Table Path Query.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{NATION}_C(\mathrm{NATIONKEY}_C) \\
+& {} \bowtie \mathrm{CUSTOMER}(\mathrm{NATIONKEY}_C, \mathrm{CUSTKEY}) \\
+& {} \bowtie \mathrm{ORDERS}(\mathrm{CUSTKEY}, \mathrm{ORDERKEY}) \\
+& {} \bowtie \mathrm{LINEITEM}(\mathrm{ORDERKEY}, \mathrm{SUPPKEY}) \\
+& {} \bowtie \mathrm{SUPPLIER}(\mathrm{SUPPKEY}, \mathrm{NATIONKEY}_S) \\
+& {} \bowtie \mathrm{NATION}_S(\mathrm{NATIONKEY}_S)
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 7.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{LINEITEM}(\mathrm{ORDERKEY}, \mathrm{SUPPKEY}) \\
+& {} \bowtie \mathrm{ORDERS}(\mathrm{ORDERKEY}, \mathrm{CUSTKEY}) \\
+& {} \bowtie \mathrm{CUSTOMER}(\mathrm{CUSTKEY}, \mathrm{NATIONKEY}) \\
+& {} \bowtie \mathrm{SUPPLIER}(\mathrm{SUPPKEY}, \mathrm{NATIONKEY})
+\end{aligned}$
+
+\section{IMDB (JOB) queries}
+\label{app:queries_imdb}
+
+As above, each relation is written with only its join attributes.
+
+\medskip
+\noindent\textbf{Acyclic Query 1.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{company\_type}(\mathrm{company\_type\_id}) \\
+& {} \bowtie \mathrm{movie\_companies}(\mathrm{company\_type\_id}, \mathrm{movie\_id}) \\
+& {} \bowtie \mathrm{title}(\mathrm{movie\_id}) \\
+& {} \bowtie \mathrm{movie\_info\_idx}(\mathrm{movie\_id}, \mathrm{info\_type\_id}) \\
+& {} \bowtie \mathrm{info\_type}(\mathrm{info\_type\_id})
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Acyclic Query 2.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{company\_name}(\mathrm{company\_id}) \\
+& {} \bowtie \mathrm{movie\_companies}(\mathrm{company\_id}, \mathrm{movie\_id}) \\
+& {} \bowtie \mathrm{title}(\mathrm{movie\_id}) \\
+& {} \bowtie \mathrm{movie\_info}(\mathrm{movie\_id}, \mathrm{info\_type\_id}) \\
+& {} \bowtie \mathrm{info\_type}(\mathrm{info\_type\_id}) \\
+& {} \bowtie \mathrm{cast\_info}(\mathrm{movie\_id}, \mathrm{char\_id}, \mathrm{role\_id}, \mathrm{person\_id}) \\
+& {} \bowtie \mathrm{char\_name}(\mathrm{char\_id}) \\
+& {} \bowtie \mathrm{role\_type}(\mathrm{role\_id}) \\
+& {} \bowtie \mathrm{aka\_name}(\mathrm{person\_id}) \\
+& {} \bowtie \mathrm{name}(\mathrm{person\_id})
+\end{aligned}$
+
+\medskip
+\noindent\textbf{Cyclic Query 8.}
+
+\noindent$\displaystyle
+\begin{aligned}
+& \mathrm{cast\_info}(\mathrm{person\_id}, \mathrm{movie\_id}) \\
+& {} \bowtie \mathrm{person\_info}(\mathrm{person\_id}, \mathrm{info\_type\_id}) \\
+& {} \bowtie \mathrm{movie\_info}(\mathrm{movie\_id}, \mathrm{info\_type\_id})
+\end{aligned}$

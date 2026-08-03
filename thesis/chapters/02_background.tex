@@ -2,8 +2,7 @@
 \label{ch:background}
 
 This chapter introduces the formal foundations underlying the IVM$^+$ approach and the adjusted variant studied in this thesis.
-We first fix our data model and the class of queries we study, and introduce a running example that we revisit throughout the thesis (Section~\ref{sec:queries}).
-We then introduce tree decompositions (Section~\ref{sec:tree_decompositions}), the structure the IVM$^+$ approach is organized around, and the fractional hypertree width derived from them (Section~\ref{sec:fhw}).
+We fix our data model and query class and introduce a running example we revisit throughout, state the insert-only maintenance problem the approach addresses, and present tree decompositions and the fractional hypertree width derived from them.
 
 \section{Data Model and Queries}
 \label{sec:queries}
@@ -13,7 +12,7 @@ We use standard relational terminology, which we briefly recall here~\cite{abite
 \medskip
 
 A \emph{relation} $R$ is a finite set of tuples, and a \emph{database} $\mathcal{D}$ is a finite set of relations.
-The \emph{size} $|R|$ of a relation is its number of tuples, and the size $|\mathcal{D}|$ of a database is the sum of the sizes of its relations.
+The \emph{size} $|R|$ of a relation is the number of its tuples, and the size $|\mathcal{D}|$ of a database is the sum of the sizes of its relations.
 
 \medskip
 
@@ -21,7 +20,7 @@ A \emph{full conjunctive query}, also called a \emph{natural join query}~\cite{a
 \[
 Q = R_1(\mathbf{X}_1) \bowtie \cdots \bowtie R_k(\mathbf{X}_k),
 \] 
-where each $R_i$ is a relation symbol and each $\mathbf{X}_i$ is a tuple of variables, the \emph{schema} of $R_i$. Each $R_i(\mathbf{X}_i)$ is an \emph{atom} of $Q$, and $\mathrm{vars}(Q) = \bigcup_{i=1}^{k} \mathbf{X}_i$ denotes the set of all variables of $Q$.
+where $R_i$ is a relation symbol and $\mathbf{X}_i$ is a tuple of variables, the \emph{schema} of $R_i$. Each $R_i(\mathbf{X}_i)$ is an \emph{atom} of $Q$, and $\mathrm{vars}(Q) = \bigcup_{i=1}^{k} \mathbf{X}_i$ denotes the set of all variables of $Q$.
 We call such a query \emph{full} because every variable in $\mathrm{vars}(Q)$ is returned in the result; no variables are projected away.
 For brevity we refer to full conjunctive queries simply as \emph{queries}.
 
@@ -29,7 +28,7 @@ A tuple $t$ over $\mathrm{vars}(Q)$ is in the \emph{result} $Q(\mathcal{D})$ if 
 For a tuple $t$ and a variable $x$ in its schema, $t(x)$ denotes the value that $t$ assigns to $x$.
 
 \paragraph{Running example.}
-As a running example we use a small \emph{self-join} query over a single binary relation $E$, which we read as the edge set of a directed graph.
+As a running example we use a small query over a single binary relation $E$, which we read as the edge set of a directed graph.
 Consider
 \[
 Q_\diamond = E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(B,D) \bowtie E_5(A,D),
@@ -37,6 +36,16 @@ Q_\diamond = E_1(A,B) \bowtie E_2(B,C) \bowtie E_3(C,D) \bowtie E_4(B,D) \bowtie
 with $\mathrm{vars}(Q_\diamond) = \{A,B,C,D\}$.
 Here $E_1,\dots,E_5$ all denote the same relation $E$; we treat each atom as a distinct occurrence of $E$ over the same data, which is standard and does not affect the tree decompositions and widths defined in the following sections.
 We examine its structure and tree decomposition in Section~\ref{sec:tree_decompositions} and determine its fractional hypertree width in Section~\ref{sec:fhw}; we return to $Q_\diamond$ throughout the thesis, including as a benchmark query in our experiments (Chapter~\ref{ch:evaluation}).
+
+\section{The Insert-Only Maintenance Problem}
+\label{sec:ivm_problem}
+
+We study the \emph{insert-only} incremental view maintenance problem for a fixed query $Q$~\cite{abokhamis2024Insert-Only}.
+The database $\mathcal{D}$ is initially empty and grows by single-tuple insertions, applied one at a time, and neither their number nor which tuples they insert is known in advance.
+Writing $\mathcal{D}^{(0)} = \emptyset$ and $\mathcal{D}^{(\tau)}$ for the database after the $\tau$-th insertion, the task is to maintain the result $Q(\mathcal{D}^{(\tau)})$ at each time-step $\tau$.
+The cost of interest is the time needed to process the insertions.
+
+Abo~Khamis et al.\ also study the \emph{insert-delete} setting, in which tuples may additionally be deleted, and the maintenance of the \emph{change} to the result rather than the full result. We consider only insert-only maintenance of the full result.
 
 \section{Tree Decomposition}
 \label{sec:tree_decompositions}
@@ -97,8 +106,8 @@ This is one of several valid tree decompositions of $Q_\diamond$; Section~\ref{s
 \section{Fractional Hypertree Width}
 \label{sec:fhw}
 
-Let $\mathbf{V} \subseteq \mathrm{vars}(Q)$.
-A \emph{fractional edge cover}~\cite{atserias2013} of $\mathbf{V}$ assigns a weight $\lambda_i \in [0,1]$ to each atom $R_i(\mathbf{X}_i)$ of $Q$ so that every variable in $\mathbf{V}$ is covered, i.e.\ the weights of the atoms whose schema contains it sum to at least one.
+Let $\mathbf{V} \subseteq \mathrm{vars}(Q)$ be a set of variables.
+A \emph{fractional edge cover}~\cite{atserias2013} of $\mathbf{V}$ assigns a weight $\lambda_i \in [0,1]$ to each atom $R_i(\mathbf{X}_i)$ of $Q$ such that, for every variable $x \in \mathbf{V}$, the weights of the atoms whose schema contains $x$ sum to at least one.
 The \emph{fractional edge cover number} $\rho^\ast(\mathbf{V})$ is the smallest total weight of such a cover:
 \[
 \begin{array}{@{}ll@{\qquad}l@{}}
@@ -107,7 +116,6 @@ The \emph{fractional edge cover number} $\rho^\ast(\mathbf{V})$ is the smallest 
                   & \lambda_i \in [0,1] & \forall\, i
 \end{array}
 \]
-Intuitively, $\rho^\ast(\mathbf{V})$ is the least number of atoms needed to cover $\mathbf{V}$, with fractional weights allowed.
 
 \medskip
 

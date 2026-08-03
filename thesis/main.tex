@@ -5,6 +5,8 @@
 \usepackage{amsmath} 
 \usepackage{caption}
 \usepackage{hyperref}
+\usepackage{xurl}
+\usepackage[htt]{hyphenat}
 \usepackage{longtable}
 \usepackage{listings}
 \usepackage{tikz}
@@ -50,10 +52,12 @@
 \include{chapters/05_evaluation}
 %\\include{chapters/06_conclusion}
 
+\appendix
+\include{chapters/appendix_queries}
+\include{chapters/appendix_results}
+
 % --- Bibliography ---
 \bibliographystyle{plain}
 \bibliography{references}
-
-\input{tables/results_tables}
 
 \end{document}

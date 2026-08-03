@@ -15,12 +15,8 @@
     \endhead 
 
     \bottomrule
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endfoot  
 
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endlastfoot 
 
     
@@ -140,7 +136,7 @@
     \quad $D_1'$           &  --                   & TO (78.82\%)          &  --                  &                 & 80.9GiB    \\
     $D_1'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                  &                   & 59.8GiB   \\
     $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 62.5GiB   \\
-    \quad $D_2'$           &  970'903'178r         & 77.64min             &  --                  &                   & 43.7GiB   \\
+    \quad $D_2'$           &  970'903'178r         & 77.64min             &  655r/s                &                   & 43.7GiB   \\
     $D_2'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                    &                  & 42.8GiB  \\
     \midrule
     
@@ -208,12 +204,8 @@
     \endhead 
 
     \bottomrule
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endfoot  
 
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endlastfoot 
 
     
@@ -401,12 +393,8 @@
     \endhead 
 
     \bottomrule
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endfoot  
 
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: all graph decompositions are without semijoins (prime). \texttt{TO} indicates experimental timeout.} \\
     \endlastfoot 
 
     
@@ -457,7 +445,7 @@
     $D_1'^{\text{count}}$  &  0r                   &  0.10min            &  215'329r/s          &                   & 1.0GiB    \\
     $D_2'^{\text{full}}$   &  0r                   &  0.10min            &  215'560r/s          &                   & 1.1GiB    \\
     \quad $D_2'$           &  0r                   &  0.10min            &  216'734r/s          &                   & 1.1GiB    \\
-    $D_2'^{\text{full}}$   &  0r                   &  0.10min            &  216'602r/s          &                   & 1.1GiB    \\
+    $D_2'^{\text{count}}$   &  0r                   &  0.10min            &  216'602r/s          &                   & 1.1GiB    \\
     \midrule
 
 
@@ -594,10 +582,8 @@
     \endhead 
 
     \bottomrule
-    \multicolumn{6}{l}{\small $D_1$: Decomposition with projections (semijoins). No-projection variants are denoted with a prime symbol ($D_1'$).} \\
     \endfoot  
 
-    \multicolumn{6}{l}{\small $D_1$: Decomposition with projections (semijoins). No-projection variants are denoted with a prime symbol ($D_1'$).} \\
     \endlastfoot 
 
     
@@ -726,9 +712,9 @@
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 10} ($\sim$10 GB)}} \\
     \nopagebreak
     Baseline              &  2'398'579r           &  10.12min            &  126'328r/s          & 1.00x             & 10.9GiB   \\
-    $D_1^{\text{full}}$   &  crashed              &                      &                      &                   &    \\
+    $D_1^{\text{full}}$   &  --                   &  OOS (9.80)          &                      &                   & 81.9GiB   \\
     \quad $D_1$           &  2'398'579r           &  152.79min           &  8360r/s             &                   & 74.7GiB   \\
-    $D_1^{\text{count}}$  &  crashed              &                      &                      &                   &    \\
+    $D_1^{\text{count}}$  &  --                   &  OOS (8.07\%)        &  --                  &                   & 75.7GiB   \\
     $D_1'^{\text{full}}$  &  --                   &  TO (2.33\%)         &  --                  &                   & 90.0GiB   \\
     \quad $D_1'$          &  --                   &  TO (3.84\%)         &  --                  &                   & 91.5GiB   \\
     $D_1'^{\text{count}}$ &  --                   &  TO (2.99\%)         & --                   &                   & 77.3GiB   \\
@@ -765,12 +751,8 @@
     \endhead 
 
     \bottomrule
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: No projection variants are denoted with prime symbol.  \texttt{TO} indicates experimental timeout.} \\
     \endfoot  
 
-    \multicolumn{6}{l}{\small $D_1$/$D_2$: less / more balanced root orientation. Prime ($D'$): without semijoins.} \\
-    \multicolumn{6}{l}{\small Note: No projection variants are denoted with prime symbol.  \texttt{TO} indicates experimental timeout.} \\
     \endlastfoot 
 
     
@@ -820,7 +802,7 @@
     
     \nopagebreak
     Baseline              &  1'916'563r           &  1.58min        &  283'665r/s          & 1.00x             & 10.9GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (63.3\%)    &  --                  &                   & 11.8GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (63.28\%)    &  --                  &                   & 11.8GiB   \\
     \quad $D_1$           &  89'392r              &  1.11min        &  404'162r/s          &                   & 10.4GiB   \\
     $D_1^{\text{count}}$  &  1'916'563r           &  1.10min        &  404'840r/s          &                   & 10.6GiB   \\
     $D_1'^{\text{full}}$  &  --                   &  TO (63.14\%)   &  --                  &                   & 10.6GiB   \\
