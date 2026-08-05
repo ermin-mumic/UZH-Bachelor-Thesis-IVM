@@ -20,20 +20,23 @@ top of an existing incremental engine without modifying it.
 
 This thesis investigates whether that realisation is beneficial in practice. We build a query
 decomposer that rewrites a join query into the bag views of a tree decomposition, in both IVM⁺
-and an adjusted variant that drops its semijoin filters, together with a semiring extension for
-computing aggregates such as `COUNT`. We evaluate the rewrites on Feldera, a general-purpose
-incremental engine, against the baseline of maintaining the query directly, without
-decomposition, across graph, TPC-H and IMDB workloads.
+and an adjusted variant, together with a semiring extension for computing aggregates such as
+`COUNT`. We evaluate the rewrites on Feldera, a general-purpose incremental engine, against the
+baseline of maintaining the query directly, without decomposition, across graph, TPC-H and IMDB
+workloads.
 
-The rewrite pays off on the queries the baseline handles worst, cyclic queries over dense data:
-there it maintains one query 42.96 times faster than the baseline, at the same memory, and keeps
-tractable several queries the baseline cannot maintain within three hours. These gains hold even
-though the engine does not implement the worst-case-optimal joins the width bound assumes. Where
-the baseline is already cheap, on acyclic key-based joins and sparse data, the rewrite gives no
-speedup and adds a memory overhead of up to 2.6 times. Within the decomposition, the final
-reconstruction dominates the cost and is avoidable when only the result's size is needed.
-Realised as plain SQL views on an unmodified engine, the IVM⁺ decomposition is thus a worthwhile
-rewrite for cyclic queries over dense data, and query-shape-dependent in general.
+The rewrite benefits cyclic queries over dense data most, where maintaining the query directly
+builds large intermediate results. There the decomposition maintains one query 52.11 times
+faster than the baseline and at lower peak memory, and it renders tractable several queries the
+baseline cannot finish within a three-hour timeout. A further gain is available whenever only an
+aggregate of the result is needed, such as its size, rather than the result itself: the semiring
+count maintains just the bag hierarchy and completes in a fraction of a minute even where the
+result is far too large for the baseline to materialise, for lower-bound speedups exceeding 1800
+times. These gains hold even though the engine does not implement the worst-case-optimal joins
+the width bound assumes. Where the baseline is already cheap, on acyclic key-based joins and
+sparse data, the rewrite gives no speedup and adds a memory overhead of up to 2.6 times. Realised
+as plain SQL views on an unmodified engine, the IVM⁺ decomposition is thus a worthwhile rewrite
+for cyclic queries over dense data, and query-shape-dependent in general.
 
 ## Repository map
 
