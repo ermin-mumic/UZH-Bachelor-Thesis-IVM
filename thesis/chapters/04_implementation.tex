@@ -23,7 +23,7 @@ We first give the necessary background on how Feldera works, then show how the d
 \section{Feldera}
 \label{sec:feldera}
 
-Feldera is a query engine for \emph{incremental computation}~\cite{feldera2026}.
+Feldera is a streaming query engine for \emph{incremental computation}~\cite{feldera2026}.
 A computation is expressed in SQL, and Feldera maintains its results as the input data changes, updating them from the changes alone rather than recomputing over all the data.
 This incremental evaluation is founded on the DBSP model~\cite{budiu2023DBSP} and applies to arbitrary SQL queries.
 
@@ -34,12 +34,12 @@ This maps directly onto the construction of Chapter~\ref{ch:ivm}: the bag relati
 
 Changes reach a pipeline's tables in three ways: through \emph{input connectors} attached to the tables, through HTTP requests, or through ad-hoc \texttt{INSERT} statements~\cite{feldera2026}.
 Our experiments use input connectors, which read the input data from CSV files.
-We chose them over HTTP ingress, which in our tests was slow enough to make ingestion, rather than the incremental computation, the bottleneck.
+We chose them over HTTP ingress because posting the data over HTTP could not keep the pipeline fed: even when sent in batches, each batch was processed almost instantly and the pipeline then idled until the next arrived, so a run measured how fast data could be delivered rather than how fast Feldera maintained the views. Reading directly from local CSV files through the connectors keeps the engine saturated, so that the incremental computation is what is measured.
 
 By default, Feldera stores only the data needed to compute future outputs, not the complete contents of every table and view~\cite{feldera2026}.
-A table or view can be declared \emph{materialized} to keep its full contents available, for example to inspect or query them directly.
-A table with a \texttt{PRIMARY KEY} is materialized automatically, since Feldera must maintain a key index.
-Materializing a table or view can slow the pipeline down, as more data must be written to storage, which can also increase the pipeline's memory use.
+A table or view can be declared \emph{materialised} to keep its full contents available, for example to inspect or query them directly.
+A table with a \texttt{PRIMARY KEY} is materialised automatically, since Feldera must maintain a key index.
+Materialising a table or view can slow the pipeline down, as more data must be written to storage, which can also increase the pipeline's memory use.
 
 \section{Decomposition as a Feldera Pipeline}
 \label{sec:pipeline}
@@ -81,7 +81,6 @@ CREATE TABLE EDGES (
 
 Besides the connector, the table is declared \texttt{'materialized'}, the annotation from Section~\ref{sec:feldera} that keeps its full contents available.
 The connector and this annotation are the only Feldera-specific parts of the declaration.
-The views built on the table, described next, are ordinary SQL.
 
 \subsection{Bag views}
 
@@ -96,7 +95,7 @@ SELECT DISTINCT B, D
 FROM BAG_2_QPRIME;
 \end{lstlisting}
 
-The view is materialized and can therefore be queried directly (Section~\ref{sec:feldera}).
+The view is materialised and can therefore be queried directly (Section~\ref{sec:feldera}).
 The $Q'$-view \texttt{BAG\_2\_QPRIME} it reads from is defined next.
 
 We define a bag's $Q'$-view by joining its atoms on their shared variables with \texttt{USING}.
@@ -173,8 +172,7 @@ FROM ROOT_QPRIME;
 
 This \texttt{RESULT} is the number of tuples in the result of $Q_\diamond$, which is its \texttt{COUNT(*)}.
 Because every input tuple has an implicit annotation of one, the base tables need no annotation column, and an atom appearing in several bags is not double-counted, since multiplying by one changes nothing.
-An aggregate that reads a column, such as \texttt{MIN}, has no such implicit annotation: each relation must then carry its value explicitly and be counted in a single \emph{canonical} bag, or its value would be combined more than once.
-We therefore implement only \texttt{COUNT(*)}.
+The same semiring construction handles other aggregates. One that reads a column, such as \texttt{MIN}, carries its value explicitly and combines it in a single \emph{canonical} bag so that it is not aggregated more than once. We implement \texttt{COUNT(*)} as a representative case.
 
 \medskip
 
@@ -183,7 +181,7 @@ The reconstruction relies on the natural join being idempotent, $R \bowtie R = R
 The count relies on the same fact through the implicit annotation of one.
 Under SQL's bag semantics this no longer holds: a duplicated input row makes such an atom count once per bag it lies in, so the result over-counts.
 Our datasets, introduced in Chapter~\ref{ch:evaluation}, are set-valued (the relational ones are primary-keyed and the graph edge sets carry no duplicate edges), so this does not arise.
-It could also be handled directly by counting each atom in a single \emph{canonical} bag and joining a deduplicated projection of it elsewhere, the same mechanism the \texttt{MIN} case above would require.
+It could also be handled directly by counting each atom in a single \emph{canonical} bag and joining a deduplicated projection of it elsewhere, the same mechanism used for \texttt{MIN} above.
 
 \section{Query Decomposer}
 \label{sec:decomposer}
@@ -209,7 +207,7 @@ The parser reads the two SQL inputs, the schema and the query, and extracts the 
 It needs the full schema, not just the query, for two reasons.
 First, the tool returns the full conjunctive query, so it must know every attribute of every relation, including those the query never mentions.
 Second, the hypergraph has one vertex per variable, so all variables must be known even where the query does not reference them.
-Parsing itself uses \emph{sqlglot}, which turns the SQL into an abstract syntax tree that we then traverse.
+Parsing itself uses \emph{sqlglot}, a Python SQL parsing library, which turns the SQL into an abstract syntax tree that we then traverse.
 
 The parser traverses the syntax tree clause by clause.
 It first reads the \texttt{SELECT} clause, which fixes whether the query asks for the full result or a \texttt{COUNT(*)}.
@@ -236,7 +234,7 @@ For $Q_\diamond$ this yields the four variables $A,B,C,D$ and five hyperedges, t
 \subsection{Decomposition}
 
 Section~\ref{sec:fhw} noted that computing a tree decomposition of minimum fractional hypertree width is NP-hard, so the decomposer uses a heuristic instead.
-It relies on the Minimum Fill-in heuristic from the \emph{networkx} library, which operates on ordinary graphs rather than hypergraphs, so the stage first builds the \emph{primal graph} of the hypergraph: each hyperedge, that is each relation's set of variables, becomes a clique.
+It relies on the Minimum Fill-in heuristic~\cite{bodlaender2005} from the \emph{networkx} library, which operates on ordinary graphs rather than hypergraphs, so the stage first builds the \emph{primal graph} of the hypergraph: each hyperedge, that is each relation's set of variables, becomes a clique.
 Making every hyperedge a clique forces its variables into a common bag, so a tree decomposition of the primal graph is a tree decomposition of the hypergraph~\cite{grohe2014}.
 
 Minimum Fill-in is a vertex-elimination heuristic for finding a decomposition of small treewidth~\cite{bodlaender2005}.
@@ -287,14 +285,16 @@ On the right are the generated views, with a toggle between IVM$^+$ and the vari
 The interface labels the variant \texttt{IVM+*}~(strict), and the figure shows it, rooted at $\{A,B,D\}$ as in our example.
 The tool assigns its own bag numbers, so the child bag $b_2$ appears here as \texttt{BAG\_1}.
 
-\begin{figure}[H]
+These views are the artifact the experiment harness deploys.
+
+\clearpage
+\begin{sidewaysfigure}[p]
   \centering
-  \includegraphics[width=\textwidth]{./figures/ch4_web_ui.png}
+  \includegraphics[width=\textheight]{./figures/ch4_web_ui.png}
   \caption{The query decomposer's web interface on $Q_\diamond$.}
   \label{fig:decomposer_ui}
-\end{figure}
-
-These views are the artifact the experiment harness deploys.
+\end{sidewaysfigure}
+\clearpage
 
 \subsection{Supported queries and limitations}
 \label{sec:decomposer_limits}
@@ -324,6 +324,8 @@ The construction also assumes \emph{set-valued} inputs: on relations with duplic
 Finally, the decomposer performs only the checks its translation needs and is not a full SQL validator.
 A query should therefore be validated in a database engine, for instance Feldera itself, before it is given to the decomposer.
 
+None of these limitations is fundamental: they reflect the tool's scope as a minimal prototype, and nothing in the approach prevents a future version from supporting the full query surface, further aggregates, and richer joins and filters.
+
 \section{Experiment Harness}
 \label{sec:harness}
 
@@ -346,7 +348,6 @@ The datasets, the machine the experiments were run on, and the pipeline variants
 
 The orchestrator, \texttt{run\_experiments.py}, holds the list of experiments to run and steps through them one at a time.
 Each entry names a pipeline (the SQL tables and views of Section~\ref{sec:pipeline}), a dataset, the number of trials, and an output directory for the results.
-Which experiments run is controlled by commenting entries in or out.
 
 Before each one it performs a \emph{cold start}, so that every experiment begins from an identical clean state.
 Restarting the Feldera container clears its in-memory state, but Feldera also keeps its data on disk (Section~\ref{sec:feldera}), in a directory mounted from the host that outlives the container.

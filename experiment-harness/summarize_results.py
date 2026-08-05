@@ -56,4 +56,4 @@ def process_experiment_results(folder_path):
         print(f"STATUS: {status_val}, COMPLETED RECORDS: {completed_records_val}")
 
 
-process_experiment_results("../results/imdb/Acyclic Query 1/decomposition_faq")
+process_experiment_results("results_ablation/tpch_data/sf_10.0/4 Table Path Query/decomposition_no_projection_faq")

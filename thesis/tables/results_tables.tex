@@ -25,24 +25,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.21\%)    &  --                  & 1.00x             & 8.6GiB    \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 9.1GiB    \\
-    \quad $D_1'$           &  471'881r             &  0.10min        &  81'663r/s           &                   & 0.6GiB    \\
-    $D_1'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  80'935r/s           &                   & 1.4GiB    \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 40.2GiB   \\
-    \quad $D_2'$           &  449'932r             &  0.10min        &  81'445r/s           &                   & 0.6GiB    \\
-    $D_2'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  81'103r/s           &                   & 1.1GiB    \\
+    Baseline              &  --                   &  TO (0.21\%)    &  --                  & --                & 8.6GiB    \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 9.1GiB    \\
+    \quad $D_1'$           &  471'881r             &  0.10min        &  81'663r/s           & $>$1800x           & 0.6GiB    \\
+    $D_1'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  80'935r/s           & $>$1800x           & 1.4GiB    \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 40.2GiB   \\
+    \quad $D_2'$           &  449'932r             &  0.10min        &  81'445r/s           & $>$1800x           & 0.6GiB    \\
+    $D_2'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  81'103r/s           & $>$1800x           & 1.1GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.21\%)    &  --                  & 1.00x             & 8.7GiB    \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 9.8GiB    \\
-    \quad $D_1'$           &  471'881r             &  0.10min        &  410'822r/s          &                   & 0.9GiB    \\
-    $D_1'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  412'064r/s          &                   & 1.8GiB    \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 39.9GiB   \\
-    \quad $D_2'$           &  449'932r             &  0.10min        &  410'670r/s          &                   & 0.9GiB    \\
-    $D_2'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  416'639r/s          &                   & 1.4GiB    \\
+    Baseline              &  --                   &  TO (0.21\%)    &  --                  & --                & 8.7GiB    \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 9.8GiB    \\
+    \quad $D_1'$           &  471'881r             &  0.10min        &  410'822r/s          & $>$1800x           & 0.9GiB    \\
+    $D_1'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  412'064r/s          & $>$1800x           & 1.8GiB    \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 39.9GiB   \\
+    \quad $D_2'$           &  449'932r             &  0.10min        &  410'670r/s          & $>$1800x           & 0.9GiB    \\
+    $D_2'^{\text{count}}$  &  39'501'979'009'022r  &  0.10min        &  416'639r/s          & $>$1800x           & 1.4GiB    \\
     \midrule
 
     % --- Cyclic Query 1 ---
@@ -50,24 +50,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline               &  --                   &  TO (0.21\%)    &  --                  & 1.00x             & 27.9GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 44.9GiB   \\
-    \quad $D_1'$           &  3'505'469r           &  0.85min        &  9926r/s             &                   & 8.0GiB    \\
-    $D_1'^{\text{count}}$  &  121'124'217'498r     &  1.02min        &  8303r/s             &                   & 9.2GiB    \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  &                   & 46.1GiB   \\
-    \quad $D_2'$           &  3'425'880r           &  1.47min        &  5787r/s             &                   & 8.6GiB    \\
-    $D_2'^{\text{count}}$  &  121'124'217'498r     &  3.14min        &  2706r/s             &                   & 9.0GiB    \\
+    Baseline               &  --                   &  TO (0.21\%)    &  --                  & --                & 27.9GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 44.9GiB   \\
+    \quad $D_1'$           &  3'505'469r           &  0.85min        &  9926r/s             & $>$211x           & 8.0GiB    \\
+    $D_1'^{\text{count}}$  &  121'124'217'498r     &  1.02min        &  8303r/s             & $>$176x           & 9.2GiB    \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)    &  --                  & --                & 46.1GiB   \\
+    \quad $D_2'$           &  3'425'880r           &  1.47min        &  5787r/s             & $>$122x           & 8.6GiB    \\
+    $D_2'^{\text{count}}$  &  121'124'217'498r     &  3.14min        &  2706r/s             & $>$57x            & 9.0GiB    \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{9 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.21\%)        &  --                  & 1.00x             & 22.5GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (1.56\%)        &  --                  &                   & 47.2GiB   \\
-    \quad $D_1'$           &  3'505'469r           &  1.11min            &  69'056r/s           &                   & 10.4GiB   \\
-    $D_1'^{\text{count}}$  &  121'124'217'498r     &  1.30min            &  58'803r/s           &                   & 11.3GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 46.3GiB   \\
-    \quad $D_2'$           &  3'425'880r           &  1.61min            &  47'535r/s           &                   & 9.2GiB    \\
-    $D_2'^{\text{count}}$  &  121'124'217'498r     &  3.05min            &  25'026r/s           &                   & 9.6GiB    \\
+    Baseline              &  --                   &  TO (0.21\%)        &  --                  & --                & 22.5GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (1.56\%)        &  --                  & --                & 47.2GiB   \\
+    \quad $D_1'$           &  3'505'469r           &  1.11min            &  69'056r/s           & $>$162x           & 10.4GiB   \\
+    $D_1'^{\text{count}}$  &  121'124'217'498r     &  1.30min            &  58'803r/s           & $>$138x           & 11.3GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  & --                & 46.3GiB   \\
+    \quad $D_2'$           &  3'425'880r           &  1.61min            &  47'535r/s           & $>$111x           & 9.2GiB    \\
+    $D_2'^{\text{count}}$  &  121'124'217'498r     &  3.05min            &  25'026r/s           & $>$59x            & 9.6GiB    \\
     \midrule
 
 
@@ -76,24 +76,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline               &  --                   &  TO (0.21\%)        &  --                  & 1.00x             & 28.8GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 44.8GiB   \\
-    \quad $D_1'$           &  3'544'194r           &  1.41min            &  6019r/s             &                   & 10.8GiB   \\
-    $D_1'^{\text{count}}$  &  234'067'755'356r     &  1.77min            &  4786r/s             &                   & 12.7GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (5.03\%)        &  --                  &                   & 87.4GiB   \\
-    \quad $D_2'$           &  28'048'050r          &  5.19min            &  1633r/s             &                   & 13.5GiB   \\
-    $D_2'^{\text{count}}$  &  234'067'755'356r     &  12.93min           &  656r/s              &                   & 17.2GiB   \\
+    Baseline               &  --                   &  TO (0.21\%)        &  --                  & --                & 28.8GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  & --                & 44.8GiB   \\
+    \quad $D_1'$           &  3'544'194r           &  1.41min            &  6019r/s             & $>$127x           & 10.8GiB   \\
+    $D_1'^{\text{count}}$  &  234'067'755'356r     &  1.77min            &  4786r/s             & $>$101x           & 12.7GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (5.03\%)        &  --                  & --                & 87.4GiB   \\
+    \quad $D_2'$           &  28'048'050r          &  5.19min            &  1633r/s             & $>$34x            & 13.5GiB   \\
+    $D_2'^{\text{count}}$  &  234'067'755'356r     &  12.93min           &  656r/s              & $>$13x            & 17.2GiB   \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{8 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.21\%)        &  --                  & 1.00x             & 28.9GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 45.3GiB   \\
-    \quad $D_1'$           &  3'544'194r           &  1.44min            &  47'149r/s           &                   & 11.5GiB   \\
-    $D_1'^{\text{count}}$  &  234'067'755'356r     &  1.83min            &  37'129r/s           &                   & 13.7GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (2.94\%)        &  --                  &                   & 50.1GiB   \\
-    \quad $D_2'$           &  28'048'050r          &  5.20min            &  13'057r/s           &                   & 13.7GiB   \\
-    $D_2'^{\text{count}}$  &  234'067'755'356r     &  12.96min           &  5236r/s             &                   & 18.1GiB   \\
+    Baseline              &  --                   &  TO (0.21\%)        &  --                  & --                & 28.9GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  & --                & 45.3GiB   \\
+    \quad $D_1'$           &  3'544'194r           &  1.44min            &  47'149r/s           & $>$125x           & 11.5GiB   \\
+    $D_1'^{\text{count}}$  &  234'067'755'356r     &  1.83min            &  37'129r/s           & $>$98x            & 13.7GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (2.94\%)        &  --                  & --                & 50.1GiB   \\
+    \quad $D_2'$           &  28'048'050r          &  5.20min            &  13'057r/s           & $>$34x            & 13.7GiB   \\
+    $D_2'^{\text{count}}$  &  234'067'755'356r     &  12.96min           &  5236r/s             & $>$13x            & 18.1GiB   \\
     \midrule
     
     % --- Cyclic Query 3 ---
@@ -102,17 +102,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  100'317'892r         &  4.17min             &  2036r/s             & 1.00x             & 9.5GiB    \\
-    $D_1'^{\text{full}}$   &  100'317'892r         &  0.74min             &  11'418r/s           &                   & 9.7GiB    \\
-    \quad $D_1'$           &  3'548'205r           &  0.44min             &  19'334r/s           &                   & 6.2GiB    \\
-    $D_1'^{\text{count}}$  &  100'317'892r         &  0.52min             &  16'310r/s           &                   & 6.6GiB    \\
+    $D_1'^{\text{full}}$   &  100'317'892r         &  0.74min             &  11'418r/s           & 5.64x             & 9.7GiB    \\
+    \quad $D_1'$           &  3'548'205r           &  0.44min             &  19'334r/s           & 9.48x             & 6.2GiB    \\
+    $D_1'^{\text{count}}$  &  100'317'892r         &  0.52min             &  16'310r/s           & 8.02x             & 6.6GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  100'317'892r         &  4.17min             &  10'182r/s           & 1.00x             & 10.0GiB   \\
-    $D_1'^{\text{full}}$   &  100'317'892r         &  0.74min             &  57'170r/s           &                   & 10.8GiB   \\
-    \quad $D_1'$           &  3'548'205r           &  0.47min             &  91'565r/s           &                   & 6.7GiB    \\
-    $D_1'^{\text{count}}$  &  100'317'892r         &  0.52min             &  81'499r/s           &                   & 6.9GiB    \\
+    $D_1'^{\text{full}}$   &  100'317'892r         &  0.74min             &  57'170r/s           & 5.64x             & 10.8GiB   \\
+    \quad $D_1'$           &  3'548'205r           &  0.47min             &  91'565r/s           & 8.87x             & 6.7GiB    \\
+    $D_1'^{\text{count}}$  &  100'317'892r         &  0.52min             &  81'499r/s           & 8.02x             & 6.9GiB    \\
     \midrule
     
     % --- Cyclic Query 4 ---
@@ -120,24 +120,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.21\%)        &  --                  & 1.00x             & 9.5GiB    \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 56.6GiB   \\
-    \quad $D_1'$           &  --                   &  TO (78.82\%)      &  --                  &                   & 82.3GiB   \\
-    $D_1'^{\text{count}}$   &  --                   &  TO (31.66\%)       &  --                  &                   & 58.5GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)       &  --                  &                   & 63.7GiB   \\
-    \quad $D_2'$           &  970'903'178r         &  77.86min         &  109r/s                 &                   & 43.9GiB   \\
-    $D_2'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                   &                   & 43.7GiB   \\
+    Baseline              &  --                   &  TO (0.21\%)        &  --                  & --                & 9.5GiB    \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  & --                & 56.6GiB   \\
+    \quad $D_1'$           &  --                   &  TO (78.82\%)      &  --                  & --                & 82.3GiB   \\
+    $D_1'^{\text{count}}$   &  --                   &  TO (31.66\%)       &  --                  & --                & 58.5GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)       &  --                  & --                & 63.7GiB   \\
+    \quad $D_2'$           &  970'903'178r         &  77.86min         &  109r/s                 & $>$2x             & 43.9GiB   \\
+    $D_2'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                   & --                & 43.7GiB   \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{6 Input Connectors}}} \\
     \nopagebreak
-    Baseline               &  --                   &  TO (0.21\%)        &  --                  & 1.00x             & 39.9GiB   \\
-    $D_1'^{\text{full}}$   &  --                   & TO (0.21\%)        &  --                  &                   & 67.5GiB   \\
-    \quad $D_1'$           &  --                   & TO (78.82\%)          &  --                  &                 & 80.9GiB    \\
-    $D_1'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                  &                   & 59.8GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  &                   & 62.5GiB   \\
-    \quad $D_2'$           &  970'903'178r         & 77.64min             &  655r/s                &                   & 43.7GiB   \\
-    $D_2'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                    &                  & 42.8GiB  \\
+    Baseline               &  --                   &  TO (0.21\%)        &  --                  & --                & 39.9GiB   \\
+    $D_1'^{\text{full}}$   &  --                   & TO (0.21\%)        &  --                  & --                & 67.5GiB   \\
+    \quad $D_1'$           &  --                   & TO (78.82\%)          &  --                  & --              & 80.9GiB    \\
+    $D_1'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                  & --                & 59.8GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (0.21\%)        &  --                  & --                & 62.5GiB   \\
+    \quad $D_2'$           &  970'903'178r         & 77.64min             &  655r/s                & $>$2x             & 43.7GiB   \\
+    $D_2'^{\text{count}}$  &  --                   &  TO (31.66\%)       &  --                    & --               & 42.8GiB  \\
     \midrule
     
     % --- Cyclic Query 5 ---
@@ -145,24 +145,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline               &  --                   &  TO (7.59\%)        &  --                  & 1.00x             & 18.9GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                  &                   & 63.2GiB   \\
-    \quad $D_1'$           &  36'104'526r          &  24.00min           &  353r/s              &                   & 26.9GiB   \\
-    $D_1'^{\text{count}}$  &  25'906'152'819r      &  41.83min           &  203r/s              &                   & 37.9GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                  &                   & 54.0GiB   \\
-    \quad $D_2'$           &  454'447'219r         &  11.20min           &  757r/s              &                   & 16.0GiB   \\
-    $D_2'^{\text{count}}$  &  25'906'152'819r      &  22.33min           &  380r/s              &                   & 20.2GiB   \\
+    Baseline               &  --                   &  TO (7.59\%)        &  --                  & --                & 18.9GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                  & --                & 63.2GiB   \\
+    \quad $D_1'$           &  36'104'526r          &  24.00min           &  353r/s              & $>$7x             & 26.9GiB   \\
+    $D_1'^{\text{count}}$  &  25'906'152'819r      &  41.83min           &  203r/s              & $>$4x             & 37.9GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                  & --                & 54.0GiB   \\
+    \quad $D_2'$           &  454'447'219r         &  11.20min           &  757r/s              & $>$16x            & 16.0GiB   \\
+    $D_2'^{\text{count}}$  &  25'906'152'819r      &  22.33min           &  380r/s              & $>$8x             & 20.2GiB   \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
-    Baseline               &  --                   &  TO (4.35\%)        &  --                 & 1.00x             & 16.3GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                 &                   & 59.8GiB   \\
-    \quad $D_1'$           &  36'104'526r          &  24.09min           &  1761r/s            &                   & 26.3GiB   \\
-    $D_1'^{\text{count}}$  &  25'906'152'819r      &  41.52min           &  1021r/s            &                   & 37.3GiB   \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (15.92\%)       &  --                 &                   & 53.4GiB   \\
-    \quad $D_2'$           &  454'447'219r         &  11.37min           &  3730r/s            &                   & 16.0GiB   \\
-    $D_2'^{\text{count}}$  &  25'906'152'819r      &  22.61min           &  1876r/s            &                   & 20.4GiB   \\
+    Baseline               &  --                   &  TO (4.35\%)        &  --                 & --                & 16.3GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (15.93\%)       &  --                 & --                & 59.8GiB   \\
+    \quad $D_1'$           &  36'104'526r          &  24.09min           &  1761r/s            & $>$7x             & 26.3GiB   \\
+    $D_1'^{\text{count}}$  &  25'906'152'819r      &  41.52min           &  1021r/s            & $>$4x             & 37.3GiB   \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (15.92\%)       &  --                 & --                & 53.4GiB   \\
+    \quad $D_2'$           &  454'447'219r         &  11.37min           &  3730r/s            & $>$15x            & 16.0GiB   \\
+    $D_2'^{\text{count}}$  &  25'906'152'819r      &  22.61min           &  1876r/s            & $>$7x             & 20.4GiB   \\
     \midrule
     
     % --- Cyclic Query 6 ---
@@ -171,17 +171,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  305'020'011r         &  1.47min            &  5777r/s              & 1.00x             & 13.3GiB   \\
-    $D_1'^{\text{full}}$   &  305'020'011r         &  2.86min            &  2966r/s              &                   & 14.7GiB   \\
-    \quad $D_1'$           &  30'482'554r          &  0.94min            &  9032r/s              &                   & 8.8GiB    \\
-    $D_1'^{\text{count}}$  &  305'020'011r         &  1.36min            &  6253r/s              &                   & 11.0GiB   \\
+    $D_1'^{\text{full}}$   &  305'020'011r         &  2.86min            &  2966r/s              & 0.51x             & 14.7GiB   \\
+    \quad $D_1'$           &  30'482'554r          &  0.94min            &  9032r/s              & 1.56x             & 8.8GiB    \\
+    $D_1'^{\text{count}}$  &  305'020'011r         &  1.36min            &  6253r/s              & 1.08x             & 11.0GiB   \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{4 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  305'020'011r         &  1.58min            &  21'528r/s            & 1.00x             & 15.5GiB   \\
-    $D_1'^{\text{full}}$   &  305'020'011r         &  2.75min            &  12'351r/s            &                   & 15.4GiB   \\
-    \quad $D_1'$           &  30'482'554r          &  1.02min            &  33'176r/s            &                   & 9.6GiB    \\ 
-    $D_1'^{\text{count}}$  &  305'020'011r         &  1.36min            &  25'028r/s            &                   & 11.1GiB   \\
+    $D_1'^{\text{full}}$   &  305'020'011r         &  2.75min            &  12'351r/s            & 0.57x             & 15.4GiB   \\
+    \quad $D_1'$           &  30'482'554r          &  1.02min            &  33'176r/s            & 1.55x             & 9.6GiB    \\ 
+    $D_1'^{\text{count}}$  &  305'020'011r         &  1.36min            &  25'028r/s            & 1.16x             & 11.1GiB   \\
 
     \bottomrule
 
@@ -214,24 +214,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (27.57\%)    &  --                 & 1.00x             & 45.4GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (7.55\%)     &  --                 &                   & 39.2GiB   \\
-    \quad $D_1'$           &  281'389r             &  0.11min         &  55'742r/s          &                   & 0.5GiB    \\
-    $D_1'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  56'548r/s          &                   & 0.9GiB    \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (27.82\%)    &  --                 &                   & 49.1GiB   \\
-    \quad $D_2'$           &  267'650r             &  0.11min         &  55'981r/s          &                   & 0.5GiB    \\
-    $D_2'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  56'565r/s          &                   & 0.7GiB    \\
+    Baseline              &  --                   &  TO (27.57\%)    &  --                 & --                & 45.4GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (7.55\%)     &  --                 & --                & 39.2GiB   \\
+    \quad $D_1'$           &  281'389r             &  0.11min         &  55'742r/s          & $>$1636x           & 0.5GiB    \\
+    $D_1'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  56'548r/s          & $>$1800x           & 0.9GiB    \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (27.82\%)    &  --                 & --                & 49.1GiB   \\
+    \quad $D_2'$           &  267'650r             &  0.11min         &  55'981r/s          & $>$1636x           & 0.5GiB    \\
+    $D_2'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  56'565r/s          & $>$1800x           & 0.7GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (26.16\%)    &  --                 & 1.00x             & 43.5GiB   \\
-    $D_1'^{\text{full}}$   &  --                   &  TO (28.25\%)    &  --                 &                   & 46.5GiB   \\
-    \quad $D_1'$           &  281'389r             &  0.10min         &  284'237r/s         &                   & 0.8GiB    \\
-    $D_1'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  286'378r/s         &                   & 1.2GiB    \\
-    $D_2'^{\text{full}}$   &  --                   &  TO (26.02\%)    &  --                 &                   & 45.0GiB   \\
-    \quad $D_2'$           &  267'650r             &  0.10min         &  284'299r/s         &                   & 0.7GiB    \\
-    $D_2'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  286'464r/s         &                   & 1.1GiB    \\
+    Baseline              &  --                   &  TO (26.16\%)    &  --                 & --                & 43.5GiB   \\
+    $D_1'^{\text{full}}$   &  --                   &  TO (28.25\%)    &  --                 & --                & 46.5GiB   \\
+    \quad $D_1'$           &  281'389r             &  0.10min         &  284'237r/s         & $>$1800x           & 0.8GiB    \\
+    $D_1'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  286'378r/s         & $>$1800x           & 1.2GiB    \\
+    $D_2'^{\text{full}}$   &  --                   &  TO (26.02\%)    &  --                 & --                & 45.0GiB   \\
+    \quad $D_2'$           &  267'650r             &  0.10min         &  284'299r/s         & $>$1800x           & 0.7GiB    \\
+    $D_2'^{\text{count}}$  &  67'450'796'768r      &  0.10min         &  286'464r/s         & $>$1800x           & 1.1GiB    \\
     \midrule
 
     % --- Cyclic Query 1 --- 
@@ -239,24 +239,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (22.82\%)   &  --                  & 1.00x             & 32.5GiB   \\
-    $D_1'^{\text{full}}$   &  161'417'942r         &  0.94min        &  6276r/s             &                   & 7.7GiB    \\
-    \quad $D_1'$           &  878'464r             &  0.35min        &  16'581r/s           &                   & 5.1GiB    \\
-    $D_1'^{\text{count}}$  &  161'417'942r         &  0.41min        &  14'516r/s           &                   & 5.3GiB    \\
-    $D_2'^{\text{full}}$   &  161'417'942r         &  1.02min        &  5760r/s             &                   & 9.0GiB    \\
-    \quad $D_2'$           &  822'847r             &  0.44min        &  13'486r/s           &                   & 6.2GiB    \\
-    $D_2'^{\text{count}}$  &  161'417'942r         &  0.60min        &  9723r/s             &                   & 6.7GiB    \\
+    Baseline              &  --                   &  TO (22.82\%)   &  --                  & --                & 32.5GiB   \\
+    $D_1'^{\text{full}}$   &  161'417'942r         &  0.94min        &  6276r/s             & $>$191x           & 7.7GiB    \\
+    \quad $D_1'$           &  878'464r             &  0.35min        &  16'581r/s           & $>$514x           & 5.1GiB    \\
+    $D_1'^{\text{count}}$  &  161'417'942r         &  0.41min        &  14'516r/s           & $>$439x           & 5.3GiB    \\
+    $D_2'^{\text{full}}$   &  161'417'942r         &  1.02min        &  5760r/s             & $>$176x           & 9.0GiB    \\
+    \quad $D_2'$           &  822'847r             &  0.44min        &  13'486r/s           & $>$409x           & 6.2GiB    \\
+    $D_2'^{\text{count}}$  &  161'417'942r         &  0.60min        &  9723r/s             & $>$300x           & 6.7GiB    \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{9 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (22.82\%)       &  --                  & 1.00x             & 31.8GiB   \\
-    $D_1'^{\text{full}}$   &  161'417'942r         &  1.11min            &  47'875r/s           &                   & 9.5GiB    \\
-    \quad $D_1'$           &  878'464r             &  0.58min            &  92'104r/s           &                   & 7.0GiB    \\
-    $D_1'^{\text{count}}$  &  161'417'942r         &  0.60min            &  87'644r/s           &                   & 7.3GiB    \\
-    $D_2'^{\text{full}}$   &  161'417'942r         &  1.02min            &  51'850r/s           &                   & 9.5GiB    \\
-    \quad $D_2'$           &  822'847r             &  0.52min            &  101'663r/s          &                   & 6.5GiB    \\
-    $D_2'^{\text{count}}$  &  161'417'942r         &  0.60min            &  87'720r/s           &                   & 7.2GiB    \\
+    Baseline              &  --                   &  TO (22.82\%)       &  --                  & --                & 31.8GiB   \\
+    $D_1'^{\text{full}}$   &  161'417'942r         &  1.11min            &  47'875r/s           & $>$162x           & 9.5GiB    \\
+    \quad $D_1'$           &  878'464r             &  0.58min            &  92'104r/s           & $>$310x           & 7.0GiB    \\
+    $D_1'^{\text{count}}$  &  161'417'942r         &  0.60min            &  87'644r/s           & $>$300x           & 7.3GiB    \\
+    $D_2'^{\text{full}}$   &  161'417'942r         &  1.02min            &  51'850r/s           & $>$176x           & 9.5GiB    \\
+    \quad $D_2'$           &  822'847r             &  0.52min            &  101'663r/s          & $>$346x           & 6.5GiB    \\
+    $D_2'^{\text{count}}$  &  161'417'942r         &  0.60min            &  87'720r/s           & $>$300x           & 7.2GiB    \\
     \midrule
 
 
@@ -266,23 +266,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  266'404'327r         &  80.77min           &  73r/s               & 1.00x             & 16.0GiB   \\
-    $D_1'^{\text{full}}$   &  266'404'327r         &  1.88min            &  3122r/s             &                   & 16.1GiB   \\
-    \quad $D_1'$           &  1'105'455r           &  0.44min            &  13'443r/s           &                   & 6.8GiB    \\
-    $D_1'^{\text{count}}$  &  266'404'327r         &  0.52min            &  11'290r/s           &                   & 7.7GiB    \\
-    $D_2'^{\text{full}}$   &  266'404'327r         &  1.55min            &  3796r/s             &                   & 10.3GiB   \\
-    \quad $D_2'$           &  2'023'391r           &  0.61min            &  9719r/s             &                   & 7.4GiB    \\
-    $D_2'^{\text{count}}$  &  266'404'327r         &  0.77min            &  7622r/s             &                   & 7.8GiB    \\
+    $D_1'^{\text{full}}$   &  266'404'327r         &  1.88min            &  3122r/s             & 42.96x            & 16.1GiB   \\
+    \quad $D_1'$           &  1'105'455r           &  0.44min            &  13'443r/s           & 183.57x           & 6.8GiB    \\
+    $D_1'^{\text{count}}$  &  266'404'327r         &  0.52min            &  11'290r/s           & 155.33x           & 7.7GiB    \\
+    $D_2'^{\text{full}}$   &  266'404'327r         &  1.55min            &  3796r/s             & 52.11x            & 10.3GiB   \\
+    \quad $D_2'$           &  2'023'391r           &  0.61min            &  9719r/s             & 132.41x           & 7.4GiB    \\
+    $D_2'^{\text{count}}$  &  266'404'327r         &  0.77min            &  7622r/s             & 104.90x           & 7.8GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{8 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  266'404'327r         &  79.83min           &  589r/s              & 1.00x             & 16.6GiB   \\
-    $D_1'^{\text{full}}$   &  266'404'327r         &  1.88min            &  24'979r/s           &                   & 16.4GiB   \\
-    \quad $D_1'$           &  1'105'455r           &  0.46min            &  101'895r/s          &                   & 7.5GiB    \\
-    $D_1'^{\text{count}}$  &  266'404'327r         &  0.52min            &  90'120r/s           &                   & 8.2GiB    \\
-    $D_2'^{\text{full}}$   &  266'404'327r         &  1.52min            &  30'924r/s           &                   & 11.0GiB   \\
-    \quad $D_2'$           &  2'023'391r           &  0.60min            &  77'834r/s           &                   & 7.7GiB    \\
-    $D_2'^{\text{count}}$  &  266'404'327r         &  0.77min            &  61'006r/s           &                   & 8.3GiB    \\
+    $D_1'^{\text{full}}$   &  266'404'327r         &  1.88min            &  24'979r/s           & 42.46x            & 16.4GiB   \\
+    \quad $D_1'$           &  1'105'455r           &  0.46min            &  101'895r/s          & 173.54x           & 7.5GiB    \\
+    $D_1'^{\text{count}}$  &  266'404'327r         &  0.52min            &  90'120r/s           & 153.52x           & 8.2GiB    \\
+    $D_2'^{\text{full}}$   &  266'404'327r         &  1.52min            &  30'924r/s           & 52.52x            & 11.0GiB   \\
+    \quad $D_2'$           &  2'023'391r           &  0.60min            &  77'834r/s           & 133.05x           & 7.7GiB    \\
+    $D_2'^{\text{count}}$  &  266'404'327r         &  0.77min            &  61'006r/s           & 103.68x           & 8.3GiB    \\
     \midrule
     
     % --- Cyclic Query 3 ---
@@ -291,17 +291,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  10'050'591r          &  1.27min             &  4619r/s             & 1.00x             & 7.5GiB    \\
-    $D_1'^{\text{full}}$   &  10'050'591r          &  0.19min             &  31'291r/s           &                   & 3.6GiB    \\
-    \quad $D_1'$           &  1'270'167r           &  0.10min             &  56'475r/s           &                   & 1.8GiB    \\
-    $D_1'^{\text{count}}$  &  10'050'591r          &  0.10min             &  56'591r/s           &                   & 2.0GiB    \\
+    $D_1'^{\text{full}}$   &  10'050'591r          &  0.19min             &  31'291r/s           & 6.68x             & 3.6GiB    \\
+    \quad $D_1'$           &  1'270'167r           &  0.10min             &  56'475r/s           & 12.70x            & 1.8GiB    \\
+    $D_1'^{\text{count}}$  &  10'050'591r          &  0.10min             &  56'591r/s           & 12.70x            & 2.0GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  10'050'591r          &  1.36min             &  21'685r/s           & 1.00x             & 7.5GiB    \\
-    $D_1'^{\text{full}}$   &  10'050'591r          &  0.19min             &  157'103r/s          &                   & 4.1GiB    \\
-    \quad $D_1'$           &  1'270'167r           &  0.10min             &  283'887r/s          &                   & 2.2GiB    \\
-    $D_1'^{\text{count}}$  &  10'050'591r          &  0.13min             &  244'023r/s          &                   & 2.3GiB    \\
+    $D_1'^{\text{full}}$   &  10'050'591r          &  0.19min             &  157'103r/s          & 7.16x             & 4.1GiB    \\
+    \quad $D_1'$           &  1'270'167r           &  0.10min             &  283'887r/s          & 13.60x            & 2.2GiB    \\
+    $D_1'^{\text{count}}$  &  10'050'591r          &  0.13min             &  244'023r/s          & 10.46x            & 2.3GiB    \\
     \midrule
     
     % --- Cyclic Query 4 ---
@@ -309,24 +309,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (49.12\%)       &  --                  & 1.00x             & 16.4GiB   \\
-    $D_1'^{\text{full}}$   &  2'388'153'166r       &  24.08min           &  244r/s              &                   & 36.6GiB   \\
-    \quad $D_1'$           &  4'314'290r           &  6.03min            &  975r/s              &                   & 22.6GiB   \\
-    $D_1'^{\text{count}}$  &  2'388'153'166r       &  15.12min           &  389r/s              &                   & 25.3GiB   \\
-    $D_2'^{\text{full}}$   &  2'388'153'166r       &  19.07min           &  308r/s              &                   & 30.5GiB   \\
-    \quad $D_2'$           &  22'049'456r          &  3.16min            &  1858r/s             &                   & 16.3GiB   \\
-    $D_2'^{\text{count}}$  &  2'388'153'166r       &  7.00min            &  840r/s              &                   & 21.5GiB   \\
+    Baseline              &  --                   &  TO (49.12\%)       &  --                  & --                & 16.4GiB   \\
+    $D_1'^{\text{full}}$   &  2'388'153'166r       &  24.08min           &  244r/s              & $>$7x             & 36.6GiB   \\
+    \quad $D_1'$           &  4'314'290r           &  6.03min            &  975r/s              & $>$29x            & 22.6GiB   \\
+    $D_1'^{\text{count}}$  &  2'388'153'166r       &  15.12min           &  389r/s              & $>$11x            & 25.3GiB   \\
+    $D_2'^{\text{full}}$   &  2'388'153'166r       &  19.07min           &  308r/s              & $>$9x             & 30.5GiB   \\
+    \quad $D_2'$           &  22'049'456r          &  3.16min            &  1858r/s             & $>$56x            & 16.3GiB   \\
+    $D_2'^{\text{count}}$  &  2'388'153'166r       &  7.00min            &  840r/s              & $>$25x            & 21.5GiB   \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{6 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (48.01\%)       &  --                  & 1.00x             & 17.3GiB   \\
-    $D_1'^{\text{full}}$   &  2'388'153'166r       &  24.72min           &  1428r/s             &                   & 37.6GiB   \\
-    \quad $D_1'$           &  4'314'290r           &  6.03min            &  5851r/s             &                   & 22.8GiB   \\
-    $D_1'^{\text{count}}$  &  2'388'153'166r       &  14.93min           &  2364r/s             &                   & 27.3GiB   \\
-    $D_2'^{\text{full}}$   &  2'388'153'166r       &  19.07min           &  1851r/s             &                   & 29.3GiB   \\
-    \quad $D_2'$           &  22'049'456r          &  3.22min            &  10'983r/s           &                   & 17.1GiB   \\
-    $D_2'^{\text{count}}$  &  2'388'153'166r       &  7.36min            &  4795r/s             &                   & 21.9GiB   \\
+    Baseline              &  --                   &  TO (48.01\%)       &  --                  & --                & 17.3GiB   \\
+    $D_1'^{\text{full}}$   &  2'388'153'166r       &  24.72min           &  1428r/s             & $>$7x             & 37.6GiB   \\
+    \quad $D_1'$           &  4'314'290r           &  6.03min            &  5851r/s             & $>$29x            & 22.8GiB   \\
+    $D_1'^{\text{count}}$  &  2'388'153'166r       &  14.93min           &  2364r/s             & $>$12x            & 27.3GiB   \\
+    $D_2'^{\text{full}}$   &  2'388'153'166r       &  19.07min           &  1851r/s             & $>$9x             & 29.3GiB   \\
+    \quad $D_2'$           &  22'049'456r          &  3.22min            &  10'983r/s           & $>$55x            & 17.1GiB   \\
+    $D_2'^{\text{count}}$  &  2'388'153'166r       &  7.36min            &  4795r/s             & $>$24x            & 21.9GiB   \\
     \midrule
     
     % --- Cyclic Query 5 ---
@@ -334,24 +334,24 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (49.61\%)       &  --                  & 1.00x             & 14.2GiB   \\
-    $D_1'^{\text{full}}$   &  188'370'277r         &  2.05min            &  2867r/s             &                   & 19.9GiB   \\
-    \quad $D_1'$           &  3'756'194r           &  1.16min            &  5070r/s             &                   & 12.2GiB   \\
-    $D_1'^{\text{count}}$  &  188'370'277r         &  2.02min            &  2906r/s             &                   & 15.5GiB   \\
-    $D_2'^{\text{full}}$   &  188'370'277r         &  1.47min            &  4010r/s             &                   & 17.3GiB   \\
-    \quad $D_2'$           &  11'132'518r          &  0.61min            &  9714r/s             &                   & 8.5GiB    \\
-    $D_2'^{\text{count}}$  &  188'370'277r         &  1.02min            &  5749r/s             &                   & 9.5GiB    \\
+    Baseline              &  --                   &  TO (49.61\%)       &  --                  & --                & 14.2GiB   \\
+    $D_1'^{\text{full}}$   &  188'370'277r         &  2.05min            &  2867r/s             & $>$87x            & 19.9GiB   \\
+    \quad $D_1'$           &  3'756'194r           &  1.16min            &  5070r/s             & $>$155x           & 12.2GiB   \\
+    $D_1'^{\text{count}}$  &  188'370'277r         &  2.02min            &  2906r/s             & $>$89x            & 15.5GiB   \\
+    $D_2'^{\text{full}}$   &  188'370'277r         &  1.47min            &  4010r/s             & $>$122x           & 17.3GiB   \\
+    \quad $D_2'$           &  11'132'518r          &  0.61min            &  9714r/s             & $>$295x           & 8.5GiB    \\
+    $D_2'^{\text{count}}$  &  188'370'277r         &  1.02min            &  5749r/s             & $>$176x           & 9.5GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (48.03\%)       &  --                 & 1.00x             & 14.8GiB   \\
-    $D_1'^{\text{full}}$   &  188'370'277r         &  2.05min            &  14'343r/s          &                   & 21.2GiB   \\
-    \quad $D_1'$           &  3'756'194r           &  1.16min            &  25'379r/s          &                   & 12.4GiB   \\
-    $D_1'^{\text{count}}$  &  188'370'277r         &  2.05min            &  14'342r/s          &                   & 15.0GiB   \\
-    $D_2'^{\text{full}}$   &  188'370'277r         &  1.52min            &  19'339r/s          &                   & 16.3GiB   \\
-    \quad $D_2'$           &  11'132'518r          &  0.66min            &  44'702r/s          &                   & 9.1GiB    \\
-    $D_2'^{\text{count}}$  &  188'370'277r         &  1.05min            &  28'030r/s          &                   & 9.6GiB    \\
+    Baseline              &  --                   &  TO (48.03\%)       &  --                 & --                & 14.8GiB   \\
+    $D_1'^{\text{full}}$   &  188'370'277r         &  2.05min            &  14'343r/s          & $>$87x            & 21.2GiB   \\
+    \quad $D_1'$           &  3'756'194r           &  1.16min            &  25'379r/s          & $>$155x           & 12.4GiB   \\
+    $D_1'^{\text{count}}$  &  188'370'277r         &  2.05min            &  14'342r/s          & $>$87x            & 15.0GiB   \\
+    $D_2'^{\text{full}}$   &  188'370'277r         &  1.52min            &  19'339r/s          & $>$118x           & 16.3GiB   \\
+    \quad $D_2'$           &  11'132'518r          &  0.66min            &  44'702r/s          & $>$272x           & 9.1GiB    \\
+    $D_2'^{\text{count}}$  &  188'370'277r         &  1.05min            &  28'030r/s          & $>$171x           & 9.6GiB    \\
     \midrule
     
     % --- Cyclic Query 6 ---
@@ -360,17 +360,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  15'629'160r          &  0.19min            &  31'214r/s            & 1.00x             & 4.4GiB    \\
-    $D_1'^{\text{full}}$   &  15'629'160r          &  0.27min            &  21'609r/s            &                   & 7.2GiB    \\
-    \quad $D_1'$           &  2'809'865r           &  0.19min            &  31'193r/s            &                   & 4.0GiB    \\
-    $D_1'^{\text{count}}$  &  15'629'160r          &  0.19min            &  31'092r/s            &                   & 5.2GiB    \\
+    $D_1'^{\text{full}}$   &  15'629'160r          &  0.27min            &  21'609r/s            & 0.70x             & 7.2GiB    \\
+    \quad $D_1'$           &  2'809'865r           &  0.19min            &  31'193r/s            & 1.00x             & 4.0GiB    \\
+    $D_1'^{\text{count}}$  &  15'629'160r          &  0.19min            &  31'092r/s            & 1.00x             & 5.2GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{4 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  15'629'160r          &  0.19min            &  124'253r/s           & 1.00x             & 4.9GiB    \\
-    $D_1'^{\text{full}}$   &  15'629'160r          &  0.27min            &  86'679r/s            &                   & 7.3GiB    \\
-    \quad $D_1'$           &  2'809'865r           &  0.19min            &  125'073r/s           &                   & 4.2GiB    \\ 
-    $D_1'^{\text{count}}$  &  15'629'160r          &  0.22min            &  111'999r/s           &                   & 5.2GiB    \\
+    $D_1'^{\text{full}}$   &  15'629'160r          &  0.27min            &  86'679r/s            & 0.70x             & 7.3GiB    \\
+    \quad $D_1'$           &  2'809'865r           &  0.19min            &  125'073r/s           & 1.00x             & 4.2GiB    \\ 
+    $D_1'^{\text{count}}$  &  15'629'160r          &  0.22min            &  111'999r/s           & 0.86x             & 5.2GiB    \\
 
     \bottomrule
 
@@ -404,23 +404,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  26'632'138r          &  0.19min        &  13'048r/s           & 1.00x             & 6.0GiB    \\
-    $D_1'^{\text{full}}$   &  26'632'138r          &  0.19min        &  13'221r/s           &                   & 6.2GiB    \\
-    \quad $D_1'$           &  143'932r             &  0.10min        &  23'816r/s           &                   & 0.4GiB    \\
-    $D_1'^{\text{count}}$  &  26'632'138r          &  0.10min        &  23'627r/s           &                   & 0.6GiB    \\
-    $D_2'^{\text{full}}$   &  26'632'138r          &  0.19min        &  13'154r/s           &                   & 5.6GiB    \\
-    \quad $D_2'$           &  52'046r              &  0.10min        &  23'548r/s           &                   & 0.4GiB    \\
-    $D_2'^{\text{count}}$  &  26'632'138r          &  0.10min        &  23'861r/s           &                   & 0.5GiB    \\
+    $D_1'^{\text{full}}$   &  26'632'138r          &  0.19min        &  13'221r/s           & 1.00x             & 6.2GiB    \\
+    \quad $D_1'$           &  143'932r             &  0.10min        &  23'816r/s           & 1.90x             & 0.4GiB    \\
+    $D_1'^{\text{count}}$  &  26'632'138r          &  0.10min        &  23'627r/s           & 1.90x             & 0.6GiB    \\
+    $D_2'^{\text{full}}$   &  26'632'138r          &  0.19min        &  13'154r/s           & 1.00x             & 5.6GiB    \\
+    \quad $D_2'$           &  52'046r              &  0.10min        &  23'548r/s           & 1.90x             & 0.4GiB    \\
+    $D_2'^{\text{count}}$  &  26'632'138r          &  0.10min        &  23'861r/s           & 1.90x             & 0.5GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  26'632'138r          &  0.19min        &  65'527r/s           & 1.00x             & 5.9GiB    \\
-    $D_1'^{\text{full}}$   &  26'632'138r          &  0.19min        &  65'990r/s           &                   & 6.3GiB    \\
-    \quad $D_1'$           &  143'932r             &  0.10min        &  117'493r/s          &                   & 0.6GiB    \\
-    $D_1'^{\text{count}}$  &  26'632'138r          &  0.10min        &  119'615r/s          &                   & 0.8GiB    \\
-    $D_2'^{\text{full}}$   &  26'632'138r          &  0.16min        &  82'712r/s           &                   & 6.2GiB    \\
-    \quad $D_2'$           &  52'046r              &  0.10min        &  120'589r/s          &                   & 0.6GiB    \\
-    $D_2'^{\text{count}}$  &  26'632'138r          &  0.10min        &  118'422r/s          &                   & 0.7GiB    \\
+    $D_1'^{\text{full}}$   &  26'632'138r          &  0.19min        &  65'990r/s           & 1.00x             & 6.3GiB    \\
+    \quad $D_1'$           &  143'932r             &  0.10min        &  117'493r/s          & 1.90x             & 0.6GiB    \\
+    $D_1'^{\text{count}}$  &  26'632'138r          &  0.10min        &  119'615r/s          & 1.90x             & 0.8GiB    \\
+    $D_2'^{\text{full}}$   &  26'632'138r          &  0.16min        &  82'712r/s           & 1.19x             & 6.2GiB    \\
+    \quad $D_2'$           &  52'046r              &  0.10min        &  120'589r/s          & 1.90x             & 0.6GiB    \\
+    $D_2'^{\text{count}}$  &  26'632'138r          &  0.10min        &  118'422r/s          & 1.90x             & 0.7GiB    \\
     \midrule
 
     % --- Cyclic Query 1 --- 
@@ -429,23 +429,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  0r                   &  0.52min        &  4722r/s             & 1.00x             & 7.5GiB    \\
-    $D_1'^{\text{full}}$   &  0r                   &  0.10min        &  23'998r/s           &                   & 0.6GiB    \\
-    \quad $D_1'$           &  0r                   &  0.10min        &  23'655r/s           &                   & 0.6GiB    \\
-    $D_1'^{\text{count}}$  &  0r                   &  0.10min        &  23'993r/s           &                   & 0.6GiB    \\
-    $D_2'^{\text{full}}$   &  0r                   &  0.10min        &  23'970r/s           &                   & 0.9GiB    \\
-    \quad $D_2'$           &  0r                   &  0.10min        &  23'816r/s           &                   & 0.9GiB    \\
-    $D_2'^{\text{count}}$  &  0r                   &  0.10min        &  23'665r/s           &                   & 0.9GiB    \\
+    $D_1'^{\text{full}}$   &  0r                   &  0.10min        &  23'998r/s           & 5.20x             & 0.6GiB    \\
+    \quad $D_1'$           &  0r                   &  0.10min        &  23'655r/s           & 5.20x             & 0.6GiB    \\
+    $D_1'^{\text{count}}$  &  0r                   &  0.10min        &  23'993r/s           & 5.20x             & 0.6GiB    \\
+    $D_2'^{\text{full}}$   &  0r                   &  0.10min        &  23'970r/s           & 5.20x             & 0.9GiB    \\
+    \quad $D_2'$           &  0r                   &  0.10min        &  23'816r/s           & 5.20x             & 0.9GiB    \\
+    $D_2'^{\text{count}}$  &  0r                   &  0.10min        &  23'665r/s           & 5.20x             & 0.9GiB    \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{9 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  0r                   &  0.52min            &  42'660r/s           & 1.00x             & 8.3GiB    \\
-    $D_1'^{\text{full}}$   &  0r                   &  0.10min            &  212'286r/s          &                   & 1.0GiB    \\
-    \quad $D_1'$           &  0r                   &  0.10min            &  213'836r/s          &                   & 1.0GiB    \\
-    $D_1'^{\text{count}}$  &  0r                   &  0.10min            &  215'329r/s          &                   & 1.0GiB    \\
-    $D_2'^{\text{full}}$   &  0r                   &  0.10min            &  215'560r/s          &                   & 1.1GiB    \\
-    \quad $D_2'$           &  0r                   &  0.10min            &  216'734r/s          &                   & 1.1GiB    \\
-    $D_2'^{\text{count}}$   &  0r                   &  0.10min            &  216'602r/s          &                   & 1.1GiB    \\
+    $D_1'^{\text{full}}$   &  0r                   &  0.10min            &  212'286r/s          & 5.20x             & 1.0GiB    \\
+    \quad $D_1'$           &  0r                   &  0.10min            &  213'836r/s          & 5.20x             & 1.0GiB    \\
+    $D_1'^{\text{count}}$  &  0r                   &  0.10min            &  215'329r/s          & 5.20x             & 1.0GiB    \\
+    $D_2'^{\text{full}}$   &  0r                   &  0.10min            &  215'560r/s          & 5.20x             & 1.1GiB    \\
+    \quad $D_2'$           &  0r                   &  0.10min            &  216'734r/s          & 5.20x             & 1.1GiB    \\
+    $D_2'^{\text{count}}$   &  0r                   &  0.10min            &  216'602r/s          & 5.20x             & 1.1GiB    \\
     \midrule
 
 
@@ -455,23 +455,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  1r                   &  0.19min            &  13'125r/s           & 1.00x             & 4.5GiB    \\
-    $D_1'^{\text{full}}$   &  1r                   &  0.10min            &  23'898r/s           &                   & 0.6GiB    \\
-    \quad $D_1'$           &  1r                   &  0.10min            &  24'057r/s           &                   & 0.6GiB    \\
-    $D_1'^{\text{count}}$  &  1r                   &  0.10min            &  24'033r/s           &                   & 0.6GiB    \\
-    $D_2'^{\text{full}}$   &  1r                   &  0.10min            &  23'927r/s           &                   & 0.5GiB    \\
-    \quad $D_2'$           &  1r                   &  0.10min            &  23'684r/s           &                   & 0.5GiB    \\
-    $D_2'^{\text{count}}$  &  1r                   &  0.10min            &  23'766r/s           &                   & 0.5GiB    \\
+    $D_1'^{\text{full}}$   &  1r                   &  0.10min            &  23'898r/s           & 1.90x             & 0.6GiB    \\
+    \quad $D_1'$           &  1r                   &  0.10min            &  24'057r/s           & 1.90x             & 0.6GiB    \\
+    $D_1'^{\text{count}}$  &  1r                   &  0.10min            &  24'033r/s           & 1.90x             & 0.6GiB    \\
+    $D_2'^{\text{full}}$   &  1r                   &  0.10min            &  23'927r/s           & 1.90x             & 0.5GiB    \\
+    \quad $D_2'$           &  1r                   &  0.10min            &  23'684r/s           & 1.90x             & 0.5GiB    \\
+    $D_2'^{\text{count}}$  &  1r                   &  0.10min            &  23'766r/s           & 1.90x             & 0.5GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{8 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  1r                   &  0.19min            &  106'109r/s          & 1.00x             & 4.9GiB    \\
-    $D_1'^{\text{full}}$   &  1r                   &  0.10min            &  192'401r/s          &                   & 0.9GiB    \\
-    \quad $D_1'$           &  1r                   &  0.10min            &  189'541r/s          &                   & 1.0GiB    \\
-    $D_1'^{\text{count}}$  &  1r                   &  0.10min            &  191'811r/s          &                   & 1.0GiB    \\
-    $D_2'^{\text{full}}$   &  1r                   &  0.10min            &  191'228r/s          &                   & 0.9GiB    \\
-    \quad $D_2'$           &  1r                   &  0.10min            &  189'510r/s          &                   & 0.9GiB    \\
-    $D_2'^{\text{count}}$  &  1r                   &  0.10min            &  192'871r/s          &                   & 0.9GiB    \\
+    $D_1'^{\text{full}}$   &  1r                   &  0.10min            &  192'401r/s          & 1.90x             & 0.9GiB    \\
+    \quad $D_1'$           &  1r                   &  0.10min            &  189'541r/s          & 1.90x             & 1.0GiB    \\
+    $D_1'^{\text{count}}$  &  1r                   &  0.10min            &  191'811r/s          & 1.90x             & 1.0GiB    \\
+    $D_2'^{\text{full}}$   &  1r                   &  0.10min            &  191'228r/s          & 1.90x             & 0.9GiB    \\
+    \quad $D_2'$           &  1r                   &  0.10min            &  189'510r/s          & 1.90x             & 0.9GiB    \\
+    $D_2'^{\text{count}}$  &  1r                   &  0.10min            &  192'871r/s          & 1.90x             & 0.9GiB    \\
     \midrule
     
     % --- Cyclic Query 3 ---
@@ -480,17 +480,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  51r                  &  0.11min             &  23'340r/s           & 1.00x             & 0.6GiB    \\
-    $D_1'^{\text{full}}$   &  51r                  &  0.11min             &  23'408r/s           &                   & 0.6GiB    \\
-    \quad $D_1'$           &  50r                  &  0.11min             &  23'366r/s           &                   & 0.6GiB    \\
-    $D_1'^{\text{count}}$  &  51r                  &  0.10min             &  23'832r/s           &                   & 0.6GiB    \\
+    $D_1'^{\text{full}}$   &  51r                  &  0.11min             &  23'408r/s           & 1.00x             & 0.6GiB    \\
+    \quad $D_1'$           &  50r                  &  0.11min             &  23'366r/s           & 1.00x             & 0.6GiB    \\
+    $D_1'^{\text{count}}$  &  51r                  &  0.10min             &  23'832r/s           & 1.10x             & 0.6GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  51r                  &  0.10min             &  120'885r/s          & 1.00x             & 0.7GiB    \\
-    $D_1'^{\text{full}}$   &  51r                  &  0.10min             &  122'537r/s          &                   & 0.7GiB    \\
-    \quad $D_1'$           &  50r                  &  0.10min             &  118'508r/s          &                   & 0.7GiB    \\
-    $D_1'^{\text{count}}$  &  51r                  &  0.10min             &  118'219r/s          &                   & 0.7GiB    \\
+    $D_1'^{\text{full}}$   &  51r                  &  0.10min             &  122'537r/s          & 1.00x             & 0.7GiB    \\
+    \quad $D_1'$           &  50r                  &  0.10min             &  118'508r/s          & 1.00x             & 0.7GiB    \\
+    $D_1'^{\text{count}}$  &  51r                  &  0.10min             &  118'219r/s          & 1.00x             & 0.7GiB    \\
     \midrule
     
     % --- Cyclic Query 4 ---
@@ -499,23 +499,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  16'058r              &  0.11min            &  23'419r/s           & 1.00x             & 2.4GiB    \\
-    $D_1'^{\text{full}}$   &  16'058r              &  0.35min            &  6974r/s             &                   & 10.7GiB   \\
-    \quad $D_1'$           &  9672r                &  0.27min            &  9058r/s             &                   & 9.1GiB    \\
-    $D_1'^{\text{count}}$  &  16'058r              &  0.35min            &  6952r/s             &                   & 9.3GiB    \\
-    $D_2'^{\text{full}}$   &  16'058r              &  0.19min            &  13'215r/s           &                   & 4.3GiB    \\
-    \quad $D_2'$           &  10'268r              &  0.19min            &  13'101r/s           &                   & 3.7GiB    \\
-    $D_2'^{\text{count}}$  &  16'058r              &  0.19min            &  13'134r/s           &                   & 4.5GiB    \\
+    $D_1'^{\text{full}}$   &  16'058r              &  0.35min            &  6974r/s             & 0.31x             & 10.7GiB   \\
+    \quad $D_1'$           &  9672r                &  0.27min            &  9058r/s             & 0.41x             & 9.1GiB    \\
+    $D_1'^{\text{count}}$  &  16'058r              &  0.35min            &  6952r/s             & 0.31x             & 9.3GiB    \\
+    $D_2'^{\text{full}}$   &  16'058r              &  0.19min            &  13'215r/s           & 0.58x             & 4.3GiB    \\
+    \quad $D_2'$           &  10'268r              &  0.19min            &  13'101r/s           & 0.58x             & 3.7GiB    \\
+    $D_2'^{\text{count}}$  &  16'058r              &  0.19min            &  13'134r/s           & 0.58x             & 4.5GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{6 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  16'058r              &  0.11min            &  140'582r/s          & 1.00x             & 2.5GiB    \\
-    $D_1'^{\text{full}}$   &  16'058r              &  0.35min            &  41'859r/s           &                   & 11.0GiB   \\
-    \quad $D_1'$           &  9672r                &  0.27min            &  54'575r/s           &                   & 9.4GiB    \\
-    $D_1'^{\text{count}}$  &  16'058r              &  0.36min            &  41'599r/s           &                   & 9.8GiB    \\
-    $D_2'^{\text{full}}$   &  16'058r              &  0.19min            &  79'165r/s           &                   & 4.6GiB    \\
-    \quad $D_2'$           &  10'268r              &  0.19min            &  78'580r/s           &                   & 4.0GiB    \\
-    $D_2'^{\text{count}}$  &  16'058r              &  0.19min            &  78'861r/s           &                   & 4.7GiB    \\
+    $D_1'^{\text{full}}$   &  16'058r              &  0.35min            &  41'859r/s           & 0.31x             & 11.0GiB   \\
+    \quad $D_1'$           &  9672r                &  0.27min            &  54'575r/s           & 0.41x             & 9.4GiB    \\
+    $D_1'^{\text{count}}$  &  16'058r              &  0.36min            &  41'599r/s           & 0.31x             & 9.8GiB    \\
+    $D_2'^{\text{full}}$   &  16'058r              &  0.19min            &  79'165r/s           & 0.58x             & 4.6GiB    \\
+    \quad $D_2'$           &  10'268r              &  0.19min            &  78'580r/s           & 0.58x             & 4.0GiB    \\
+    $D_2'^{\text{count}}$  &  16'058r              &  0.19min            &  78'861r/s           & 0.58x             & 4.7GiB    \\
     \midrule
     
     % --- Cyclic Query 5 ---
@@ -524,23 +524,23 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  5674r                &  0.11min            &  23'409r/s           & 1.00x             & 2.7GiB    \\
-    $D_1'^{\text{full}}$   &  5674r                &  0.10min            &  23'553r/s           &                   & 2.8GiB    \\
-    \quad $D_1'$           &  3763r                &  0.10min            &  23'687r/s           &                   & 2.4GiB    \\
-    $D_1'^{\text{count}}$  &  5674r                &  0.10min            &  23'986r/s           &                   & 2.9GiB    \\
-    $D_2'^{\text{full}}$   &  5674r                &  0.10min            &  23'896r/s           &                   & 1.5GiB    \\
-    \quad $D_2'$           &  3816r                &  0.11min            &  23'380r/s           &                   & 1.3GiB    \\
-    $D_2'^{\text{count}}$  &  5674r                &  0.10min            &  23'594r/s           &                   & 1.5GiB    \\
+    $D_1'^{\text{full}}$   &  5674r                &  0.10min            &  23'553r/s           & 1.10x             & 2.8GiB    \\
+    \quad $D_1'$           &  3763r                &  0.10min            &  23'687r/s           & 1.10x             & 2.4GiB    \\
+    $D_1'^{\text{count}}$  &  5674r                &  0.10min            &  23'986r/s           & 1.10x             & 2.9GiB    \\
+    $D_2'^{\text{full}}$   &  5674r                &  0.10min            &  23'896r/s           & 1.10x             & 1.5GiB    \\
+    \quad $D_2'$           &  3816r                &  0.11min            &  23'380r/s           & 1.00x             & 1.3GiB    \\
+    $D_2'^{\text{count}}$  &  5674r                &  0.10min            &  23'594r/s           & 1.10x             & 1.5GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{5 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  5674r                &  0.10min            &  118'643r/s         & 1.00x             & 2.5GiB    \\
-    $D_1'^{\text{full}}$   &  5674r                &  0.10min            &  118'505r/s         &                   & 3.2GiB    \\
-    \quad $D_1'$           &  3763r                &  0.10min            &  119'280r/s         &                   & 2.6GiB    \\
-    $D_1'^{\text{count}}$  &  5674r                &  0.10min            &  118'974r/s         &                   & 3.0GiB    \\
-    $D_2'^{\text{full}}$   &  5674r                &  0.10min            &  118'713r/s         &                   & 1.6GiB    \\
-    \quad $D_2'$           &  3816r                &  0.10min            &  118'433r/s         &                   & 1.6GiB    \\
-    $D_2'^{\text{count}}$  &  5674r                &  0.10min            &  120'787r/s         &                   & 1.7GiB    \\
+    $D_1'^{\text{full}}$   &  5674r                &  0.10min            &  118'505r/s         & 1.00x             & 3.2GiB    \\
+    \quad $D_1'$           &  3763r                &  0.10min            &  119'280r/s         & 1.00x             & 2.6GiB    \\
+    $D_1'^{\text{count}}$  &  5674r                &  0.10min            &  118'974r/s         & 1.00x             & 3.0GiB    \\
+    $D_2'^{\text{full}}$   &  5674r                &  0.10min            &  118'713r/s         & 1.00x             & 1.6GiB    \\
+    \quad $D_2'$           &  3816r                &  0.10min            &  118'433r/s         & 1.00x             & 1.6GiB    \\
+    $D_2'^{\text{count}}$  &  5674r                &  0.10min            &  120'787r/s         & 1.00x             & 1.7GiB    \\
     \midrule
     
     % --- Cyclic Query 6 ---
@@ -549,17 +549,17 @@
     \multicolumn{6}{l}{\textit{\textbf{Single Input Connector}}} \\
     \nopagebreak
     Baseline              &  1404r                &  0.10min            &  23'498r/s            & 1.00x             & 0.5GiB    \\
-    $D_1'^{\text{full}}$   &  1404r                &  0.10min            &  23'740r/s            &                   & 0.9GiB    \\
-    \quad $D_1'$           &  1099r                &  0.11min            &  23'376r/s            &                   & 0.9GiB    \\
-    $D_1'^{\text{count}}$  &  1404r                &  0.10min            &  23'806r/s            &                   & 1.0GiB    \\
+    $D_1'^{\text{full}}$   &  1404r                &  0.10min            &  23'740r/s            & 1.00x             & 0.9GiB    \\
+    \quad $D_1'$           &  1099r                &  0.11min            &  23'376r/s            & 0.91x             & 0.9GiB    \\
+    $D_1'^{\text{count}}$  &  1404r                &  0.10min            &  23'806r/s            & 1.00x             & 1.0GiB    \\
     \addlinespace 
     
     \multicolumn{6}{l}{\textit{\textbf{4 Input Connectors}}} \\
     \nopagebreak
     Baseline              &  1404r                &  0.10min            &  93'957r/s            & 1.00x             & 0.6GiB    \\
-    $D_1'^{\text{full}}$   &  1404r                &  0.10min            &  95'015r/s            &                   & 1.2GiB    \\
-    \quad $D_1'$           &  1099r                &  0.10min            &  94'049r/s            &                   & 1.1GiB    \\ 
-    $D_1'^{\text{count}}$  &  1404r                &  0.10min            &  95'818r/s            &                   & 1.1GiB    \\
+    $D_1'^{\text{full}}$   &  1404r                &  0.10min            &  95'015r/s            & 1.00x             & 1.2GiB    \\
+    \quad $D_1'$           &  1099r                &  0.10min            &  94'049r/s            & 1.00x             & 1.1GiB    \\ 
+    $D_1'^{\text{count}}$  &  1404r                &  0.10min            &  95'818r/s            & 1.00x             & 1.1GiB    \\
 
     \bottomrule
 
@@ -593,34 +593,34 @@
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 1} ($\sim$1 GB)}} \\
     \nopagebreak
     Baseline              &  6'001'215r           &  1.02min             &  137'629r/s          & 1.00x             & 9.4GiB    \\
-    $D_1^{\text{full}}$   &  6'001'215r           &  1.02min             &  137'972r/s          &                   & 16.1GiB   \\
-    \quad $D_1$           &  6'001'215r           &  1.02min             &  137'896r/s          &                   & 10.9GiB   \\
-    $D_1^{\text{count}}$  &  6'001'215r           &  1.05min             &  134'709r/s          &                   & 11.6GiB   \\
-    $D_1'^{\text{full}}$  &  6'001'215r           &  1.02min             &  137'918r/s          &                   & 12.4GiB   \\
-    \quad $D_1'$          &  6'001'215r           &  0.99min             &  141'859r/s          &                   & 9.6GiB    \\
-    $D_1'^{\text{count}}$ &  6'001'215r           &  1.02min             &  138'098r/s          &                   & 10.4GiB   \\
+    $D_1^{\text{full}}$   &  6'001'215r           &  1.02min             &  137'972r/s          & 1.00x             & 16.1GiB   \\
+    \quad $D_1$           &  6'001'215r           &  1.02min             &  137'896r/s          & 1.00x             & 10.9GiB   \\
+    $D_1^{\text{count}}$  &  6'001'215r           &  1.05min             &  134'709r/s          & 0.97x             & 11.6GiB   \\
+    $D_1'^{\text{full}}$  &  6'001'215r           &  1.02min             &  137'918r/s          & 1.00x             & 12.4GiB   \\
+    \quad $D_1'$          &  6'001'215r           &  0.99min             &  141'859r/s          & 1.03x             & 9.6GiB    \\
+    $D_1'^{\text{count}}$ &  6'001'215r           &  1.02min             &  138'098r/s          & 1.00x             & 10.4GiB   \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 10} ($\sim$10 GB)}} \\
     \nopagebreak
     Baseline              &  59'986'052r          &  10.34min            &  136'260r/s          & 1.00x             & 16.2GiB   \\
-    $D_1^{\text{full}}$   &  59'986'052r          &  12.29min            &  114'637r/s          &                   & 42.2GiB   \\
-    \quad $D_1$           &  59'986'052r          &  10.26min            &  137'329r/s          &                   & 24.2GiB   \\
-    $D_1^{\text{count}}$  &  59'986'052r          &  10.34min            &  136'156r/s          &                   & 27.0GiB   \\
-    $D_1'^{\text{full}}$  &  59'986'052r          &  11.87min            &  118'835r/s          &                   & 32.8GiB   \\
-    \quad $D_1'$          &  59'986'052r          &  9.95min             &  141'529r/s          &                   & 12.4GiB   \\
-    $D_1'^{\text{count}}$ &  59'986'052r          &  10.03min            &  140'374r/s          &                   & 14.3GiB   \\
+    $D_1^{\text{full}}$   &  59'986'052r          &  12.29min            &  114'637r/s          & 0.84x             & 42.2GiB   \\
+    \quad $D_1$           &  59'986'052r          &  10.26min            &  137'329r/s          & 1.01x             & 24.2GiB   \\
+    $D_1^{\text{count}}$  &  59'986'052r          &  10.34min            &  136'156r/s          & 1.00x             & 27.0GiB   \\
+    $D_1'^{\text{full}}$  &  59'986'052r          &  11.87min            &  118'835r/s          & 0.87x             & 32.8GiB   \\
+    \quad $D_1'$          &  59'986'052r          &  9.95min             &  141'529r/s          & 1.04x             & 12.4GiB   \\
+    $D_1'^{\text{count}}$ &  59'986'052r          &  10.03min            &  140'374r/s          & 1.03x             & 14.3GiB   \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 30} ($\sim$30 GB)}} \\
     \nopagebreak
     Baseline              &  179'998'372r         &  33.57min            &  125'855r/s          & 1.00x             & 30.2GiB   \\
-    $D_1^{\text{full}}$   &  179'998'372r         &  54.60min            &  77'386r/s           &                   & 47.2GiB   \\
-    \quad $D_1$           &  179'998'372r         &  34.48min            &  122'542r/s          &                   & 32.7GiB   \\
-    $D_1^{\text{count}}$  &  179'998'372r         &  35.07min            &  120'488r/s          &                   & 33.9GiB   \\
-    $D_1'^{\text{full}}$  &  179'998'372r         &  45.17min            &  93'575r/s           &                   & 44.5GiB   \\
-    \quad $D_1'$          &  179'998'372r         &  29.98min            &  140'936r/s          &                   & 19.3GiB   \\
-    $D_1'^{\text{count}}$ &  179'998'372r         &  30.17min            &  140'035r/s          &                   & 19.9GiB   \\
+    $D_1^{\text{full}}$   &  179'998'372r         &  54.60min            &  77'386r/s           & 0.61x             & 47.2GiB   \\
+    \quad $D_1$           &  179'998'372r         &  34.48min            &  122'542r/s          & 0.97x             & 32.7GiB   \\
+    $D_1^{\text{count}}$  &  179'998'372r         &  35.07min            &  120'488r/s          & 0.96x             & 33.9GiB   \\
+    $D_1'^{\text{full}}$  &  179'998'372r         &  45.17min            &  93'575r/s           & 0.74x             & 44.5GiB   \\
+    \quad $D_1'$          &  179'998'372r         &  29.98min            &  140'936r/s          & 1.12x             & 19.3GiB   \\
+    $D_1'^{\text{count}}$ &  179'998'372r         &  30.17min            &  140'035r/s          & 1.11x             & 19.9GiB   \\
     \midrule
 
     % --- 5 Table Path Query ---
@@ -629,34 +629,34 @@
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 1} ($\sim$1 GB)}} \\
     \nopagebreak
     Baseline              &  6'001'215r           &  1.02min             &  124'981r/s          & 1.00x             & 9.6GiB    \\
-    $D_1^{\text{full}}$   &  6'001'215r           &  1.05min             &  121'952r/s          &                   & 16.9GiB   \\
-    \quad $D_1$           &  6'001'215r           &  1.02min             &  125'276r/s          &                   & 11.6GiB   \\
-    $D_1^{\text{count}}$  &  6'001'215r           &  1.02min             &  125'342r/s          &                   & 12.4GiB   \\
-    $D_1'^{\text{full}}$  &  6'001'215r           &  1.02min             &  124'973r/s          &                   & 14.5GiB   \\
-    \quad $D_1'$          &  6'001'215r           &  1.02min             &  125'132r/s          &                   & 9.2GiB    \\
-    $D_1'^{\text{count}}$ &  6'001'215r           &  1.02min             &  125'127r/s          &                   & 9.7GiB    \\
+    $D_1^{\text{full}}$   &  6'001'215r           &  1.05min             &  121'952r/s          & 0.97x             & 16.9GiB   \\
+    \quad $D_1$           &  6'001'215r           &  1.02min             &  125'276r/s          & 1.00x             & 11.6GiB   \\
+    $D_1^{\text{count}}$  &  6'001'215r           &  1.02min             &  125'342r/s          & 1.00x             & 12.4GiB   \\
+    $D_1'^{\text{full}}$  &  6'001'215r           &  1.02min             &  124'973r/s          & 1.00x             & 14.5GiB   \\
+    \quad $D_1'$          &  6'001'215r           &  1.02min             &  125'132r/s          & 1.00x             & 9.2GiB    \\
+    $D_1'^{\text{count}}$ &  6'001'215r           &  1.02min             &  125'127r/s          & 1.00x             & 9.7GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 10} ($\sim$10 GB)}} \\
     \nopagebreak
     Baseline              &  59'986'052r          &  11.12min            &  114'865r/s          & 1.00x             & 21.0GiB   \\
-    $D_1^{\text{full}}$   &  59'986'052r          &  13.93min            &  91'718r/s           &                   & 47.8GiB   \\
-    \quad $D_1$           &  59'986'052r          &  10.06min            &  126'869r/s          &                   & 25.2GiB   \\
-    $D_1^{\text{count}}$  &  59'986'052r          &  10.37min            &  123'166r/s          &                   & 27.1GiB   \\
-    $D_1'^{\text{full}}$  &  59'986'052r          &  13.09min            &  97'589r/s           &                   & 38.0GiB   \\
-    \quad $D_1'$          &  59'986'052r          &  9.81min             &  130'111r/s          &                   & 13.0GiB   \\
-    $D_1'^{\text{count}}$ &  59'986'052r          &  10.01min            &  127'591r/s          &                   & 13.9GiB   \\
+    $D_1^{\text{full}}$   &  59'986'052r          &  13.93min            &  91'718r/s           & 0.80x             & 47.8GiB   \\
+    \quad $D_1$           &  59'986'052r          &  10.06min            &  126'869r/s          & 1.11x             & 25.2GiB   \\
+    $D_1^{\text{count}}$  &  59'986'052r          &  10.37min            &  123'166r/s          & 1.07x             & 27.1GiB   \\
+    $D_1'^{\text{full}}$  &  59'986'052r          &  13.09min            &  97'589r/s           & 0.85x             & 38.0GiB   \\
+    \quad $D_1'$          &  59'986'052r          &  9.81min             &  130'111r/s          & 1.13x             & 13.0GiB   \\
+    $D_1'^{\text{count}}$ &  59'986'052r          &  10.01min            &  127'591r/s          & 1.11x             & 13.9GiB   \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 30} ($\sim$30 GB)}} \\
     \nopagebreak
     Baseline              &  179'998'372r         &  38.55min            &  99'474r/s           & 1.00x             & 30.7GiB   \\
-    $D_1^{\text{full}}$   &  179'998'372r         &  62.56min            &  61'234r/s           &                   & 51.2GiB   \\
-    \quad $D_1$           &  179'998'372r         &  33.26min            &  115'175r/s          &                   & 29.2GiB   \\
-    $D_1^{\text{count}}$  &  179'998'372r         &  34.35min            &  111'527r/s          &                   & 31.5GiB   \\
-    $D_1'^{\text{full}}$  &  179'998'372r         &  53.76min            &  71'289r/s           &                   & 44.6GiB   \\
-    \quad $D_1'$          &  179'998'372r         &  29.45min            &  130'074r/s          &                   & 17.5GiB   \\
-    $D_1'^{\text{count}}$ &  179'998'372r         &  29.90min            &  128'111r/s          &                   & 19.9GiB   \\
+    $D_1^{\text{full}}$   &  179'998'372r         &  62.56min            &  61'234r/s           & 0.62x             & 51.2GiB   \\
+    \quad $D_1$           &  179'998'372r         &  33.26min            &  115'175r/s          & 1.16x             & 29.2GiB   \\
+    $D_1^{\text{count}}$  &  179'998'372r         &  34.35min            &  111'527r/s          & 1.12x             & 31.5GiB   \\
+    $D_1'^{\text{full}}$  &  179'998'372r         &  53.76min            &  71'289r/s           & 0.72x             & 44.6GiB   \\
+    \quad $D_1'$          &  179'998'372r         &  29.45min            &  130'074r/s          & 1.31x             & 17.5GiB   \\
+    $D_1'^{\text{count}}$ &  179'998'372r         &  29.90min            &  128'111r/s          & 1.29x             & 19.9GiB   \\
     \midrule
 
     % --- 3 Table Path Query ---
@@ -664,35 +664,35 @@
     \midrule
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 1} ($\sim$1 GB)}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (6.65\%)         &  --                  & 1.00x             & 23.6GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (5.45\%)         &  --                  &                   & 23.8GiB   \\
-    \quad $D_1$           &  10'000r              &  1.02min             &  100'500r/s          &                   & 8.6GiB    \\
-    $D_1^{\text{count}}$  &  36'007'310'944r      &  1.02min             &  100'584r/s          &                   & 8.7GiB    \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (5.72\%)         &  --                  &                   & 23.5GiB   \\
-    \quad $D_1'$          &  10'000r              &  0.97min             &  106'446r/s          &                   & 7.3GiB    \\
-    $D_1'^{\text{count}}$ &  36'007'310'944r      &  0.97min             &  106'428r/s          &                   & 7.3GiB    \\
+    Baseline              &  --                   &  TO (6.65\%)         &  --                  & --                & 23.6GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (5.45\%)         &  --                  & --                & 23.8GiB   \\
+    \quad $D_1$           &  10'000r              &  1.02min             &  100'500r/s          & $>$176x           & 8.6GiB    \\
+    $D_1^{\text{count}}$  &  36'007'310'944r      &  1.02min             &  100'584r/s          & $>$176x           & 8.7GiB    \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (5.72\%)         &  --                  & --                & 23.5GiB   \\
+    \quad $D_1'$          &  10'000r              &  0.97min             &  106'446r/s          & $>$185x           & 7.3GiB    \\
+    $D_1'^{\text{count}}$ &  36'007'310'944r      &  0.97min             &  106'428r/s          & $>$185x           & 7.3GiB    \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 10} ($\sim$10 GB)}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.55\%)         &  --                  & 1.00x             & 24.9GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (0.52\%)         &  --                  &                   & 25.0GiB   \\
-    \quad $D_1$           &  100'000r             &  9.75min             &  105'227r/s          &                   & 10.7GiB   \\
-    $D_1^{\text{count}}$  &  3'599'144'795'238r   &  10.51min            &  97'748r/s           &                   & 12.5GiB   \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (0.55\%)         &  --                  &                   & 26.1GiB   \\
-    \quad $D_1'$          &  100'000r             &  9.48min             &  108'326r/s          &                   & 13.4GiB   \\
-    $D_1'^{\text{count}}$ &  3'599'144'795'238r   &  9.70min             &  105'820r/s          &                   & 9.9GiB    \\
+    Baseline              &  --                   &  TO (0.55\%)         &  --                  & --                & 24.9GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (0.52\%)         &  --                  & --                & 25.0GiB   \\
+    \quad $D_1$           &  100'000r             &  9.75min             &  105'227r/s          & $>$18x            & 10.7GiB   \\
+    $D_1^{\text{count}}$  &  3'599'144'795'238r   &  10.51min            &  97'748r/s           & $>$17x            & 12.5GiB   \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (0.55\%)         &  --                  & --                & 26.1GiB   \\
+    \quad $D_1'$          &  100'000r             &  9.48min             &  108'326r/s          & $>$18x            & 13.4GiB   \\
+    $D_1'^{\text{count}}$ &  3'599'144'795'238r   &  9.70min             &  105'820r/s          & $>$18x            & 9.9GiB    \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 30} ($\sim$30 GB)}} \\
     \nopagebreak
-    Baseline              &  --                   &  TO (0.29\%)         &  --                  & 1.00x             & 26.5GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (0.30\%)         &  --                  &                   & 26.7GiB   \\
-    \quad $D_1$           &  300'000r             &  29.70min            &  103'718r/s          &                   & 12.3GiB   \\
-    $D_1^{\text{count}}$  &  32'399'833'908'509r  &  31.81min            &  96'847r/s           &                   & 15.5GiB   \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (0.31\%)         &  --                  &                   & 26.8GiB   \\
-    \quad $D_1'$          &  300'000r             &  28.42min            &  108'372r/s          &                   & 9.9GiB    \\
-    $D_1'^{\text{count}}$ &  32'399'833'908'509r  &  29.50min            &  104'425r/s          &                   & 11.4GiB   \\
+    Baseline              &  --                   &  TO (0.29\%)         &  --                  & --                & 26.5GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (0.30\%)         &  --                  & --                & 26.7GiB   \\
+    \quad $D_1$           &  300'000r             &  29.70min            &  103'718r/s          & $>$6x             & 12.3GiB   \\
+    $D_1^{\text{count}}$  &  32'399'833'908'509r  &  31.81min            &  96'847r/s           & $>$5x             & 15.5GiB   \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (0.31\%)         &  --                  & --                & 26.8GiB   \\
+    \quad $D_1'$          &  300'000r             &  28.42min            &  108'372r/s          & $>$6x             & 9.9GiB    \\
+    $D_1'^{\text{count}}$ &  32'399'833'908'509r  &  29.50min            &  104'425r/s          & $>$6x             & 11.4GiB   \\
     \midrule
 
     % --- Cyclic Query 7 ---
@@ -701,34 +701,34 @@
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 1} ($\sim$1 GB)}} \\
     \nopagebreak
     Baseline              &  239'917r             &  1.02min             &  124'981r/s          & 1.00x             & 8.5GiB    \\
-    $D_1^{\text{full}}$   &  239'917r             &  1.44min             &  88'964r/s           &                   & 14.2GiB   \\
-    \quad $D_1$           &  239'917r             &  1.38min             &  92'548r/s           &                   & 12.9GiB   \\
-    $D_1^{\text{count}}$  &  239'917r             &  1.60min             &  79'574r/s           &                   & 13.8GiB   \\
-    $D_1'^{\text{full}}$  &  239'917r             &  12.07min            &  10'601r/s           &                   & 31.4GiB   \\
-    \quad $D_1'$          &  239'917r             &  7.78min             &  16'514r/s           &                   & 35.8GiB   \\
-    $D_1'^{\text{count}}$ &  239'917r             &  15.37min            &  8312r/s             &                   & 32.7GiB   \\
+    $D_1^{\text{full}}$   &  239'917r             &  1.44min             &  88'964r/s           & 0.71x             & 14.2GiB   \\
+    \quad $D_1$           &  239'917r             &  1.38min             &  92'548r/s           & 0.74x             & 12.9GiB   \\
+    $D_1^{\text{count}}$  &  239'917r             &  1.60min             &  79'574r/s           & 0.64x             & 13.8GiB   \\
+    $D_1'^{\text{full}}$  &  239'917r             &  12.07min            &  10'601r/s           & 0.08x             & 31.4GiB   \\
+    \quad $D_1'$          &  239'917r             &  7.78min             &  16'514r/s           & 0.13x             & 35.8GiB   \\
+    $D_1'^{\text{count}}$ &  239'917r             &  15.37min            &  8312r/s             & 0.07x             & 32.7GiB   \\
     \addlinespace
     
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 10} ($\sim$10 GB)}} \\
     \nopagebreak
     Baseline              &  2'398'579r           &  10.12min            &  126'328r/s          & 1.00x             & 10.9GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  OOS (9.80)          &                      &                   & 81.9GiB   \\
-    \quad $D_1$           &  2'398'579r           &  152.79min           &  8360r/s             &                   & 74.7GiB   \\
-    $D_1^{\text{count}}$  &  --                   &  OOS (8.07\%)        &  --                  &                   & 75.7GiB   \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (2.33\%)         &  --                  &                   & 90.0GiB   \\
-    \quad $D_1'$          &  --                   &  TO (3.84\%)         &  --                  &                   & 91.5GiB   \\
-    $D_1'^{\text{count}}$ &  --                   &  TO (2.99\%)         & --                   &                   & 77.3GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  OOS (9.80\%)        &  --                  & --                & 81.9GiB   \\
+    \quad $D_1$           &  2'398'579r           &  152.79min           &  8360r/s             & 0.07x             & 74.7GiB   \\
+    $D_1^{\text{count}}$  &  --                   &  OOS (8.07\%)        &  --                  & --                & 75.7GiB   \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (2.33\%)         &  --                  & --                & 90.0GiB   \\
+    \quad $D_1'$          &  --                   &  TO (3.84\%)         &  --                  & --                & 91.5GiB   \\
+    $D_1'^{\text{count}}$ &  --                   &  TO (2.99\%)         & --                   & --                & 77.3GiB   \\
     \addlinespace
 
     \multicolumn{6}{l}{\textit{\textbf{Scale Factor 30} ($\sim$30 GB)}} \\
     \nopagebreak
     Baseline              &  7'202'172r           &  30.29min            &  126'519r/s          & 1.00x             & 16.8GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (1.77\%)         &  --                  &                   & 92.4GiB   \\
-    \quad $D_1$           &  --                   &  TO (1.97\%)         &  --                  &                   & 95.1GiB   \\
-    $D_1^{\text{count}}$  &  --                   &  TO (1.68\%)         &                      &                   & 71.1GiB   \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (0.55\%)         &  --                  &                   & 92.0GiB   \\
-    \quad $D_1'$          &  --                   &  TO (0.78\%)         &  --                  &                   & 100.4GiB  \\
-    $D_1'^{\text{count}}$ &  --                   &  TO (0.53\%)         &  --                  &                   & 91.0GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (1.77\%)         &  --                  & --                & 92.4GiB   \\
+    \quad $D_1$           &  --                   &  TO (1.97\%)         &  --                  & --                & 95.1GiB   \\
+    $D_1^{\text{count}}$  &  --                   &  TO (1.68\%)         &  --                  & --                & 71.1GiB   \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (0.55\%)         &  --                  & --                & 92.0GiB   \\
+    \quad $D_1'$          &  --                   &  TO (0.78\%)         &  --                  & --                & 100.4GiB  \\
+    $D_1'^{\text{count}}$ &  --                   &  TO (0.53\%)         &  --                  & --                & 91.0GiB   \\
     
     \bottomrule
 
@@ -762,18 +762,18 @@
     
     \nopagebreak
     Baseline              &  702'744r             &  0.18min        &  359'041r/s          & 1.00x             & 2.6GiB    \\
-    $D_1^{\text{full}}$   &  702'744r             &  0.18min        &  362'354r/s          &                   & 3.1GiB    \\
-    \quad $D_1$           &  3r                   &  0.18min        &  359'097r/s          &                   & 2.5GiB    \\
-    $D_1^{\text{count}}$  &  702'744r             &  0.18min        &  359'223r/s          &                   & 2.6GiB    \\
-    $D_1'^{\text{full}}$  &  702'744r             &  0.19min        &  356'867r/s          &                   & 2.9GiB    \\
-    \quad $D_1'$          &  3r                   &  0.19min        &  357'928r/s          &                   & 2.1GiB    \\
-    $D_1'^{\text{count}}$ &  702'744r             &  0.19min        &  353'895r/s          &                   & 2.4GiB    \\
-    $D_2^{\text{full}}$   &  702'744r             &  0.19min        &  355'113r/s          &                   & 2.8GiB    \\
-    \quad $D_2$           &  234'248r             &  0.19min        &  358'058r/s          &                   & 2.6GiB    \\
-    $D_2^{\text{count}}$  &  702'744r             &  0.19min        &  357'109r/s          &                   & 2.7GiB    \\
-    $D_2'^{\text{full}}$  &  702'744r             &  0.19min        &  357'238r/s          &                   & 3.1GiB    \\
-    \quad $D_2'$          &  234'248r             &  0.18min        &  359'189r/s          &                   & 2.5GiB    \\
-    $D_2'^{\text{count}}$ &  702'744r             &  0.18min        &  358'757r/s          &                   & 2.6GiB    \\
+    $D_1^{\text{full}}$   &  702'744r             &  0.18min        &  362'354r/s          & 1.00x             & 3.1GiB    \\
+    \quad $D_1$           &  3r                   &  0.18min        &  359'097r/s          & 1.00x             & 2.5GiB    \\
+    $D_1^{\text{count}}$  &  702'744r             &  0.18min        &  359'223r/s          & 1.00x             & 2.6GiB    \\
+    $D_1'^{\text{full}}$  &  702'744r             &  0.19min        &  356'867r/s          & 0.95x             & 2.9GiB    \\
+    \quad $D_1'$          &  3r                   &  0.19min        &  357'928r/s          & 0.95x             & 2.1GiB    \\
+    $D_1'^{\text{count}}$ &  702'744r             &  0.19min        &  353'895r/s          & 0.95x             & 2.4GiB    \\
+    $D_2^{\text{full}}$   &  702'744r             &  0.19min        &  355'113r/s          & 0.95x             & 2.8GiB    \\
+    \quad $D_2$           &  234'248r             &  0.19min        &  358'058r/s          & 0.95x             & 2.6GiB    \\
+    $D_2^{\text{count}}$  &  702'744r             &  0.19min        &  357'109r/s          & 0.95x             & 2.7GiB    \\
+    $D_2'^{\text{full}}$  &  702'744r             &  0.19min        &  357'238r/s          & 0.95x             & 3.1GiB    \\
+    \quad $D_2'$          &  234'248r             &  0.18min        &  359'189r/s          & 1.00x             & 2.5GiB    \\
+    $D_2'^{\text{count}}$ &  702'744r             &  0.18min        &  358'757r/s          & 1.00x             & 2.6GiB    \\
     \midrule
 
     % --- Acyclic Query 2 ---
@@ -782,18 +782,18 @@
     
     \nopagebreak
     Baseline              &  6'828'759r           &  2.91min        &  196'460r/s          & 1.00x             & 14.8GiB   \\
-    $D_1^{\text{full}}$   &  6'828'759r           &  2.02min        &  282'854r/s          &                   & 15.1GiB   \\
-    \quad $D_1$           &  11r                  &  1.18min        &  482'942r/s          &                   & 12.1GiB   \\
-    $D_1^{\text{count}}$  &  6'828'759r           &  1.19min        &  481'355r/s          &                   & 12.6GiB   \\
-    $D_1'^{\text{full}}$  &  6'828'759r           &  1.91min        &  298'888r/s          &                   & 14.4GiB   \\
-    \quad $D_1'$          &  11r                  &  1.10min        &  517'528r/s          &                   & 10.8GiB   \\
-    $D_1'^{\text{count}}$ &  6'828'759r           &  1.11min        &  517'182r/s          &                   & 11.4GiB   \\
-    $D_2^{\text{full}}$   &  6'828'759r           &  2.27min        &  251'427r/s          &                   & 15.5GiB   \\
-    \quad $D_2$           &  161'149r             &  1.41min        &  406'286r/s          &                   & 12.6GiB   \\
-    $D_2^{\text{count}}$  &  6'828'759r           &  1.46min        &  391'490r/s          &                   & 12.8GiB   \\
-    $D_2'^{\text{full}}$  &  6'828'759r           &  2.11min        &  271'425r/s          &                   & 14.9GiB   \\
-    \quad $D_2'$          &  161'149r             &  1.19min        &  482'101r/s          &                   & 11.2GiB   \\
-    $D_2'^{\text{count}}$ &  6'828'759r           &  1.27min        &  449'698r/s          &                   & 11.7GiB   \\
+    $D_1^{\text{full}}$   &  6'828'759r           &  2.02min        &  282'854r/s          & 1.44x             & 15.1GiB   \\
+    \quad $D_1$           &  11r                  &  1.18min        &  482'942r/s          & 2.47x             & 12.1GiB   \\
+    $D_1^{\text{count}}$  &  6'828'759r           &  1.19min        &  481'355r/s          & 2.45x             & 12.6GiB   \\
+    $D_1'^{\text{full}}$  &  6'828'759r           &  1.91min        &  298'888r/s          & 1.52x             & 14.4GiB   \\
+    \quad $D_1'$          &  11r                  &  1.10min        &  517'528r/s          & 2.65x             & 10.8GiB   \\
+    $D_1'^{\text{count}}$ &  6'828'759r           &  1.11min        &  517'182r/s          & 2.62x             & 11.4GiB   \\
+    $D_2^{\text{full}}$   &  6'828'759r           &  2.27min        &  251'427r/s          & 1.28x             & 15.5GiB   \\
+    \quad $D_2$           &  161'149r             &  1.41min        &  406'286r/s          & 2.06x             & 12.6GiB   \\
+    $D_2^{\text{count}}$  &  6'828'759r           &  1.46min        &  391'490r/s          & 1.99x             & 12.8GiB   \\
+    $D_2'^{\text{full}}$  &  6'828'759r           &  2.11min        &  271'425r/s          & 1.38x             & 14.9GiB   \\
+    \quad $D_2'$          &  161'149r             &  1.19min        &  482'101r/s          & 2.45x             & 11.2GiB   \\
+    $D_2'^{\text{count}}$ &  6'828'759r           &  1.27min        &  449'698r/s          & 2.29x             & 11.7GiB   \\
     \midrule
 
     % --- Cyclic Query 8 ---
@@ -802,18 +802,18 @@
     
     \nopagebreak
     Baseline              &  1'916'563r           &  1.58min        &  283'665r/s          & 1.00x             & 10.9GiB   \\
-    $D_1^{\text{full}}$   &  --                   &  TO (63.28\%)    &  --                  &                   & 11.8GiB   \\
-    \quad $D_1$           &  89'392r              &  1.11min        &  404'162r/s          &                   & 10.4GiB   \\
-    $D_1^{\text{count}}$  &  1'916'563r           &  1.10min        &  404'840r/s          &                   & 10.6GiB   \\
-    $D_1'^{\text{full}}$  &  --                   &  TO (63.14\%)   &  --                  &                   & 10.6GiB   \\
-    \quad $D_1'$          &  89'392r              &  1.22min        &  367'956r/s          &                   & 9.6GiB    \\
-    $D_1'^{\text{count}}$ &  1'916'563r           &  1.58min        &  283'526r/s          &                   & 11.3GiB   \\
-    $D_2^{\text{full}}$   &  1'916'563r           &  3.95min        &  113'210r/s          &                   & 11.5GiB   \\
-    \quad $D_2$           &  38'649r              &  3.80min        &  117'478r/s          &                   & 11.4GiB   \\
-    $D_2^{\text{count}}$  &  1'916'563r           &  3.99min        &  111'826r/s          &                   & 11.9GiB   \\
-    $D_2'^{\text{full}}$  &  1'916'563r           &  1.18min        &  377'105r/s          &                   & 10.7GiB   \\
-    \quad $D_2'$          &  38'649r              &  1.10min        &  404'627r/s          &                   & 9.6GiB    \\
-    $D_2'^{\text{count}}$ &  1'916'563r           &  1.21min        &  368'281r/s          &                   & 10.0GiB   \\
+    $D_1^{\text{full}}$   &  --                   &  TO (63.28\%)    &  --                  & --                & 11.8GiB   \\
+    \quad $D_1$           &  89'392r              &  1.11min        &  404'162r/s          & 1.42x             & 10.4GiB   \\
+    $D_1^{\text{count}}$  &  1'916'563r           &  1.10min        &  404'840r/s          & 1.44x             & 10.6GiB   \\
+    $D_1'^{\text{full}}$  &  --                   &  TO (63.14\%)   &  --                  & --                & 10.6GiB   \\
+    \quad $D_1'$          &  89'392r              &  1.22min        &  367'956r/s          & 1.30x             & 9.6GiB    \\
+    $D_1'^{\text{count}}$ &  1'916'563r           &  1.58min        &  283'526r/s          & 1.00x             & 11.3GiB   \\
+    $D_2^{\text{full}}$   &  1'916'563r           &  3.95min        &  113'210r/s          & 0.40x             & 11.5GiB   \\
+    \quad $D_2$           &  38'649r              &  3.80min        &  117'478r/s          & 0.42x             & 11.4GiB   \\
+    $D_2^{\text{count}}$  &  1'916'563r           &  3.99min        &  111'826r/s          & 0.40x             & 11.9GiB   \\
+    $D_2'^{\text{full}}$  &  1'916'563r           &  1.18min        &  377'105r/s          & 1.34x             & 10.7GiB   \\
+    \quad $D_2'$          &  38'649r              &  1.10min        &  404'627r/s          & 1.44x             & 9.6GiB    \\
+    $D_2'^{\text{count}}$ &  1'916'563r           &  1.21min        &  368'281r/s          & 1.31x             & 10.0GiB   \\
 
     \bottomrule
 

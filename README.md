@@ -1,0 +1,48 @@
+# Bachelor Thesis — Incremental View Maintenance over Tree Decompositions as SQL Views: An Evaluation on Feldera
+
+📄 **[Read the thesis](thesis/thesis.pdf)**
+
+This repository accompanies a Bachelor's thesis at the University of Zurich (DaST group)
+that evaluates the insert-only **IVM⁺** approach — realised as SQL views over a
+**tree decomposition** of a query — on the incremental query engine
+[Feldera](https://www.feldera.com/).
+
+## Abstract
+
+In many settings, a query's result must stay current as new data arrives. Incremental view
+maintenance (IVM) provides this by maintaining a structure that encodes the result and
+updating it from each change, rather than recomputing it from scratch. Abo Khamis et al. give
+an approach, which we call IVM⁺, that maintains full conjunctive queries in the insert-only
+setting by organising the computation around a tree decomposition of the query, with a cost
+governed by the query's fractional hypertree width. Although the approach is theoretical, in
+the insert-only setting it can be expressed entirely as a set of SQL views, and so realised on
+top of an existing incremental engine without modifying it.
+
+This thesis investigates whether that realisation is beneficial in practice. We build a query
+decomposer that rewrites a join query into the bag views of a tree decomposition, in both IVM⁺
+and an adjusted variant that drops its semijoin filters, together with a semiring extension for
+computing aggregates such as `COUNT`. We evaluate the rewrites on Feldera, a general-purpose
+incremental engine, against the baseline of maintaining the query directly, without
+decomposition, across graph, TPC-H and IMDB workloads.
+
+The rewrite pays off on the queries the baseline handles worst, cyclic queries over dense data:
+there it maintains one query 42.96 times faster than the baseline, at the same memory, and keeps
+tractable several queries the baseline cannot maintain within three hours. These gains hold even
+though the engine does not implement the worst-case-optimal joins the width bound assumes. Where
+the baseline is already cheap, on acyclic key-based joins and sparse data, the rewrite gives no
+speedup and adds a memory overhead of up to 2.6 times. Within the decomposition, the final
+reconstruction dominates the cost and is avoidable when only the result's size is needed.
+Realised as plain SQL views on an unmodified engine, the IVM⁺ decomposition is thus a worthwhile
+rewrite for cyclic queries over dense data, and query-shape-dependent in general.
+
+## Repository map
+
+| Directory                                             | What it is                                                                                     |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [`query-decomposer/`](query-decomposer/README.md)     | Tool that turns a SQL query into the SQL view pipeline, via a tree decomposition of the query. |
+| [`experiment-harness/`](experiment-harness/README.md) | Benchmarking harness that deploys the pipelines on Feldera and measures their performance.     |
+| `thesis/`                                             | LaTeX sources of the thesis.                                                                   |
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

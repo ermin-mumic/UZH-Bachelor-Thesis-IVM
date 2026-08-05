@@ -123,7 +123,7 @@ The \emph{fractional hypertree width}~\cite{grohe2014} $w(Q)$ of $Q$ is the smal
 \[
 w(Q) = \min_{(\mathcal{T}, \chi)} \; \max_{b \in \mathcal{T}} \; \rho^\ast(\chi(b)).
 \]
-In particular, a tree decomposition with a single bag has that bag equal to $\mathrm{vars}(Q)$, so the maximum over its bags is just $\rho^\ast(\mathrm{vars}(Q))$; since $w(Q)$ minimizes over all tree decompositions, $w(Q) \le \rho^\ast(\mathrm{vars}(Q))$.
+In particular, a tree decomposition with a single bag has that bag equal to $\mathrm{vars}(Q)$, so the maximum over its bags is just $\rho^\ast(\mathrm{vars}(Q))$; since $w(Q)$ minimises over all tree decompositions, $w(Q) \le \rho^\ast(\mathrm{vars}(Q))$.
 
 \paragraph{Running example.}
 The single-bag decomposition has $\rho^\ast(\{A,B,C,D\}) = 2$: giving $E_1(A,B)$ and $E_3(C,D)$ weight $1$ each covers all four variables, and no cover is lighter.
@@ -133,6 +133,8 @@ No tree decomposition can do better, hence $w(Q_\diamond) = \tfrac{3}{2} < 2$.
 \medskip
 
 The IVM$^+$ approach is built on a tree decomposition of minimum fractional hypertree width, which governs the cost of maintaining the query~\cite{abokhamis2024Insert-Only}.
+Concretely, when each bag is evaluated with a worst-case-optimal join, a sequence of $N$ insertions is maintained in total time $O(N^{w(Q)})$. 
+Acyclic queries have $w(Q) = 1$, since every atom can occupy its own bag, whereas a cycle forces some bag to cover more than one atom, giving $w(Q) > 1$.
 Computing such a decomposition is NP-hard~\cite{fischl2018}, and approximation algorithms exist~\cite{marx2010}.
 Our decomposer instead uses a practical heuristic: it generates candidate decompositions with a Minimum Fill-in heuristic~\cite{bodlaender2005} and selects the one of least fractional hypertree width, as described in more detail in Chapter~\ref{ch:implementation}.
 

@@ -13,20 +13,20 @@ We focus on the insert-only setting, in which tuples are only inserted and never
 Such workloads arise in many practical settings, such as append-only event streams and continuously growing analytical datasets.
 They show that in this setting a stream of inserts can be processed one tuple at a time in the same total time as evaluating the query once over the final database.
 Maintaining the result incrementally is therefore essentially no more costly than computing it once.
-Their approach organizes this maintenance around a \emph{tree decomposition} of the query; we refer to it as the \emph{IVM$^+$ approach}.
+Their approach organises this maintenance around a \emph{tree decomposition} of the query; we refer to it as the \emph{IVM$^+$ approach}.
 
 Although the IVM$^+$ approach is theoretical in nature, in the insert-only setting it can be expressed directly as a set of SQL views.
-The IVM$^+$ approach can therefore be realized on top of an existing IVM engine simply by rewriting the input query into these views, without modifying the engine itself.
+The IVM$^+$ approach can therefore be realised on top of an existing IVM engine simply by rewriting the input query into these views, without modifying the engine itself.
 This makes it lightweight to deploy, requiring only a query rewrite rather than the design or modification of a dedicated system.
 
 \medskip
 
-In this thesis, we investigate whether the IVM$^+$ approach is beneficial in practice when realized at the SQL level on an existing IVM engine.
+In this thesis, we investigate whether the IVM$^+$ approach is beneficial in practice when realised at the SQL level on an existing IVM engine.
 We make two contributions:\footnote{The thesis repository is available at \url{https://github.com/ermin-mumic/UZH-Bachelor-Thesis-IVM}.}
 
 \begin{itemize}
   \item \textbf{A query decomposer.} 
-  We present a tool that, given a join query, computes a tree decomposition and produces the corresponding IVM$^+$ realization as a set of SQL views.
+  We present a tool that, given a join query, computes a tree decomposition and produces the corresponding IVM$^+$ realisation as a set of SQL views.
   The entire translation is performed at the SQL level, without modifying the engine.
   The tool supports both the standard IVM$^+$ approach and an adjusted variant that we introduce in Chapter~\ref{ch:ivm}.
   It also supports aggregates such as \texttt{COUNT}, based on the concept of provenance semirings~\cite{green2007}, for both the standard approach and the variant.
@@ -37,7 +37,7 @@ We make two contributions:\footnote{The thesis repository is available at \url{h
   We compare the maintenance performance of the rewritten queries against that of the original queries.
 \end{itemize}
 
-\emph{[summary of main results to be added.]}
+Our evaluation finds that the rewrite helps most where the original query would otherwise build large intermediate results, on cyclic queries over dense data. There it maintains the result far more efficiently, in one case $42.96$ times faster than the original query and at the same memory, and it keeps tractable several queries the original cannot maintain within three hours. Where the original query is already cheap to maintain, the rewrite gives no speedup and uses up to $2.6$ times the memory, so its benefit is specific to these harder, cyclic queries rather than a property of the rewrite in general.
 
 \medskip
 

@@ -1,7 +1,9 @@
-\documentclass{report} 
+\documentclass{report}
 
 % --- Packages ---
-\usepackage{booktabs} 
+\usepackage[a4paper,left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage{amsmath} 
 \usepackage{caption}
 \usepackage{hyperref}
@@ -12,6 +14,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 \usepackage{float}
+\usepackage{rotating}
 \usepackage{xcolor}
 
 % Code listing style
@@ -34,11 +37,12 @@
 \newcommand*{\bigbowtie}{\mathop{\vcenter{\hbox{\scalebox{1.6}{$\bowtie$}}}}\limits}
 
 \begin{document}
+\pagestyle{plain}
 
 % --- Front ---
-%\pagenumbering{roman}
-%\input{frontmatter/titlepage}
-%\\input{frontmatter/abstract}
+\pagenumbering{roman}
+\input{front/titlepage}
+\input{front/abstract}
 
 \tableofcontents
 \cleardoublepage
@@ -50,7 +54,7 @@
 \include{chapters/03_ivm}
 \include{chapters/04_implementation}
 \include{chapters/05_evaluation}
-%\\include{chapters/06_conclusion}
+\include{chapters/06_conclusion}
 
 \appendix
 \include{chapters/appendix_queries}
@@ -59,5 +63,8 @@
 % --- Bibliography ---
 \bibliographystyle{plain}
 \bibliography{references}
+
+% --- Declaration on the use of AI tools ---
+\input{chapters/ai_declaration}
 
 \end{document}
