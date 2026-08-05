@@ -37,7 +37,7 @@ We make two contributions:\footnote{The thesis repository is available at \url{h
   We compare the maintenance performance of the rewritten queries against that of the original queries.
 \end{itemize}
 
-Our evaluation finds that the rewrite helps most where the original query would otherwise build large intermediate results, on cyclic queries over dense data. There it maintains the result far more efficiently, in one case $42.96$ times faster than the original query and at the same memory, and it keeps tractable several queries the original cannot maintain within three hours. Where the original query is already cheap to maintain, the rewrite gives no speedup and uses up to $2.6$ times the memory, so its benefit is specific to these harder, cyclic queries rather than a property of the rewrite in general.
+Our evaluation finds that the rewrite helps most where the original query would otherwise build large intermediate results, on cyclic queries over dense data. There it maintains the result far more efficiently, in one case $52.11$ times faster than the original query and using less memory, and it keeps tractable several queries the original cannot finish within three hours. When only the size of the result is needed rather than the result itself, the gain is larger still, completing in a fraction of a minute even where the original query cannot finish, for speedups of over $1800$ times. Where the original query is already cheap to maintain, the rewrite gives no speedup and uses up to $2.6$ times the memory, so its benefit is specific to these harder, cyclic queries rather than a property of the rewrite in general.
 
 \medskip
 
